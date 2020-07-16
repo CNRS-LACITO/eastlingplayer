@@ -32,27 +32,20 @@ class App extends React.Component {
 	}
 
 	  componentDidMount(){
-<<<<<<< HEAD
 	  	//15/07/2020 : changement suggéré par Edouard Sombié. oai_primary pour le média (audio, vidéo), oai_secondary pour le fichier d'annotations
 	  	var oai_primary = this.getUrlParameter("oai_primary");
 	  	var oai_secondary = this.getUrlParameter("oai_secondary");
 
 	  	if(oai_primary.length > 0){
-=======
-	  	var idDoc = this.getUrlParameter("idDoc");
 
-	  	if(idDoc.length > 0){
->>>>>>> b41ec341fc1a27e65269b27ad4962fc772dd46d3
 	  		this.setState({
 	            hasId: true,
 	        });
 
-<<<<<<< HEAD
+
 	        //fetch(parserUrl+"?oai_primary="+oai_primary)
 		    fetch(parserUrl+"?idDoc="+oai_primary)
-=======
-	        fetch(parserUrl+"?idDoc="+idDoc)
->>>>>>> b41ec341fc1a27e65269b27ad4962fc772dd46d3
+
 		      .then(res => res.json())
 		      .then(
 		        (result) => {
@@ -121,11 +114,8 @@ class App extends React.Component {
 			    	</Container>
 		    	 	:
 		    	 	<Container>
-<<<<<<< HEAD
 					    {/* <Metadata file={this.state.METADATA} /> */}
-=======
-					    <Metadata file={this.state.METADATA} />
->>>>>>> b41ec341fc1a27e65269b27ad4962fc772dd46d3
+
 					    <Player file={this.state.MEDIAFILE} />
 					    <Options files={this.state.ANNOTATIONFILES} selectedFile={this.state.selectedFile} images={this.state.images}/>
 			    	</Container>
@@ -138,11 +128,8 @@ class App extends React.Component {
 
 			    	<Container>
 			    		<p>Document ID not provided in URL.</p>
-<<<<<<< HEAD
 			    		<p>(URL must include the oai_primary parameter as following:  url<b>?oai_primary=[cocoon id]</b>)</p>
-=======
-			    		<p>(URL must include the idDoc parameter as following:  url<b>?idDoc=[cocoon id]</b>)</p>
->>>>>>> b41ec341fc1a27e65269b27ad4962fc772dd46d3
+
 			    	</Container>
 			    	]
 			    }

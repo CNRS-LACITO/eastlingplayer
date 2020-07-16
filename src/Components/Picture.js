@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 
 class Picture extends React.Component {
@@ -46,53 +45,4 @@ class Picture extends React.Component {
   }
 }
 
-=======
-import React from 'react';
-
-class Picture extends React.Component {
-
-  render() {
-        var url_image = this.props.imageSrc;
-        var coords = this.props.area.coords.split(',');
-
-        var image_scope = coords[3]-coords[1];
-        var image_width = coords[2]-coords[0];
-        var image_bottom = 0;
-        var image_bottom = parseInt(coords[1]); 
-        var usemap ="#map_" + this.props.sentenceId;
-
-       var delta_x = coords[0];
-       var delta_y = coords[1];
-       
-       var cssBGPosition = '-' + delta_x + 'px -' + delta_y + 'px';    
-       var cssBG ='url('+url_image+') -' + delta_x + 'px -' + delta_y + 'px';
-       
-        const wordsAreas = [];
-        const imgStyle = {
-          'background-position': cssBGPosition,
-          'width': image_width + 'px',
-          'height': image_scope + 'px',
-          'padding': '0px',
-          'border': '0px',
-          'object-fit': 'none',
-          'object-position':cssBGPosition,
-
-        };
-
-
-    return (
-          <div>
-          <div sentenceId={this.props.sentenceId} style={{position:'relative',textAlign:'initial',overflow:'auto'}}>
-           <img src={this.props.imageSrc} style={imgStyle} width={image_width} height={image_scope} usemap={usemap} />
-           <div>
-           {this.props.canvas}
-           </div>
-             
-            </div>
-          </div>
-    );
-  }
-}
-
->>>>>>> b41ec341fc1a27e65269b27ad4962fc772dd46d3
 export default Picture;
