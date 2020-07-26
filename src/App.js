@@ -8,21 +8,25 @@ import Player from './Components/Player';
 
 import './App.css';
 
-const parserUrl = "https://eastling.huma-num.fr/player/parser.php";
+//const parserUrl = "https://eastling.huma-num.fr/player/parser.php";
+const parserUrl = "https://eastling.huma-num.fr/player/parser2.php";
 
 class App extends React.Component {
 
 	constructor(props) {
 	    super(props);
 	    this.state = {
-	    	hasId : false,
-	    	isLoaded : false,
-	    	hasError : false,
-	    	error : {},
+	    	hasPrimaryId : false,
+	    	hasSecondaryId : false,
+	    	isMediaLoaded : false,
+	    	isAnnotationsLoaded : false,
+	    	hasMediaError : false,
+	    	mediaError : {},
+			hasAnnotationsError : false,
+	    	annotationsError : {},
 			METADATA: {},
 	      	MEDIAFILE : {},
-			ANNOTATIONFILES : [],
-			selectedFile : {},
+			annotations : {},
 			images : []
 	    };
 	  }
@@ -39,12 +43,11 @@ class App extends React.Component {
 	  	if(oai_primary.length > 0){
 
 	  		this.setState({
-	            hasId: true,
+	            hasPrimaryId: true,
 	        });
 
-
-	        //fetch(parserUrl+"?oai_primary="+oai_primary)
-		    fetch(parserUrl+"?idDoc="+oai_primary)
+	        fetch(parserUrl+"?oai_primary="+oai_primary)
+		    //fetch(parserUrl+"?idDoc="+oai_primary)
 
 		      .then(res => res.json())
 		      .then(
@@ -52,9 +55,9 @@ class App extends React.Component {
 
 			        if(result.metadata["OAI-PMH"].error != undefined){
 			        	this.setState({
-				            isLoaded: true,
-				            hasError:true,
-				            error: result.metadata["OAI-PMH"].error
+				            isMediaLoaded: true,
+				            hasMediaError:true,
+				            mediaError: result.metadata["OAI-PMH"].error
 				          });
 			        }else{
 			        	var mediaType = "";
@@ -71,12 +74,45 @@ class App extends React.Component {
 			        	
 
 			        	this.setState({
-				            isLoaded: true,
+				            isMediaLoaded: true,
 				            METADATA :  {"data":result.metadata},
-				            ANNOTATIONFILES : result.annotations,
 				            MEDIAFILE : {"type":mediaType,"url":mediaUrl},
-				            selectedFile : result.annotations[0],
 				            images : result.images
+				          });
+			        }
+ 
+		        },
+		        // Remarque : il est important de traiter les erreurs ici
+		        // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
+		        // des exceptions provenant de réels bugs du composant.
+		        (error) => {
+		          console.log(error);
+
+		        }
+		      )
+	  	}
+
+	  	if(oai_secondary.length > 0){
+
+	  		this.setState({
+	            hasSecondaryId: true,
+	        });
+
+	        fetch(parserUrl+"?oai_secondary="+oai_secondary)
+		      .then(res => res.json())
+		      .then(
+		        (result) => {
+
+			        if(result.annotations["TEXT"] == undefined){
+			        	this.setState({
+				            isAnnotationsLoaded: true,
+				            hasAnnotationsError:true,
+				            annotationsError: "No result"
+				          });
+			        }else{			
+			        	this.setState({
+				            isAnnotationsLoaded: true,
+				            annotations : result.annotations.TEXT.S,
 				          });
 			        }
  
@@ -99,39 +135,57 @@ class App extends React.Component {
 		    <div className="App">	
 
 		    	{ 
-		    	 	this.state.hasId
+		    	 	this.state.hasPrimaryId
 		    	 	?
 		    	 	[
-		    	 	this.state.isLoaded 
+		    	 	this.state.isMediaLoaded 
 		    	 	? 
 		    	 	[
-		    	 	this.state.hasError 
+		    	 	this.state.hasMediaError 
 		    	 	?
 		    	 	<Container>
 					    <p>Error executing request to OAI-PMH:</p>
-					    <p>Code :{this.state.error.code}</p>
-					    <p>Details :{this.state.error.text}</p>
+					    <p>Code :{this.state.mediaError.code}</p>
+					    <p>Details :{this.state.mediaError.text}</p>
 			    	</Container>
 		    	 	:
 		    	 	<Container>
 					    {/* <Metadata file={this.state.METADATA} /> */}
-
 					    <Player file={this.state.MEDIAFILE} />
-					    <Options files={this.state.ANNOTATIONFILES} selectedFile={this.state.selectedFile} images={this.state.images}/>
 			    	</Container>
 			    	]
 			    	:
 			    	<CircularProgress />
 			    	]
 			    	:
-			    	[
+			    	<div>No Media</div>
+			    }
 
-			    	<Container>
-			    		<p>Document ID not provided in URL.</p>
-			    		<p>(URL must include the oai_primary parameter as following:  url<b>?oai_primary=[cocoon id]</b>)</p>
+			    { 
 
+		    	 	this.state.hasSecondaryId
+		    	 	?
+		    	 	[
+		    	 	this.state.isAnnotationsLoaded 
+		    	 	? 
+		    	 	[
+		    	 	this.state.hasAnnotationsError 
+		    	 	?
+		    	 	<Container>
+					    <p>Error getting annotations :</p>
+					    <p>Code :{this.state.annotationsError.code}</p>
+					    <p>Details :{this.state.annotationsError.text}</p>
+			    	</Container>
+		    	 	:
+		    	 	<Container>
+					    <Options annotations={this.state.annotations} images={this.state.images}/>
 			    	</Container>
 			    	]
+			    	:
+			    	<CircularProgress />
+			    	]
+			    	:
+			    	<div>No Annotations</div>
 			    }
 		    </div>
 		  );

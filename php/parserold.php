@@ -3,16 +3,7 @@
 header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
-$oaiID = $_GET['oai_primary']; // ID du document
-
-$oaiPrimary = $_GET['oai_primary']; // ID du document
-$oaiSecondary = $_GET['oai_secondary']; // ID du fichier annotations
-
-if($oaiPrimary == NULL && $oaiSecondary == NULL) die("You must provide an OAI ID.");
-
-$oaiID = ($oaiPrimary != NULL) ? $oaiPrimary : $oaiSecondary;
-
-$xmlMetadata = simplexml_load_file('https://cocoon.huma-num.fr/crdo_servlet/oai-pmh?verb=GetRecord&metadataPrefix=crdo_dcq&identifier=oai:crdo.vjf.cnrs.fr:'.$oaiID);
+$xmlMetadata = simplexml_load_file('https://cocoon.huma-num.fr/crdo_servlet/oai-pmh?verb=GetRecord&metadataPrefix=crdo_dcq&identifier=oai:crdo.vjf.cnrs.fr:'.$_GET['idDoc']);
 $ns = $xmlMetadata->getNamespaces(true);
 
 $xml = dom_import_simplexml($xmlMetadata);
@@ -24,28 +15,18 @@ $resourcesUrl = array();
 $annotationsUrl = array();
 $imagesUrl = array();
 
-if($oaiPrimary != NULL){
-	foreach($metadataIdentifierList as $metadataIdentifier){
+foreach($metadataIdentifierList as $metadataIdentifier){
 
-		if(strpos($metadataIdentifier->textContent,'.mp3') || strpos($metadataIdentifier->textContent,'.wav')|| strpos($metadataIdentifier->textContent,'.ogg')){
-		//if(strpos($mediaFormat,'audio') && strpos($metadataIdentifier->textContent,'.mp3')){
-			$audioUrl = $metadataIdentifier->textContent;
-		}
-
-		if(strpos($metadataIdentifier->textContent,'.mp4') || strpos($metadataIdentifier->textContent,'.mov') || strpos($metadataIdentifier->textContent,'.avi')){
-		//if(strpos($mediaFormat,'video') && strpos($metadataIdentifier->textContent,'.mp4')){
-			$videoUrl = $metadataIdentifier->textContent;
-		}
-	}	
-}
-
-
-if($oaiSecondary!=NULL && $mediaFormat == "text/xml"){
-	foreach($metadataIdentifierList as $identifier){
-		if(strpos($identifier->textContent,'/data/')){
-			$annotationUrl = $identifier->textContent;
-		}		
+	if(strpos($metadataIdentifier->textContent,'.mp3') || strpos($metadataIdentifier->textContent,'.wav')|| strpos($metadataIdentifier->textContent,'.ogg')){
+	//if(strpos($mediaFormat,'audio') && strpos($metadataIdentifier->textContent,'.mp3')){
+		$audioUrl = $metadataIdentifier->textContent;
 	}
+
+	if(strpos($metadataIdentifier->textContent,'.mp4') || strpos($metadataIdentifier->textContent,'.mov') || strpos($metadataIdentifier->textContent,'.avi')){
+	//if(strpos($mediaFormat,'video') && strpos($metadataIdentifier->textContent,'.mp4')){
+		$videoUrl = $metadataIdentifier->textContent;
+	}
+
 
 }
 
@@ -69,10 +50,9 @@ foreach($isRequiredByList as $isRequiredBy){
 			$resourcesUrl[$format][] = $content;
 			$urlParts = explode("/",$content);
 
-			//if($format=="text/xml"){
-				//$annotationsUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);	
-			//}else 
-			if($format=="image/jpeg"){
+			if($format=="text/xml"){
+				$annotationsUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);
+			}else if($format=="image/jpeg"){
 				
 				$imagesUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);
 			}
@@ -136,30 +116,27 @@ function recursiveParseXML($xmlTag,$o){
 $metadataJson = new stdClass();
 recursiveParseXML($xml,$metadataJson);
 
+$annotations = [];
 
-
-if($oaiPrimary != NULL){
-	$response = array(
-		'oai_type'=>'primary',
-		'metadata'=>$metadataJson,
-		'audio'=>$audioUrl,
-		'video'=>$videoUrl,
-		'images'=>$imagesUrl
-	);	
-}else{
-
-	$annotations = [];
-
-	$annotationXml = dom_import_simplexml(simplexml_load_file($annotationUrl));
+foreach($annotationsUrl as $aUrl){
+	$annotationXml = dom_import_simplexml(simplexml_load_file($aUrl['url']));
 	$annotationJson = new stdClass();
 	recursiveParseXML($annotationXml,$annotationJson);
 
-	$response = array(
-		'oai_type'=>'secondary',
-		'annotations'=>$annotationJson
+	$annotations[] = array(
+		'id'=>$aUrl['id'],
+		'data'=>$annotationJson
 	);
+
 }
 
+$response = array(
+	'metadata'=>$metadataJson,
+	'annotations'=>$annotations,
+	'audio'=>$audioUrl,
+	'video'=>$videoUrl,
+	'images'=>$imagesUrl
+);
 
 echo json_encode($response);
 

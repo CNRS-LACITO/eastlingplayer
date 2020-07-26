@@ -8,7 +8,7 @@ class Options extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        selectedFile: props.selectedFile,
+        //selectedFile: props.selectedFile,
         checkedTranscriptionBySentence: true,
         checkedTranslationBySentence: true,
         checkedWholeTranscription: false,
@@ -19,9 +19,11 @@ class Options extends React.Component {
     };
   }
 
+/*
   updateState(event) {
     this.setState({ selectedFile: event.target.value});
   }
+*/
 
   handleChecked(event){
     //this.setState({checkedTranscriptionBySentence: event.target.checked});
@@ -31,47 +33,14 @@ class Options extends React.Component {
 
 
   render() {
-    const menuItems = [];
-    this.props.files.forEach((f) => {
-      menuItems.push(
-          <MenuItem
-            key={f.id}
-            value={f}>{f.id}</MenuItem>
-        );
-
-    });
-
-    if(this.props.files.length == 0){
-        menuItems.push(
-        <MenuItem
-          key={0}
-          value={0}>No file available</MenuItem>
-      );
-    }
-      
-    
 
     return (
       <div>
         <h2>Options</h2>
         {
-        this.state.selectedFile
-        ?
+
         <FormGroup row>
-        
-        <FormControl>
-          <InputLabel id="annotationFile-select-label">Annotation file</InputLabel>
-          <Select
-            labelId="annotationFile-select-label"
-            id="annotationFile-select"
-            value={this.state.selectedFile}
-            defaultValue={this.props.selectedFile.id}
-            onChange={this.updateState.bind(this)}
-          >
-            {menuItems}
-            
-          </Select>
-        </FormControl>
+
         <FormControlLabel
             control={
               <Switch
@@ -135,15 +104,14 @@ class Options extends React.Component {
           />
 
           </FormGroup>
-          :
-          <div></div>
+
           }
 
 
           { 
-          this.state.selectedFile
+          this.props.annotations
           ?
-          <Annotations displayOptions={this.state} file={this.state.selectedFile} images={this.props.images} />
+          <Annotations displayOptions={this.state} annotations={this.props.annotations} images={this.props.images} />
           :
           <div></div>
           }

@@ -17,35 +17,16 @@ class Annotations extends React.Component {
 
 
   getAnnotationData(){
-    if(this.props.file.data){
+    if(this.props.annotations){
       console.log("data");
       this.setState({
             isLoaded: true,
-            annotationData : this.props.file.data.TEXT.S
+            annotationData : this.props.annotations.TEXT.S
           });
 
       console.log(this.state.annotationData);
-    }else{
-      console.log("url");
-      fetch(this.props.file.url)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            annotationData : result.TEXT.S
-          });
-        },
-        // Remarque : il est important de traiter les erreurs ici
-        // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
-        // des exceptions provenant de réels bugs du composant.
-        (error) => {
-          console.log(error);
-        }
-      )
     }
-
-    
+  
   }
 
   componentDidMount() {
@@ -67,8 +48,8 @@ class Annotations extends React.Component {
     var imageSrc = "";
     var sID = 0;
 
-    this.state.annotationData.forEach((a) => {
-
+    //this.state.annotationData.forEach((a) => {
+    this.props.annotations.forEach((a) => {
       if(a.AREA != undefined && a.AREA.image != undefined){
         this.props.images.forEach((i) =>{
           var idImage = i.id.split('.version');
