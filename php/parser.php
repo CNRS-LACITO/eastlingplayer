@@ -148,15 +148,34 @@ if($oaiPrimary != NULL){
 	);	
 }else{
 
-	$annotations = [];
+	//$annotations = [];
+	$langTranscriptions = [];
+	$langTranslations = [];
 
 	$annotationXml = dom_import_simplexml(simplexml_load_file($annotationUrl));
 	$annotationJson = new stdClass();
 	recursiveParseXML($annotationXml,$annotationJson);
+	foreach ($annotationJson->TEXT->S as $sentence) {
+		foreach ($sentence->FORM as $transcription) {
+			$langTranscriptions[]=$transcription->kindOf;
+			$langTranscriptions = array_unique($langTranscriptions);
+		}
+
+		foreach ($sentence->TRANSL as $transl) {
+			$langTranslations[]=$transl->{"xml:lang"};
+			$langTranslations = array_unique($langTranslations);
+		}
+	}
+
+
 
 	$response = array(
 		'oai_type'=>'secondary',
-		'annotations'=>$annotationJson
+		'annotations'=>$annotationJson,
+		'langues'=>array(
+			'transcriptions'=>$langTranscriptions,
+			'translations'=>$langTranslations
+		)
 	);
 }
 

@@ -37,15 +37,15 @@ class Sentence extends React.Component {
 	if(this.props.s.TRANSL != undefined){
 		if(this.props.s.TRANSL.length == undefined){
 			translations.push(
-		          <Typography variant="body2" component="p">
-			          {this.props.s.TRANSL["xml:lang"]}: <b><i>{this.props.s.TRANSL.text}</i></b>
+		          <Typography hidden={!this.props.displayOptions.translations.includes(this.props.s.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation ${this.props.s.TRANSL['xml:lang']}`}>
+			          <b><i>{this.props.s.TRANSL.text}</i></b>
 			        </Typography>
 		        );
 		}else{
 			this.props.s.TRANSL.forEach((t) => {
 		      translations.push(
-		        	<Typography variant="body2" component="p">
-			        	{t["xml:lang"]}: <b><i>{t.text}</i></b>
+		        	<Typography hidden={!this.props.displayOptions.translations.includes(t["xml:lang"])} variant="body2" component="p" className={`translation ${t["xml:lang"]}`}>
+			        	<b><i>{t.text}</i></b>
 			       	</Typography>
 		        );
 		    });
@@ -57,15 +57,15 @@ class Sentence extends React.Component {
 	if(this.props.s.FORM != undefined){
 		if(this.props.s.FORM.length == undefined){
 			transcriptions.push(
-		          <Typography variant="body2" component="p">
-			          {this.props.s.FORM.kindOf}: <b>{this.props.s.FORM.text}</b>
+		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription ${this.props.s.FORM.kindOf}`}>
+			          <b>{this.props.s.FORM.text}</b>
 			        </Typography>
 		        );
 		}else{
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
-		          <Typography variant="body2" component="p">
-			          {f.kindOf}: <b>{f.text}</b>
+		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription ${f.kindOf}`}>
+			          <b>{f.text}</b>
 			        </Typography>
 		        );
 		    });
@@ -201,13 +201,13 @@ class Sentence extends React.Component {
 				<IconButton color="primary" aria-label="play" onClick={this.pauseSentence.bind(this)}>
 				  <Pause />
 				</IconButton>
-				<p hidden={!this.props.displayOptions.checkedWords}>
+				<p hidden={!this.props.displayOptions.words}>
 				{words}
 				</p>
-				<p hidden={!this.props.displayOptions.checkedTranscriptionBySentence}>
+				<p>
 	        	{transcriptions}
 	        	</p>
-	        	<p hidden={!this.props.displayOptions.checkedTranslationBySentence}>
+	        	<p>
 	        	{translations}
 	        	</p>
 	        	<p>

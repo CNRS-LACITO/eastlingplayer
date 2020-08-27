@@ -18,13 +18,10 @@ class Annotations extends React.Component {
 
   getAnnotationData(){
     if(this.props.annotations){
-      console.log("data");
       this.setState({
             isLoaded: true,
             annotationData : this.props.annotations.TEXT.S
           });
-
-      console.log(this.state.annotationData);
     }
   
   }

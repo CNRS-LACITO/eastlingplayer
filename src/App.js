@@ -3,8 +3,9 @@ import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Metadata from './Components/Metadata';
-import Options from './Components/Options';
+import DisplayOptions from './Components/DisplayOptions';
 import Player from './Components/Player';
+import Annotations from './Components/Annotations';
 
 import './App.css';
 
@@ -27,7 +28,11 @@ class App extends React.Component {
 			METADATA: {},
 	      	MEDIAFILE : {},
 			annotations : {},
-			images : []
+			images : [],
+			displayOptions : {},
+			langOptions : {
+				transcriptions:[],translations:[]
+			},
 	    };
 	  }
 
@@ -39,6 +44,25 @@ class App extends React.Component {
 	  	//15/07/2020 : changement suggéré par Edouard Sombié. oai_primary pour le média (audio, vidéo), oai_secondary pour le fichier d'annotations
 	  	var oai_primary = this.getUrlParameter("oai_primary");
 	  	var oai_secondary = this.getUrlParameter("oai_secondary");
+	  	//25/08/2020 : récupérer les options d'affichage dans l'URL (Edouard SOMBIE)
+	  	var optionTranscriptions = this.getUrlParameter("optionTranscriptions");
+	  	var optionTranslations = this.getUrlParameter("optionTranslations");
+	  	var optionWholeTranscriptions = this.getUrlParameter("optionWholeTranscriptions");
+	  	var optionWholeTranslations = this.getUrlParameter("optionWholeTranslations");
+	  	var optionWords = this.getUrlParameter("optionWords");
+	  	var optionGlosses = this.getUrlParameter("optionGlosses");
+
+	  	this.setState({
+	        displayOptions: {
+	        	transcriptions : optionTranscriptions.split('+'),
+	        	translations : optionTranslations.split('+'),
+	        	wholeTranscriptions : optionWholeTranscriptions,
+	        	wholeTranslations : optionWholeTranslations,
+	        	words : (optionWords == 'true'),
+	        	glosses : (optionGlosses == 'true')
+	        },
+	    });
+	  	
 
 	  	if(oai_primary.length > 0){
 
@@ -109,12 +133,16 @@ class App extends React.Component {
 				            hasAnnotationsError:true,
 				            annotationsError: "No result"
 				          });
-			        }else{			
+			        }else{	
+			        	//27/08/2020 : options de langues
+
 			        	this.setState({
+			        		langOptions: result.langues,
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations.TEXT.S,
 				          });
 			        }
+			        
  
 		        },
 		        // Remarque : il est important de traiter les erreurs ici
@@ -162,7 +190,6 @@ class App extends React.Component {
 			    }
 
 			    { 
-
 		    	 	this.state.hasSecondaryId
 		    	 	?
 		    	 	[
@@ -177,9 +204,14 @@ class App extends React.Component {
 					    <p>Details :{this.state.annotationsError.text}</p>
 			    	</Container>
 		    	 	:
+		    	 	<div>
 		    	 	<Container>
-					    <Options annotations={this.state.annotations} images={this.state.images}/>
+					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} />
 			    	</Container>
+			    	<Container>
+ 						<Annotations displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} />
+ 			    	</Container>
+ 			    	</div>
 			    	]
 			    	:
 			    	<CircularProgress />
