@@ -25,7 +25,7 @@ class Word extends React.Component {
 	    super(props);
 	    this.state = {
 	      anchorEl: null,
-        open: false
+          open: false
 	    };
 	  }
 
@@ -81,26 +81,29 @@ class Word extends React.Component {
 
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
-    if(this.props.w.TRANSL.length == undefined){
-      translations.push(
-              <Typography variant="body2" component="p">
-                {this.props.w.TRANSL["xml:lang"]}: {this.props.w.TRANSL.text}
-              </Typography>
-            );
-    }else{
-      this.props.w.TRANSL.forEach((t) => {
-          translations.push(
-              <Typography variant="body2" component="p">
-                {t["xml:lang"]}: {t.text}
-              </Typography>
-            );
-        });
+    if(this.props.w.TRANSL != undefined){
+	    if(this.props.w.TRANSL.length == undefined){
+	      translations.push(
+	              <Typography variant="body2" component="p" hidden={!this.props.displayOptions.glosses.includes(this.props.w.TRANSL["xml:lang"])} className={`gloss ${this.props.w.TRANSL['xml:lang']}`}>
+	                {this.props.w.TRANSL.text}
+	              </Typography>
+	            );
+	    }else{
+	      this.props.w.TRANSL.forEach((t) => {
+	          translations.push(
+	              <Typography variant="body2" component="p" hidden={!this.props.displayOptions.glosses.includes(t["xml:lang"])} className={`gloss ${t['xml:lang']}`}>
+	                {t.text}
+	              </Typography>
+	            );
+	        });
+	    }
     }
+    
   //
       if(this.props.w.FORM.length == undefined){
         transcriptions.push(
                   <Typography variant="body2" component="p">
-                    {this.props.w.FORM.kindOf}: {this.props.w.FORM.text}
+                    {this.props.w.FORM.text}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
@@ -108,7 +111,7 @@ class Word extends React.Component {
           this.props.w.FORM.forEach((f) => {
               transcriptions.push(
                   <Typography variant="body2" component="p">
-                    {f.kindOf}: {f.text}
+                    {f.text}
                   </Typography>
                 );
             });
@@ -120,14 +123,14 @@ class Word extends React.Component {
     if(this.props.w.NOTE.length == undefined){
       notes.push(
               <Typography variant="body2" component="p">
-                {this.props.w.NOTE["xml:lang"]}: <b>{this.props.w.NOTE.message}</b> <b>{this.props.w.NOTE.text}</b>
+                {this.props.w.NOTE.message} {this.props.w.NOTE.text}
               </Typography>
             );
     }else{
       this.props.w.NOTE.forEach((f) => {
           notes.push(
               <Typography variant="body2" component="p">
-                {f["xml:lang"]}: <b>{f.message}</b> <b>{f.text}</b>
+                {f.message} {f.text}
               </Typography>
             );
         });
@@ -136,36 +139,20 @@ class Word extends React.Component {
 
     return (
       <div style={{display:"inline-block"}} ref={el => (this.instance = el)} >
-        <Button style={buttonStyle} id={this.props.w.id} aria-describedby={this.props.w.id} variant="contained" color="default" onClick={this.handleClick}>
-          {word}
-        </Button>
-        <Popover
-          id={this.props.w.id}
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          onClose={this.handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
-            <p>
-            {transcriptions}
+
+			<p class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+            	{transcriptions}
             </p>
 
             <p>
-            {translations}
+            	{translations}
             </p>
 
             <p>
-            {notes}
+           		{notes}
             </p>
           
-        </Popover>
+
         </div>
     );
   }

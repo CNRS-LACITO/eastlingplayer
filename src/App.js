@@ -9,8 +9,7 @@ import Annotations from './Components/Annotations';
 
 import './App.css';
 
-//const parserUrl = "https://eastling.huma-num.fr/player/parser.php";
-const parserUrl = "https://eastling.huma-num.fr/player/parser2.php";
+const parserUrl = "https://eastling.huma-num.fr/player/parser.php";
 
 class App extends React.Component {
 
@@ -28,6 +27,7 @@ class App extends React.Component {
 			METADATA: {},
 	      	MEDIAFILE : {},
 			annotations : {},
+			doi : '',
 			images : [],
 			displayOptions : {},
 			langOptions : {
@@ -36,11 +36,13 @@ class App extends React.Component {
 	    };
 	  }
 
+
+
 	getUrlParameter (sVar) {
 		return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
 	}
 
-	  componentDidMount(){
+	componentDidMount(){
 	  	//15/07/2020 : changement suggéré par Edouard Sombié. oai_primary pour le média (audio, vidéo), oai_secondary pour le fichier d'annotations
 	  	var oai_primary = this.getUrlParameter("oai_primary");
 	  	var oai_secondary = this.getUrlParameter("oai_secondary");
@@ -50,16 +52,21 @@ class App extends React.Component {
 	  	var optionWholeTranscriptions = this.getUrlParameter("optionWholeTranscriptions");
 	  	var optionWholeTranslations = this.getUrlParameter("optionWholeTranslations");
 	  	var optionWords = this.getUrlParameter("optionWords");
+	  	var optionNotes = this.getUrlParameter("optionNotes");
 	  	var optionGlosses = this.getUrlParameter("optionGlosses");
+	  	var optionLang = this.getUrlParameter("optionLang");
+	  	//28/08/2020
+	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
 
 	  	this.setState({
 	        displayOptions: {
 	        	transcriptions : optionTranscriptions.split('+'),
 	        	translations : optionTranslations.split('+'),
-	        	wholeTranscriptions : optionWholeTranscriptions,
-	        	wholeTranslations : optionWholeTranslations,
+	        	glosses : optionGlosses.split('+'),
+	        	wholeTranscriptions : (optionWholeTranscriptions == 'true'),
+	        	wholeTranslations : optionWholeTranslations.split('+'),
 	        	words : (optionWords == 'true'),
-	        	glosses : (optionGlosses == 'true')
+	        	notes : (optionNotes == 'true')
 	        },
 	    });
 	  	
@@ -139,7 +146,8 @@ class App extends React.Component {
 			        	this.setState({
 			        		langOptions: result.langues,
 				            isAnnotationsLoaded: true,
-				            annotations : result.annotations.TEXT.S,
+				            annotations : result.annotations.TEXT,
+				            doi : result.doi
 				          });
 			        }
 			        
@@ -209,7 +217,7 @@ class App extends React.Component {
 					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} />
 			    	</Container>
 			    	<Container>
- 						<Annotations displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} />
+ 						<Annotations doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} />
  			    	</Container>
  			    	</div>
 			    	]

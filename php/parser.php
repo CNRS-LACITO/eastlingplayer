@@ -23,6 +23,7 @@ $mediaFormat= $xml->getElementsByTagNameNS($ns['dc'],'format')[0]->textContent;
 $resourcesUrl = array();
 $annotationsUrl = array();
 $imagesUrl = array();
+$doi="";
 
 if($oaiPrimary != NULL){
 	foreach($metadataIdentifierList as $metadataIdentifier){
@@ -44,6 +45,10 @@ if($oaiSecondary!=NULL && $mediaFormat == "text/xml"){
 	foreach($metadataIdentifierList as $identifier){
 		if(strpos($identifier->textContent,'/data/')){
 			$annotationUrl = $identifier->textContent;
+		}
+
+		if(strpos($identifier->textContent,'doi')==0){
+			$doi = $identifier->textContent;
 		}		
 	}
 
@@ -77,7 +82,8 @@ foreach($isRequiredByList as $isRequiredBy){
 				$imagesUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);
 			}
 
-		}		
+		}	
+			
 	}
 
 }
@@ -151,19 +157,74 @@ if($oaiPrimary != NULL){
 	//$annotations = [];
 	$langTranscriptions = [];
 	$langTranslations = [];
+	$langGlosses = [];
+	$langWholeTranslations = [];
 
 	$annotationXml = dom_import_simplexml(simplexml_load_file($annotationUrl));
 	$annotationJson = new stdClass();
 	recursiveParseXML($annotationXml,$annotationJson);
-	foreach ($annotationJson->TEXT->S as $sentence) {
-		foreach ($sentence->FORM as $transcription) {
-			$langTranscriptions[]=$transcription->kindOf;
-			$langTranscriptions = array_unique($langTranscriptions);
+
+	//27/08/2020 : get the different languages available
+	//28/08/2020 : set a default language for transcription
+	foreach ($annotationJson->TEXT->TRANSL as $wholeTranslation){
+		$langWholeTranslations[]=$wholeTranslation->{"xml:lang"};
+		$langWholeTranslations = array_unique($langWholeTranslations);
+	}
+
+	foreach ($annotationJson->TEXT->S as $keyS => $sentence) {
+		foreach ($sentence->FORM as $keyF => $transcription) {
+			if(!property_exists($transcription, "kindOf")){
+				$langTranscriptions[] = "phone";
+				if(is_array($annotationJson->TEXT->S[$keyS]->FORM)){
+					$annotationJson->TEXT->S[$keyS]->FORM[$keyF]->kindOf = "phone";
+				}else{
+					$annotationJson->TEXT->S[$keyS]->FORM->kindOf = "phone";
+				}
+				
+			}
+			
+			if($transcription->kindOf != NULL){
+				$langTranscriptions[]=$transcription->kindOf;
+				$langTranscriptions = array_unique($langTranscriptions);
+			}
+			
 		}
 
 		foreach ($sentence->TRANSL as $transl) {
 			$langTranslations[]=$transl->{"xml:lang"};
 			$langTranslations = array_unique($langTranslations);
+		}
+
+		foreach ($sentence->W as $keyW => $word) {
+
+			foreach ($word->FORM as $keyF2 => $transcription) {
+				if(!property_exists($transcription, "kindOf")){
+					$langTranscriptions[] = "phone";
+					$langTranscriptions = array_unique($langTranscriptions);
+					if(is_array($annotationJson->TEXT->S[$keyS]->W[$keyW]->FORM)){
+						$annotationJson->TEXT->S[$keyS]->W[$keyW]->FORM[$keyF2]->kindOf = "phone";
+					}else{
+						$annotationJson->TEXT->S[$keyS]->W[$keyW]->FORM->kindOf = "phone";
+					}
+				}else{
+					if($transcription->kindOf != NULL){
+						$langTranscriptions[]=$transcription->kindOf;
+						$langTranscriptions = array_unique($langTranscriptions);
+					}
+					
+				}
+
+				
+			}
+
+			foreach ($word->TRANSL as $transl) {
+				if($transl->{"xml:lang"} != null){
+					$langGlosses[]=$transl->{"xml:lang"};
+					$langGlosses = array_unique($langGlosses);
+				}
+				
+			}
+
 		}
 	}
 
@@ -171,10 +232,13 @@ if($oaiPrimary != NULL){
 
 	$response = array(
 		'oai_type'=>'secondary',
+		'doi'=>$doi,
 		'annotations'=>$annotationJson,
 		'langues'=>array(
 			'transcriptions'=>$langTranscriptions,
-			'translations'=>$langTranslations
+			'translations'=>$langTranslations,
+			'glosses'=>$langGlosses,
+			'wholeTranslations'=>$langWholeTranslations
 		)
 	);
 }

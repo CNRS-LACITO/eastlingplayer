@@ -1,7 +1,7 @@
 import React from 'react';
 import Picture from './Picture';
 import Word from './Word';
-import { Card, CardHeader, Avatar, CardContent, Divider } from '@material-ui/core';
+import { Card, CardHeader, Avatar, CardContent, Divider, Button } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { PlayArrow, Pause } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +12,9 @@ class Sentence extends React.Component {
 
 	constructor(props) {
 	    super(props);
+	    this.state = {
+	        displayOptions : this.props.displayOptions
+	    };
 	}
 
 	playSentence(){
@@ -38,14 +41,14 @@ class Sentence extends React.Component {
 		if(this.props.s.TRANSL.length == undefined){
 			translations.push(
 		          <Typography hidden={!this.props.displayOptions.translations.includes(this.props.s.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation ${this.props.s.TRANSL['xml:lang']}`}>
-			          <b><i>{this.props.s.TRANSL.text}</i></b>
+			          <b>{this.props.s.TRANSL.text}</b>
 			        </Typography>
 		        );
 		}else{
 			this.props.s.TRANSL.forEach((t) => {
 		      translations.push(
 		        	<Typography hidden={!this.props.displayOptions.translations.includes(t["xml:lang"])} variant="body2" component="p" className={`translation ${t["xml:lang"]}`}>
-			        	<b><i>{t.text}</i></b>
+			        	<b>{t.text}</b>
 			       	</Typography>
 		        );
 		    });
@@ -77,15 +80,15 @@ class Sentence extends React.Component {
 	if(this.props.s.NOTE != undefined){
 		if(this.props.s.NOTE.length == undefined){
 			notes.push(
-		          <Typography variant="body2" component="p">
-			          {this.props.s.NOTE["xml:lang"]}: <b>{this.props.s.NOTE.message}</b> <b>{this.props.s.NOTE.text}</b>
+		          <Typography variant="body2" component="p" className="note" hidden={!this.props.displayOptions.notes}>
+			          NOTE : {this.props.s.NOTE.message} {this.props.s.NOTE.text}
 			        </Typography>
 		        );
 		}else{
 			this.props.s.NOTE.forEach((f) => {
 		      notes.push(
-		          <Typography variant="body2" component="p">
-			          {f["xml:lang"]}: <b>{f.message}</b> <b>{f.text}</b>
+		          <Typography variant="body2" component="p" className="note" hidden={!this.props.displayOptions.notes}>
+			          NOTE : {f.message} {f.text}
 			        </Typography>
 		        );
 		    });
@@ -118,19 +121,19 @@ class Sentence extends React.Component {
 		    		if(w.M.length>0){
 		    			w.M.forEach((m) =>{
 			    			words.push(
-				          		<Word w={m} />
+				          		<Word w={m} displayOptions={this.props.displayOptions} />
 				        	);
 			    		});
 		    		}else{
 		    			words.push(
-				          		<Word w={w.M} />
+				          		<Word w={w.M} displayOptions={this.props.displayOptions} />
 				        	);
 		    		}
 
 
 		    	}else{
 		    		words.push(
-			          	<Word w={w} />
+			          	<Word w={w} displayOptions={this.props.displayOptions} />
 			        );
 
 			        if(w.AREA != undefined){
@@ -159,6 +162,7 @@ class Sentence extends React.Component {
 				        canvas.push(
 				        	<canvas title={word} style={canvasStyle} wordid={w.id} width={coords[2]-coords[0]} height={coords[3]-coords[1]} onClick={()=>document.getElementById(w.id).click()} ></canvas>
 				        );
+				        
 			        }
 		    	}	
 		     	
@@ -179,12 +183,17 @@ class Sentence extends React.Component {
 		<Card>
 			<CardHeader
 		        avatar={
+		        	<div>
 		          <Avatar aria-label="sentenceId" style={avatarStyle}>
-		            S{this.props.sID}
+		            S{this.props.sID} 
 		          </Avatar>
+					<Button variant="contained" href={this.props.doi}>doi</Button>
+					</div>
+		        
 		        }
 		        
 		      />
+		      
 	      <CardContent>
 	      	
 	      		{(this.props.s.AREA != undefined) ? 
@@ -201,17 +210,21 @@ class Sentence extends React.Component {
 				<IconButton color="primary" aria-label="play" onClick={this.pauseSentence.bind(this)}>
 				  <Pause />
 				</IconButton>
-				<p hidden={!this.props.displayOptions.words}>
-				{words}
+
+				<p style={{display: "inline-block"}}>
+	        		{transcriptions}
+	        	</p>
+
+	        	<p>
+					{words}
 				</p>
-				<p>
-	        	{transcriptions}
-	        	</p>
+
 	        	<p>
-	        	{translations}
+	        		{translations}
 	        	</p>
+
 	        	<p>
-	        	{notes}
+	        		{notes}
 	        	</p>
 	        	
 	        </div> 
