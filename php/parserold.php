@@ -3,7 +3,20 @@
 header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
-$xmlMetadata = simplexml_load_file('https://cocoon.huma-num.fr/crdo_servlet/oai-pmh?verb=GetRecord&metadataPrefix=crdo_dcq&identifier=oai:crdo.vjf.cnrs.fr:'.$_GET['idDoc']);
+$oaiID = isset($_GET['oai_primary']) ? $_GET['oai_primary'] : NULL;
+// ID du document
+
+$oaiPrimary = isset($_GET['oai_primary']) ? $_GET['oai_primary'] : NULL;
+$oaiSecondary = isset($_GET['oai_secondary']) ? $_GET['oai_secondary'] : NULL;
+
+// ID du document
+// ID du fichier annotations
+
+if($oaiPrimary == NULL && $oaiSecondary == NULL) die("You must provide an OAI ID.");
+
+$oaiID = ($oaiPrimary != NULL) ? $oaiPrimary : $oaiSecondary;
+
+$xmlMetadata = simplexml_load_file('https://cocoon.huma-num.fr/crdo_servlet/oai-pmh?verb=GetRecord&metadataPrefix=crdo_dcq&identifier=oai:crdo.vjf.cnrs.fr:'.$oaiID);
 $ns = $xmlMetadata->getNamespaces(true);
 
 $xml = dom_import_simplexml($xmlMetadata);
@@ -14,19 +27,34 @@ $mediaFormat= $xml->getElementsByTagNameNS($ns['dc'],'format')[0]->textContent;
 $resourcesUrl = array();
 $annotationsUrl = array();
 $imagesUrl = array();
+$doi="";
 
-foreach($metadataIdentifierList as $metadataIdentifier){
+if($oaiPrimary != NULL){
+	foreach($metadataIdentifierList as $metadataIdentifier){
 
-	if(strpos($metadataIdentifier->textContent,'.mp3') || strpos($metadataIdentifier->textContent,'.wav')|| strpos($metadataIdentifier->textContent,'.ogg')){
-	//if(strpos($mediaFormat,'audio') && strpos($metadataIdentifier->textContent,'.mp3')){
-		$audioUrl = $metadataIdentifier->textContent;
+		if(strpos($metadataIdentifier->textContent,'.mp3') || strpos($metadataIdentifier->textContent,'.wav')|| strpos($metadataIdentifier->textContent,'.ogg')){
+		//if(strpos($mediaFormat,'audio') && strpos($metadataIdentifier->textContent,'.mp3')){
+			$audioUrl = $metadataIdentifier->textContent;
+		}
+
+		if(strpos($metadataIdentifier->textContent,'.mp4') || strpos($metadataIdentifier->textContent,'.mov') || strpos($metadataIdentifier->textContent,'.avi')){
+		//if(strpos($mediaFormat,'video') && strpos($metadataIdentifier->textContent,'.mp4')){
+			$videoUrl = $metadataIdentifier->textContent;
+		}
+	}	
+}
+
+
+if($oaiSecondary!=NULL && $mediaFormat == "text/xml"){
+	foreach($metadataIdentifierList as $identifier){
+		if(strpos($identifier->textContent,'/data/')){
+			$annotationUrl = $identifier->textContent;
+		}
+
+		if(strpos($identifier->textContent,'doi')==0){
+			$doi = $identifier->textContent;
+		}		
 	}
-
-	if(strpos($metadataIdentifier->textContent,'.mp4') || strpos($metadataIdentifier->textContent,'.mov') || strpos($metadataIdentifier->textContent,'.avi')){
-	//if(strpos($mediaFormat,'video') && strpos($metadataIdentifier->textContent,'.mp4')){
-		$videoUrl = $metadataIdentifier->textContent;
-	}
-
 
 }
 
@@ -50,14 +78,16 @@ foreach($isRequiredByList as $isRequiredBy){
 			$resourcesUrl[$format][] = $content;
 			$urlParts = explode("/",$content);
 
-			if($format=="text/xml"){
-				$annotationsUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);
-			}else if($format=="image/jpeg"){
+			//if($format=="text/xml"){
+				//$annotationsUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);	
+			//}else 
+			if($format=="image/jpeg"){
 				
 				$imagesUrl[] = array("id"=>$urlParts[sizeof($urlParts)-1],"url"=>$content);
 			}
 
-		}		
+		}	
+			
 	}
 
 }
@@ -116,27 +146,122 @@ function recursiveParseXML($xmlTag,$o){
 $metadataJson = new stdClass();
 recursiveParseXML($xml,$metadataJson);
 
-$annotations = [];
 
-foreach($annotationsUrl as $aUrl){
-	$annotationXml = dom_import_simplexml(simplexml_load_file($aUrl['url']));
+
+if($oaiPrimary != NULL){
+	$response = array(
+		'oai_type'=>'primary',
+		'metadata'=>$metadataJson,
+		'audio'=>$audioUrl,
+		'video'=>$videoUrl,
+		'images'=>$imagesUrl
+	);	
+}else{
+
+	//$annotations = [];
+	$langTranscriptions = [];
+	$langTranslations = [];
+	$langGlosses = [];
+	$langWholeTranslations = [];
+
+	$annotationXml = dom_import_simplexml(simplexml_load_file($annotationUrl));
 	$annotationJson = new stdClass();
 	recursiveParseXML($annotationXml,$annotationJson);
 
-	$annotations[] = array(
-		'id'=>$aUrl['id'],
-		'data'=>$annotationJson
-	);
+	//27/08/2020 : get the different languages available
+	//28/08/2020 : set a default language for transcription
+	if(property_exists($annotationJson->TEXT,"TRANSL")){
+		foreach ($annotationJson->TEXT->TRANSL as $wholeTranslation){
+			$langWholeTranslations[]=$wholeTranslation->{"xml:lang"};
+			$langWholeTranslations = array_unique($langWholeTranslations);
+		}
+	}
+	
 
+	foreach ($annotationJson->TEXT->S as $keyS => $sentence) {
+
+		foreach ($sentence->FORM as $keyF => $transcription) {
+			//Si le type de transcription n'est pas renseigné on le force
+			if(!property_exists($transcription, "kindOf")){
+				$langTranscriptions[] = "phone";
+				if(is_array($annotationJson->TEXT->S[$keyS]->FORM)){
+					$annotationJson->TEXT->S[$keyS]->FORM[$keyF]->kindOf = "phone";
+				}else{
+					$annotationJson->TEXT->S[$keyS]->FORM->kindOf = "phone";
+				}
+				
+			}else{
+				$langTranscriptions[]=$transcription->kindOf;
+			}
+
+			$langTranscriptions = array_unique($langTranscriptions);
+			
+		}
+
+		foreach ($sentence->TRANSL as $transl) {
+
+			if(property_exists($transl, "xml:lang")){
+				$langTranslations[]=$transl->{"xml:lang"};
+				$langTranslations = array_unique($langTranslations);
+			}
+			
+			
+		}
+
+		foreach ($sentence->W as $keyW => $word) {
+			//TODO : Gestion des morphèmes
+			if(property_exists($word, "FORM")){
+				foreach ($word->FORM as $keyF2 => $transcription) {
+					if(!property_exists($transcription, "kindOf")){
+						$langTranscriptions[] = "phone";
+						$langTranscriptions = array_unique($langTranscriptions);
+						var_dump($sentence);
+						if(is_array($annotationJson->TEXT->S[$keyS]->W[$keyW]->FORM)){
+							$annotationJson->TEXT->S[$keyS]->W[$keyW]->FORM[$keyF2]->kindOf = "phone";
+						}else{
+							$annotationJson->TEXT->S[$keyS]->W[$keyW]->FORM->kindOf = "phone";
+						}
+					}else{
+						if($transcription->kindOf != NULL){
+							$langTranscriptions[]=$transcription->kindOf;
+							$langTranscriptions = array_unique($langTranscriptions);
+						}
+						
+					}
+
+					
+				}
+			}
+
+			if(property_exists($word, "TRANSL")){
+				foreach ($word->TRANSL as $transl) {
+
+					if(property_exists($transl, "xml:lang") && $transl->{"xml:lang"} != null){
+						$langGlosses[]=$transl->{"xml:lang"};
+						$langGlosses = array_unique($langGlosses);
+					}
+					
+				}
+			}
+
+		}
+	}
+
+
+
+	$response = array(
+		'oai_type'=>'secondary',
+		'doi'=>$doi,
+		'annotations'=>$annotationJson,
+		'langues'=>array(
+			'transcriptions'=>$langTranscriptions,
+			'translations'=>$langTranslations,
+			'glosses'=>$langGlosses,
+			'wholeTranslations'=>$langWholeTranslations
+		)
+	);
 }
 
-$response = array(
-	'metadata'=>$metadataJson,
-	'annotations'=>$annotations,
-	'audio'=>$audioUrl,
-	'video'=>$videoUrl,
-	'images'=>$imagesUrl
-);
 
 echo json_encode($response);
 

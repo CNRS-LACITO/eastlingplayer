@@ -9,7 +9,7 @@ import Annotations from './Components/Annotations';
 
 import './App.css';
 
-const parserUrl = "https://eastling.huma-num.fr/player/parser.php";
+const parserUrl = "https://eastling.huma-num.fr/player/parserMySQL.php";
 
 class App extends React.Component {
 
@@ -84,13 +84,6 @@ class App extends React.Component {
 		      .then(
 		        (result) => {
 
-			        if(result.metadata["OAI-PMH"].error != undefined){
-			        	this.setState({
-				            isMediaLoaded: true,
-				            hasMediaError:true,
-				            mediaError: result.metadata["OAI-PMH"].error
-				          });
-			        }else{
 			        	var mediaType = "";
 			        	var mediaUrl = "";
 
@@ -110,7 +103,7 @@ class App extends React.Component {
 				            MEDIAFILE : {"type":mediaType,"url":mediaUrl},
 				            images : result.images
 				          });
-			        }
+			        
  
 		        },
 		        // Remarque : il est important de traiter les erreurs ici
