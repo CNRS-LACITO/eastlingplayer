@@ -122,14 +122,14 @@ class Word extends React.Component {
   if(this.props.w.NOTE != undefined){
     if(this.props.w.NOTE.length == undefined){
       notes.push(
-              <Typography variant="body2" component="p">
+              <Typography variant="body2" component="p" className={`note ${this.props.w.NOTE['xml:lang']}`}>
                 {this.props.w.NOTE.message} {this.props.w.NOTE.text}
               </Typography>
             );
     }else{
       this.props.w.NOTE.forEach((f) => {
           notes.push(
-              <Typography variant="body2" component="p">
+              <Typography variant="body2" component="p" className={`note ${f.NOTE['xml:lang']}`}>
                 {f.message} {f.text}
               </Typography>
             );

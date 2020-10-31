@@ -42,11 +42,21 @@ class Player extends React.Component {
     if(this.props.file.type == "audio"){
       mediaElement = <audio ref={audio => (this.audio = audio)} id="player" controls preload='auto' style={audioStyle}>
           <source src={this.props.file.url} type="audio/mpeg" />
+          <track label="Transcription & Translation" id="test" />
+          <track label="Transcription" id="trackTranscription" />
+          <track label="Translation" id="trackTranslation" />
+          
+
         Your browser does not support the
             <code>audio</code> element.</audio>;
     }else{
       mediaElement = <video ref={video => (this.video = video)} id="player" controls preload='auto' style={audioStyle}>
           <source src={this.props.file.url} type="video/mp4" />
+          <track label="Transcription & Translation" id="test" />
+          <track label="Transcription" id="trackTranscription" />
+          <track label="Translation" id="trackTranslation" />
+          
+           
         Your browser does not support the
             <code>video</code> element.</video>;
     }

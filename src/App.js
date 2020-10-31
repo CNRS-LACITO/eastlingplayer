@@ -63,10 +63,10 @@ class App extends React.Component {
 	        	transcriptions : optionTranscriptions.split('+'),
 	        	translations : optionTranslations.split('+'),
 	        	glosses : optionGlosses.split('+'),
+	        	notes : optionNotes.split('+'),
 	        	wholeTranscriptions : (optionWholeTranscriptions == 'true'),
 	        	wholeTranslations : optionWholeTranslations.split('+'),
-	        	words : (optionWords == 'true'),
-	        	notes : (optionNotes == 'true')
+	        	words : (optionWords == 'true')
 	        },
 	    });
 	  	
@@ -160,6 +160,7 @@ class App extends React.Component {
 
 
 	  render(){
+	  	console.log("render App");
 	  	return (
 		    <div className="App">	
 
@@ -205,12 +206,12 @@ class App extends React.Component {
 					    <p>Details :{this.state.annotationsError.text}</p>
 			    	</Container>
 		    	 	:
-		    	 	<div>
+		    	 	<div key={this.state.doi}>
 		    	 	<Container>
 					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} />
 			    	</Container>
 			    	<Container>
- 						<Annotations doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} />
+ 						<Annotations doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
  			    	</Container>
  			    	</div>
 			    	]

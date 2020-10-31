@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, FormControl, InputLabel, Select, MenuItem, FormControlLabel, FormLabel, Switch, Checkbox } from '@material-ui/core';
+import { FormGroup, FormControlLabel, FormLabel, Switch, Checkbox } from '@material-ui/core';
 
 class DisplayOptions extends React.Component {
 
@@ -10,32 +10,70 @@ class DisplayOptions extends React.Component {
         checkedWholeTranscriptions: this.props.displayOptions.wholeTranscriptions,
         displayWholeTranslations: this.props.displayOptions.wholeTranslations,
         words : this.props.displayOptions.words,
-        notes : this.props.displayOptions.notes,
+        //notes : this.props.displayOptions.notes,
         displayTranscriptions: this.props.displayOptions.transcriptions,
         displayTranslations: this.props.displayOptions.translations,
         displayGlosses: this.props.displayOptions.glosses,
+        displayNotes: this.props.displayOptions.notes,
         langOptions:this.props.langOptions
     };
+
+    console.log(this.state.displayNotes.length);
+    console.log(this.state.langOptions);
+    /*
+    this.state.langOptions.transcriptions.forEach((transc) => {
+      var newTrack = document.createElement("track");
+      newTrack.setAttribute("id",transc);
+      newTrack.setAttribute("kind","captions");
+
+      document.querySelector("#player").appendChild(newTrack);
+      });
+
+    this.state.langOptions.translations.forEach((transl) => {
+      var newTrack = document.createElement("track");
+      newTrack.setAttribute("id",transl);
+      newTrack.setAttribute("kind","subtitles");
+      document.querySelector("#player").appendChild(newTrack);
+      });
+      */
+
   }
 
- 
 
   buildUrl(){
 
       var params = new URLSearchParams(window.location.search);
       params.set('optionWords',this.state.words.toString());
-      params.set('optionNotes',this.state.notes.toString());
+      //params.set('optionNotes',this.state.notes.toString());
       params.set('optionTranscriptions',this.state.displayTranscriptions.join('+'));
       params.set('optionTranslations',this.state.displayTranslations.join('+'));
       params.set('optionGlosses',this.state.displayGlosses.join('+'));
+      params.set('optionNotes',this.state.displayNotes.join('+'));
       params.set('optionWholeTranscriptions',this.state.checkedWholeTranscriptions.toString());
       params.set('optionWholeTranslations',this.state.displayWholeTranslations.join('+'));
 
       var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 
       window.history.pushState('test','',newUrl);
+  }
 
+  checkTranscriptions(){
+    document.querySelectorAll('.wholeTranscriptions').forEach(
+      function(e){
+        e.style.display='none';
+      });
 
+    var checkedTranscriptions = this.state.displayTranscriptions;
+    console.log(checkedTranscriptions);
+    for(var i=0;i<checkedTranscriptions.length;i++){
+      if(checkedTranscriptions[i].length>0){
+          document.querySelectorAll('.wholeTranscriptions.'+checkedTranscriptions[i]).forEach(
+            function(e){
+              e.style.display='block';
+            });
+      }
+   
+    }
   }
 
   handleChecked(event){
@@ -44,26 +82,33 @@ class DisplayOptions extends React.Component {
     this.setState({[event.target.name]: checked},()=>{
       this.buildUrl();
 
-      if(name == "words")
+      if(name === "words")
       document.querySelectorAll('.word').forEach(
           function(e){
             //e.style.display='none';
-            (checked==true)?e.style.display='block':e.style.display='none';
+            (checked===true)?e.style.display='block':e.style.display='none';
           });
 
-      if(name == "notes")
+      if(name === "notes")
       document.querySelectorAll('.note').forEach(
           function(e){
             //e.style.display='none';
-            (checked==true)?e.style.display='block':e.style.display='none';
+            (checked===true)?e.style.display='block':e.style.display='none';
           });
 
-      if(name == "checkedWholeTranscriptions")
-      document.querySelectorAll('.wholeTranscriptions').forEach(
-          function(e){
-            //e.style.display='none';
-            (checked==true)?e.style.display='block':e.style.display='none';
-          });
+
+      if(name === "checkedWholeTranscriptions"){
+        if(checked===false){
+          document.querySelectorAll('.wholeTranscriptions').forEach(
+            function(e){
+              e.style.display='none';
+            });
+        }else{
+          this.checkTranscriptions();
+        }
+      }
+      
+    
 
     });
   }
@@ -94,6 +139,8 @@ class DisplayOptions extends React.Component {
 
 
       this.setState({displayTranscriptions: checkedTranscriptions},this.buildUrl());
+      if(this.state.checkedWholeTranscriptions===true)
+        this.checkTranscriptions();
 
     }
     
@@ -174,6 +221,31 @@ class DisplayOptions extends React.Component {
     
   }
 
+  handleNotesOptions(event){
+    if(event.target.name.length >0 ){
+      var checkedNotes = this.state.displayNotes;
+
+      const index = checkedNotes.indexOf(event.target.name);
+      if (index > -1) {
+        checkedNotes.splice(index, 1);
+        document.querySelectorAll('.note.'+event.target.name).forEach(
+          function(e){
+            e.style.display='none';
+          });
+      }else{
+        checkedNotes.push(event.target.name);
+        document.querySelectorAll('.note.'+event.target.name).forEach(
+          function(e){
+            e.style.display='block';
+          });
+      }
+
+      this.setState({displayNotes: checkedNotes},this.buildUrl());
+
+    }
+    
+  }
+
   render() {
 
     return (
@@ -249,17 +321,15 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
 
-          <FormControlLabel
-            control={
-              <Switch
-                checked={this.state.notes}
-                onChange={this.handleChecked.bind(this)}
-                name="notes"
-                color="primary"
-              />
-            }
-            label="Notes"
-          />
+          <FormLabel component="legend">Notes</FormLabel>
+          <FormGroup>
+          {this.state.langOptions.notes.map(nl => (
+            <FormControlLabel
+              control={<Checkbox checked={this.state.displayNotes.includes(nl)} onChange={this.handleNotesOptions.bind(this)} name={nl} />}
+              label={nl}
+            />
+          ))}
+          </FormGroup>
 
           </FormGroup>
 

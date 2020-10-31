@@ -33,12 +33,11 @@ class Sentence extends React.Component {
 	const translations = [];
 	const notes = [];
 	const words = [];
-	const areas = [];
 	const canvas = [];
 
 	// Get translation(s) of the sentence
-	if(this.props.s.TRANSL != undefined){
-		if(this.props.s.TRANSL.length == undefined){
+	if(this.props.s.TRANSL !== null && this.props.s.TRANSL !== undefined){
+		if(this.props.s.TRANSL.length === undefined){
 			translations.push(
 		          <Typography hidden={!this.props.displayOptions.translations.includes(this.props.s.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation ${this.props.s.TRANSL['xml:lang']}`}>
 			          <b>{this.props.s.TRANSL.text}</b>
@@ -57,13 +56,14 @@ class Sentence extends React.Component {
 	
 //
 	// Get transcription(s) of the sentence
-	if(this.props.s.FORM != undefined){
-		if(this.props.s.FORM.length == undefined){
+	if(this.props.s.FORM !== undefined){
+		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription ${this.props.s.FORM.kindOf}`}>
 			          <b>{this.props.s.FORM.text}</b>
 			        </Typography>
 		        );
+
 		}else{
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
@@ -77,8 +77,8 @@ class Sentence extends React.Component {
   	
 
 	// Get note(s) of the sentence
-	if(this.props.s.NOTE != undefined){
-		if(this.props.s.NOTE.length == undefined){
+	if(this.props.s.NOTE !== undefined && this.props.s.NOTE !== null){
+		if(this.props.s.NOTE.length === undefined){
 			notes.push(
 		          <Typography variant="body2" component="p" className="note" hidden={!this.props.displayOptions.notes}>
 			          NOTE : {this.props.s.NOTE.message} {this.props.s.NOTE.text}
@@ -98,7 +98,7 @@ class Sentence extends React.Component {
 
 
     
-    if(this.props.s.AREA != undefined){
+    if(this.props.s.AREA !== undefined){
     	var coords = this.props.s.AREA.coords.split(',');
 	    var delta_x = coords[0];//offset for x, image positioning
 	    var delta_y = coords[1];//offset for y, image positioning
@@ -106,7 +106,7 @@ class Sentence extends React.Component {
 
 		
 		// Get note(s) of the sentence
-	if(this.props.s.W != undefined){
+	if(this.props.s.W !== undefined){
 
 		//W can be an array or an object depending on the number of children in the XML
 		//Object if only one Word, Array if more than 1 word
@@ -116,7 +116,7 @@ class Sentence extends React.Component {
 			//get words of the sentence
 		    this.props.s.W.forEach((w) => {
 
-		    	if(w.M != undefined){
+		    	if(w.M !== undefined){
 
 		    		if(w.M.length>0){
 		    			w.M.forEach((m) =>{
@@ -136,14 +136,14 @@ class Sentence extends React.Component {
 			          	<Word w={w} displayOptions={this.props.displayOptions} />
 			        );
 
-			        if(w.AREA != undefined){
+			        if(w.AREA !== undefined){
 			        	var coords = w.AREA.coords.split(',');
 				        coords[0] -= delta_x;
 				        coords[1] -= delta_y;
 						coords[2] -= delta_x;
 				        coords[3] -= delta_y;
 
-				        var newCoords = coords.join(',');
+				        //var newCoords = coords.join(',');
 				        var canvasStyle = {
 				        	'position': 'absolute',
 				        	'top': coords[1],
@@ -153,7 +153,7 @@ class Sentence extends React.Component {
 
 				        // Get transcription(s) of the word
 				        var word="";
-					  	if(w.FORM.length == undefined){
+					  	if(w.FORM.length === undefined){
 					  		word = w.FORM.text
 						}else{
 						      word = w.FORM[0].text
@@ -196,7 +196,7 @@ class Sentence extends React.Component {
 		      
 	      <CardContent>
 	      	
-	      		{(this.props.s.AREA != undefined) ? 
+	      		{(this.props.s.AREA !== undefined) ? 
 	      		(
 	      		<Picture sentenceId={this.props.s.id} imageSrc={this.props.imageSrc} canvas={canvas} area={this.props.s.AREA} />
 	      		):(<div></div>)
