@@ -100,15 +100,19 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
         var translSubtitle = "";
 
         if(typeof(a.FORM) === "object"){
+          if(a.FORM !== null)
           transcSubtitle = a.FORM.text;
         }else{
+          if(a.FORM[0].text !== null)
           transcSubtitle = a.FORM[0].text;
         }
 
         if(a.TRANSL !== null){
           if(typeof(a.TRANSL) === "object"){
+            if(a.TRANSL !== null)
             translSubtitle = a.TRANSL.text;
           }else{
+            if(a.TRANSL[0].text !== null)
             translSubtitle = a.TRANSL[0].text;
           }
         }
@@ -137,7 +141,7 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
     });
 
     // Get whole transcription(s) of the doc
-    if(this.props.annotations.FORM !== undefined){
+    if(this.props.annotations.FORM !== undefined && this.props.annotations.FORM !== null){
       if(this.props.annotations.FORM.length === undefined){
         wholeTranscriptions.push(
                 <Typography hidden={(!this.props.displayOptions.wholeTranscriptions) || (!this.props.displayOptions.transcriptions.includes(this.props.annotations.FORM.kindOf))} variant="body2" component="p" className={this.props.annotations.FORM.kindOf + " wholeTranscriptions"}>

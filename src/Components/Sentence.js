@@ -56,7 +56,7 @@ class Sentence extends React.Component {
 	
 //
 	// Get transcription(s) of the sentence
-	if(this.props.s.FORM !== undefined){
+	if(this.props.s.FORM !== undefined && this.props.s.FORM !== null){
 		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription ${this.props.s.FORM.kindOf}`}>
