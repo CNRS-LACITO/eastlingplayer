@@ -187,7 +187,7 @@ class Sentence extends React.Component {
 		          <Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-					<Button variant="contained" href={this.props.doi}>doi</Button>
+					<Button variant="contained" href={this.props.doi} target="_blank">doi</Button>
 					</div>
 		        
 		        }

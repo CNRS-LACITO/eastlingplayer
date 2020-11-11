@@ -91,7 +91,9 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
       }
       
       sID++;
-      var doiSentenceUrl = doiUrl + doi + "&sentence=S" + sID;
+      //#3
+      //var doiSentenceUrl = doiUrl + doi + "&sentence=S" + sID;
+      var doiSentenceUrl = doi + "#S" + sID;
       //TEST VTT
  
       if(trackTranscription.cues.length < this.props.annotations.S.length){
