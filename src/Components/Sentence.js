@@ -181,18 +181,7 @@ class Sentence extends React.Component {
     return (
       <div>
 		<Card>
-			<CardHeader
-		        avatar={
-		        	<div>
-		          <Avatar aria-label="sentenceId" style={avatarStyle}>
-		            S{this.props.sID} 
-		          </Avatar>
-					<Button variant="contained" href={this.props.doi} target="_blank">doi</Button>
-					</div>
-		        
-		        }
-		        
-		      />
+
 		      
 	      <CardContent>
 	      	
@@ -203,6 +192,11 @@ class Sentence extends React.Component {
 	      		}
 	       	
 	        <div style={{textAlign:"initial"}}>
+
+	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
+		            S{this.props.sID} 
+		          </Avatar>
+				<Button variant="contained" href={this.props.doi} target="_blank">doi</Button>
 
 	        	<IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
 				  <PlayArrow />
@@ -230,7 +224,7 @@ class Sentence extends React.Component {
 	        </div> 
 	      </CardContent>
 	    </Card>
-	    <Divider light />
+
       </div>
     );
   }

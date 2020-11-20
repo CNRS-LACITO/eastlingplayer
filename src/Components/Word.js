@@ -81,7 +81,7 @@ class Word extends React.Component {
 
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
-    if(this.props.w.TRANSL != undefined){
+    if(this.props.w.TRANSL != undefined && this.props.w.TRANSL !== null){
 	    if(this.props.w.TRANSL.length == undefined){
 	      translations.push(
 	              <Typography variant="body2" component="p" hidden={!this.props.displayOptions.glosses.includes(this.props.w.TRANSL["xml:lang"])} className={`gloss ${this.props.w.TRANSL['xml:lang']}`}>
@@ -100,6 +100,7 @@ class Word extends React.Component {
     }
     
   //
+  if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
       if(this.props.w.FORM.length == undefined){
         transcriptions.push(
                   <Typography variant="body2" component="p">
@@ -117,9 +118,9 @@ class Word extends React.Component {
             });
             word = this.props.w.FORM[0].text;
         }
-
+  }
         // Get note(s) of the sentence
-  if(this.props.w.NOTE != undefined){
+  if(this.props.w.NOTE != undefined && this.props.w.NOTE != null){
     if(this.props.w.NOTE.length == undefined){
       notes.push(
               <Typography variant="body2" component="p" className={`note ${this.props.w.NOTE['xml:lang']}`}>
