@@ -139,7 +139,7 @@ class App extends React.Component {
 			        	this.setState({
 			        		langOptions: result.langues,
 				            isAnnotationsLoaded: true,
-				            annotations : result.annotations.TEXT,
+				            annotations : result.annotations,
 				            doi : result.doi
 				          });
 			        }

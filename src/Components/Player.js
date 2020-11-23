@@ -18,7 +18,8 @@ class Player extends React.Component {
     var scriptStr = "var wordidList=[];var startTimeList=[];var endTimeList=[];"
     scriptStr +="function updatePosition(time){startTimeList.some(function(t,index,_arr){ if(t < time && endTimeList[index]> time){highlight(wordidList[index]);} })}";
     scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime)};";
-    scriptStr +="function highlight(id){document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollIntoView();window.scrollBy(0, -50);document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollLeft=document.querySelector('[wordid=\"'+id+'\"]').offsetLeft;document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';";
+    //scriptStr +="function highlight(id){document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollIntoView();window.scrollBy(0, -50);document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollLeft=document.querySelector('[wordid=\"'+id+'\"]').offsetLeft;document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';";
+    scriptStr +="function highlight(id){console.log(id);document.querySelector('[id=\"'+id+'\"]').scrollIntoView();window.scrollBy(0, -50);/*document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';*/";
     scriptStr +="document.querySelectorAll('canvas:not([wordid=\"'+id+'\"])').forEach(function(e){e.style.border='none'});}";
     //document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement
     //console.log(scriptStr);

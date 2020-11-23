@@ -1,5 +1,6 @@
 import React from 'react';
 import Sentence from './Sentence';
+import Word from './Word';
 import { Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
@@ -17,33 +18,6 @@ class Annotations extends React.Component {
     console.log('Annotations - shouldComponentUpdate lifecycle');
     return false;
   }
-
-
-/*
-
-DEPRECATED : plus de choix de fichier annotations en liste déroulante
-
-  getAnnotationData(){
-    if(this.props.annotations){
-      this.setState({
-            isLoaded: true,
-            annotationData : this.props.annotations.TEXT.S
-          });
-    }
-  }
-
- componentDidMount() {
-    if(this.props.file !=== undefined)
-    this.getAnnotationData();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.file !=== this.props.file) {
-      this.getAnnotationData();
-    }
-
-  }
-*/
 
   render() {
     console.log(this.state.isLoaded);
@@ -76,82 +50,131 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
       
     }
 
+    if(this.props.annotations.TEXT !== undefined && this.props.annotations.TEXT !== null)
+      var sentences = this.props.annotations.TEXT.S;
+
+    if(this.props.annotations.WORDLIST !== undefined && this.props.annotations.WORDLIST !== null)
+      var wordlist = this.props.annotations.WORDLIST.W;
+
     //this.state.annotationData.forEach((a) => {
-    this.props.annotations.S.forEach((a) => {
+    if(sentences !== null && sentences !== undefined){
+      sentences.forEach((a) => {
 
-      if(a.AREA !== undefined && a.AREA.image !== undefined){
-        this.props.images.forEach((i) =>{
-          var idImage = i.id.split('.version');
+        if(a.AREA !== undefined && a.AREA.image !== undefined){
+          this.props.images.forEach((i) =>{
+            var idImage = i.id.split('.version');
 
-          if(idImage[0] === a.AREA.image)
-            {
-              imageSrc=i.url;
-            }
-        });
-      }
-      
-      sID++;
-      //#3
-      //var doiSentenceUrl = doiUrl + doi + "&sentence=S" + sID;
-      var doiSentenceUrl = doi + "#S" + sID;
-      //TEST VTT
- 
-      if(trackTranscription.cues.length < this.props.annotations.S.length){
-        
-        var transcSubtitle = "";
-        var translSubtitle = "";
-
-        if(typeof(a.FORM) === "object"){
-          if(a.FORM !== null)
-          transcSubtitle = a.FORM.text;
-        }else{
-          if(a.FORM[0].text !== null)
-          transcSubtitle = a.FORM[0].text;
+            if(idImage[0] === a.AREA.image)
+              {
+                imageSrc=i.url;
+              }
+          });
         }
+        
+        sID++;
+        //#3
+        //var doiSentenceUrl = doiUrl + doi + "&sentence=S" + sID;
+        var doiSentenceUrl = doi + "#S" + sID;
+        //TEST VTT
+   
+        if(trackTranscription.cues.length < sentences.length){
+          
+          var transcSubtitle = "";
+          var translSubtitle = "";
 
-        if(a.TRANSL !== null){
-          if(typeof(a.TRANSL) === "object"){
-            if(a.TRANSL !== null)
-            translSubtitle = a.TRANSL.text;
+          if(typeof(a.FORM) === "object"){
+            if(a.FORM !== null)
+            transcSubtitle = a.FORM.text;
           }else{
-            if(a.TRANSL[0].text !== null)
-            translSubtitle = a.TRANSL[0].text;
+            if(a.FORM[0].text !== null)
+            transcSubtitle = a.FORM[0].text;
           }
+
+          if(a.TRANSL !== null){
+            if(typeof(a.TRANSL) === "object"){
+              if(a.TRANSL !== null)
+              translSubtitle = a.TRANSL.text;
+            }else{
+              if(a.TRANSL[0].text !== null)
+              translSubtitle = a.TRANSL[0].text;
+            }
+          }
+
+          const cueTransc = new VTTCue(a.AUDIO.start, a.AUDIO.end, transcSubtitle);
+          const cueTransl = new VTTCue(a.AUDIO.start, a.AUDIO.end, translSubtitle);
+
+          cueTransc.size = 99;
+          cueTransl.size = 99;
+          cueTransc.line = 12;
+          cueTransl.line = 14;
+
+          trackTest.addCue(cueTransc);
+          trackTest.addCue(cueTransl);
+          trackTranscription.addCue(cueTransc);
+          trackTranslation.addCue(cueTransl);
+          
         }
-
-        const cueTransc = new VTTCue(a.AUDIO.start, a.AUDIO.end, transcSubtitle);
-        const cueTransl = new VTTCue(a.AUDIO.start, a.AUDIO.end, translSubtitle);
-
-        cueTransc.size = 99;
-        cueTransl.size = 99;
-        cueTransc.line = 12;
-        cueTransl.line = 14;
-
-        trackTest.addCue(cueTransc);
-        trackTest.addCue(cueTransl);
-        trackTranscription.addCue(cueTransc);
-        trackTranslation.addCue(cueTransl);
         
-      }
-      
-      
+        annotationItems.push(
+            <Sentence doi={doiSentenceUrl} sID={sID} s={a} imageSrc={imageSrc} displayOptions={this.state.displayOptions} />
+          );
 
-      annotationItems.push(
-          <Sentence doi={doiSentenceUrl} sID={sID} s={a} imageSrc={imageSrc} displayOptions={this.state.displayOptions} />
-        );
+      });
+    }
 
-    });
+    if(wordlist !== null && wordlist !== undefined){
+      wordlist.forEach((a) => {
+
+          // Get word(s) of the sentence
+        if(wordlist !== undefined && wordlist !== null){
+
+          //W can be an array or an object depending on the number of children in the XML
+          //Object if only one Word, Array if more than 1 word
+
+          if(Array.isArray(wordlist)){
+            //get words of the sentence
+              wordlist.forEach((w) => {
+
+                if(w.M !== undefined && w.M !== null){
+
+                  if(w.M.length>0){
+                    w.M.forEach((m) =>{
+                      annotationItems.push(
+                            <Word w={m} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} isMorph={true} />
+                        );
+                    });
+                  }else{
+                    annotationItems.push(
+                            <Word w={w.M} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} isMorph={true} />
+                        );
+                  }
+
+
+                }else{
+                  annotationItems.push(
+                    <Word w={w} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} />
+                  );
+                } 
+                
+              });
+
+          } 
+          
+        }
+      });
+    }
+    
 
     // Get whole transcription(s) of the doc
-    if(this.props.annotations.FORM !== undefined && this.props.annotations.FORM !== null){
-      if(this.props.annotations.FORM.length === undefined){
+    if(this.props.annotations.TEXT.FORM !== undefined && this.props.annotations.TEXT.FORM !== null){
+      if(this.props.annotations.TEXT.FORM.length === undefined){
         wholeTranscriptions.push(
-                <Typography hidden={(!this.props.displayOptions.wholeTranscriptions) || (!this.props.displayOptions.transcriptions.includes(this.props.annotations.FORM.kindOf))} variant="body2" component="p" className={this.props.annotations.FORM.kindOf + " wholeTranscriptions"}>
-                  {this.props.annotations.FORM.text}
+                <Typography hidden={(!this.props.displayOptions.wholeTranscriptions) || (!this.props.displayOptions.transcriptions.includes(this.props.annotations.TEXT.FORM.kindOf))} variant="body2" component="p" className={this.props.annotations.TEXT.FORM.kindOf + " wholeTranscriptions"}>
+                  {this.props.annotations.TEXT.FORM.text}
                 </Typography>
               );
       }else{
-        this.props.annotations.FORM.forEach((f) => {
+        this.props.annotations.TEXT.FORM.forEach((f) => {
             wholeTranscriptions.push(
                 <Typography hidden={(!this.props.displayOptions.wholeTranscriptions) || (!this.props.displayOptions.transcriptions.includes(f.kindOf))} variant="body2" component="p" className={f.kindOf + " wholeTranscriptions"}>
                   {f.text}
@@ -162,15 +185,15 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
     }
 //
     // Get whole translation(s) of the doc
-    if(this.props.annotations.TRANSL !== null && this.props.annotations.TRANSL !== undefined){
-      if(this.props.annotations.TRANSL.length === undefined){
+    if(this.props.annotations.TEXT.TRANSL !== null && this.props.annotations.TEXT.TRANSL !== undefined){
+      if(this.props.annotations.TEXT.TRANSL.length === undefined){
         wholeTranslations.push(
-                <Typography hidden={!this.props.displayOptions.wholeTranslations.includes(this.props.annotations.TRANSL["xml:lang"])} variant="body2" component="p" className={`wholetranslation ${this.props.annotations.TRANSL['xml:lang']}`}>
-                  {this.props.annotations.TRANSL.text}
+                <Typography hidden={!this.props.displayOptions.wholeTranslations.includes(this.props.annotations.TEXT.TRANSL["xml:lang"])} variant="body2" component="p" className={`wholetranslation ${this.props.annotations.TEXT.TRANSL['xml:lang']}`}>
+                  {this.props.annotations.TEXT.TRANSL.text}
                 </Typography>
               );
       }else{
-        this.props.annotations.TRANSL.forEach((t) => {
+        this.props.annotations.TEXT.TRANSL.forEach((t) => {
             wholeTranslations.push(
                 <Typography hidden={!this.props.displayOptions.wholeTranslations.includes(t["xml:lang"])} variant="body2" component="p" className={`wholetranslation ${t['xml:lang']}`}>
                   {t.text}
@@ -181,15 +204,15 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
     }
 
     // Get note(s) of the doc
-    if(this.props.annotations.NOTE !== undefined && this.props.annotations.NOTE !== null){
-      if(this.props.annotations.NOTE.length === undefined){
+    if(this.props.annotations.TEXT.NOTE !== undefined && this.props.annotations.TEXT.NOTE !== null){
+      if(this.props.annotations.TEXT.NOTE.length === undefined){
         notes.push(
-                <Typography hidden={!this.props.displayOptions.notes.includes(this.props.annotations.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.annotations.NOTE['xml:lang']}`}>
-                  {this.props.annotations.NOTE.message}
+                <Typography hidden={!this.props.displayOptions.notes.includes(this.props.annotations.TEXT.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.annotations.TEXT.NOTE['xml:lang']}`}>
+                  {this.props.annotations.TEXT.NOTE.message}
                 </Typography>
               );
       }else{
-        this.props.annotations.NOTE.forEach((t) => {
+        this.props.annotations.TEXT.NOTE.forEach((t) => {
             notes.push(
                 <Typography hidden={!this.props.displayOptions.notes.includes(t["xml:lang"])} variant="body2" component="p" className={`note ${t['xml:lang']}`}>
                   {t.message}
@@ -203,16 +226,18 @@ DEPRECATED : plus de choix de fichier annotations en liste déroulante
 
     return (
       <div>
-        <Container fixed>
-               {wholeTranscriptions}
-        </Container>
-        <Container fixed>
-               {wholeTranslations}
-        </Container>
-        <Container fixed>
-               {notes}
-        </Container>
-        <Container fixed>
+        <div class="TEXT">
+          <Container fixed id="documentTranscriptionsBlock">
+                 {wholeTranscriptions}
+          </Container>
+          <Container fixed id="documentTranslationsBlock">
+                 {wholeTranslations}
+          </Container>
+          <Container fixed id="documentNotesBlock">
+                 {notes}
+          </Container>
+        </div>
+        <Container fixed id="documentAnnotationsBlock">
               {annotationItems}
         </Container>
       </div>

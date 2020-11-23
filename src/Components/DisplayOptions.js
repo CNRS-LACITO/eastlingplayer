@@ -18,7 +18,7 @@ class DisplayOptions extends React.Component {
         langOptions:this.props.langOptions
     };
 
-    console.log(this.state.displayNotes.length);
+    console.log(this.state.displayNotes);
     console.log(this.state.langOptions);
     /*
     this.state.langOptions.transcriptions.forEach((transc) => {
@@ -83,19 +83,20 @@ class DisplayOptions extends React.Component {
       this.buildUrl();
 
       if(name === "words")
-      document.querySelectorAll('.word').forEach(
+      document.querySelectorAll('.wordsBlock').forEach(
           function(e){
             //e.style.display='none';
             (checked===true)?e.style.display='block':e.style.display='none';
           });
 
+/*
       if(name === "notes")
       document.querySelectorAll('.note').forEach(
           function(e){
             //e.style.display='none';
             (checked===true)?e.style.display='block':e.style.display='none';
           });
-
+*/
 
       if(name === "checkedWholeTranscriptions"){
         if(checked===false){
@@ -252,9 +253,10 @@ class DisplayOptions extends React.Component {
       <div>
         <h2>Display Options</h2>
         {
-
+        
         <FormGroup row>
-
+        
+        <div class="optionTransc">
         <FormLabel component="legend">Transcriptions</FormLabel>
         <FormGroup>
         {this.state.langOptions.transcriptions.map(transc => (
@@ -264,7 +266,9 @@ class DisplayOptions extends React.Component {
           />
         ))}
         </FormGroup>
+        </div>
 
+        <div class="optionTransl">
         <FormLabel component="legend">Translations</FormLabel>
         <FormGroup>
         {this.state.langOptions.translations.map(transl => (
@@ -273,9 +277,10 @@ class DisplayOptions extends React.Component {
             label={transl}
           />
         ))}
-        </FormGroup>           
+        </FormGroup>
+        </div>           
 
-
+        <div class="optionWholeTransc">
           <FormControlLabel
             control={
               <Switch 
@@ -287,8 +292,9 @@ class DisplayOptions extends React.Component {
             }
             label="Whole text transcription"
           />
+        </div>
 
-          
+        <div class="optionWholeTransl">  
           <FormLabel component="legend">Whole text translation</FormLabel>
         <FormGroup>
         {this.state.langOptions.wholeTranslations.map(transl => (
@@ -298,7 +304,9 @@ class DisplayOptions extends React.Component {
           />
         ))}
         </FormGroup> 
+        </div>
 
+        <div class="optionWords">
           <FormControlLabel
             control={
               <Switch
@@ -310,7 +318,9 @@ class DisplayOptions extends React.Component {
             }
             label="Words"
           />
+        </div>
 
+        <div class="optionGlosses">
           <FormLabel component="legend">Glosses</FormLabel>
           <FormGroup>
           {this.state.langOptions.glosses.map(gl => (
@@ -320,7 +330,9 @@ class DisplayOptions extends React.Component {
             />
           ))}
           </FormGroup>
+          </div>
 
+          <div class="optionNotes">
           <FormLabel component="legend">Notes</FormLabel>
           <FormGroup>
           {this.state.langOptions.notes.map(nl => (
@@ -330,6 +342,7 @@ class DisplayOptions extends React.Component {
             />
           ))}
           </FormGroup>
+          </div>
 
           </FormGroup>
 

@@ -80,14 +80,14 @@ class Sentence extends React.Component {
 	if(this.props.s.NOTE !== undefined && this.props.s.NOTE !== null){
 		if(this.props.s.NOTE.length === undefined){
 			notes.push(
-		          <Typography variant="body2" component="p" className="note" hidden={!this.props.displayOptions.notes}>
+		          <Typography hidden={!this.props.displayOptions.notes.includes(this.props.s.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.s.NOTE["xml:lang"]}`} >
 			          NOTE : {this.props.s.NOTE.message} {this.props.s.NOTE.text}
 			        </Typography>
 		        );
 		}else{
 			this.props.s.NOTE.forEach((f) => {
 		      notes.push(
-		          <Typography variant="body2" component="p" className="note" hidden={!this.props.displayOptions.notes}>
+		          <Typography hidden={!this.props.displayOptions.notes.includes(f["xml:lang"])} variant="body2" component="p" className={`note ${f["xml:lang"]}`} >
 			          NOTE : {f.message} {f.text}
 			        </Typography>
 		        );
@@ -98,15 +98,14 @@ class Sentence extends React.Component {
 
 
     
-    if(this.props.s.AREA !== undefined){
+    if(this.props.s.AREA !== undefined && this.props.s.AREA !== null){
     	var coords = this.props.s.AREA.coords.split(',');
 	    var delta_x = coords[0];//offset for x, image positioning
 	    var delta_y = coords[1];//offset for y, image positioning
 	}
-
-		
-		// Get note(s) of the sentence
-	if(this.props.s.W !== undefined){
+	
+	// Get word(s) of the sentence
+	if(this.props.s.W !== undefined && this.props.s.W !== null){
 
 		//W can be an array or an object depending on the number of children in the XML
 		//Object if only one Word, Array if more than 1 word
@@ -116,17 +115,22 @@ class Sentence extends React.Component {
 			//get words of the sentence
 		    this.props.s.W.forEach((w) => {
 
-		    	if(w.M !== undefined){
+		    	if(w.M !== undefined && w.M !== null){
 
 		    		if(w.M.length>0){
+		    			var divWord;
+		    			var morphemes = [];
 		    			w.M.forEach((m) =>{
-			    			words.push(
-				          		<Word w={m} displayOptions={this.props.displayOptions} />
+			    			morphemes.push(
+				          		<Word w={m} displayOptions={this.props.displayOptions} isMorph={true} />
 				        	);
 			    		});
+			    		divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
+			    		words.push(divWord);
+
 		    		}else{
 		    			words.push(
-				          		<Word w={w.M} displayOptions={this.props.displayOptions} />
+				          		<Word w={w.M} displayOptions={this.props.displayOptions} isMorph={true} />
 				        	);
 		    		}
 
@@ -136,7 +140,7 @@ class Sentence extends React.Component {
 			          	<Word w={w} displayOptions={this.props.displayOptions} />
 			        );
 
-			        if(w.AREA !== undefined){
+			        if(w.AREA !== undefined && w.AREA !== null){
 			        	var coords = w.AREA.coords.split(',');
 				        coords[0] -= delta_x;
 				        coords[1] -= delta_y;
@@ -180,18 +184,15 @@ class Sentence extends React.Component {
 
     return (
       <div>
-		<Card>
-
-		      
-	      <CardContent>
-	      	
+		<Card> 
+	      <CardContent>  	
 	      		{(this.props.s.AREA !== undefined) ? 
 	      		(
 	      		<Picture sentenceId={this.props.s.id} imageSrc={this.props.imageSrc} canvas={canvas} area={this.props.s.AREA} />
 	      		):(<div></div>)
 	      		}
 	       	
-	        <div style={{textAlign:"initial"}}>
+	        <div class="SENTENCE" style={{textAlign:"initial"}}>
 
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
@@ -205,19 +206,19 @@ class Sentence extends React.Component {
 				  <Pause />
 				</IconButton>
 
-				<p style={{display: "inline-block"}}>
+				<p class="transcBlock" style={{display: "inline-block"}}>
 	        		{transcriptions}
 	        	</p>
 
-	        	<p>
+	        	<p class="wordsBlock" hidden={!this.props.displayOptions.words}>
 					{words}
 				</p>
 
-	        	<p>
+	        	<p class="translBlock">
 	        		{translations}
 	        	</p>
 
-	        	<p>
+	        	<p class="notesBlock">
 	        		{notes}
 	        	</p>
 	        	

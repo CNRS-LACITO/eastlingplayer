@@ -1,6 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Popover, Typography} from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import { PlayArrow, Pause } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +29,16 @@ class Word extends React.Component {
 	      anchorEl: null,
           open: false
 	    };
-	  }
+	}
+
+  playSentence(){
+    document.getElementById('player').currentTime = this.props.w.AUDIO.start;
+    document.getElementById('player').play();
+  }
+
+  pauseSentence(){
+    document.getElementById('player').pause();
+  }
 
     componentDidMount() {
       if(this.props.w.AUDIO != undefined){
@@ -130,7 +141,7 @@ class Word extends React.Component {
     }else{
       this.props.w.NOTE.forEach((f) => {
           notes.push(
-              <Typography variant="body2" component="p" className={`note ${f.NOTE['xml:lang']}`}>
+              <Typography variant="body2" component="p" className={`note ${f['xml:lang']}`}>
                 {f.message} {f.text}
               </Typography>
             );
@@ -139,22 +150,58 @@ class Word extends React.Component {
   }
 
     return (
-      <div style={{display:"inline-block"}} ref={el => (this.instance = el)} >
+      <div id={this.props.w.id} class={this.props.isMorph===true ? "MORPHEME" : "WORD" } style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+      { 
+            this.props.isWordList===true
+            ?
+            <div style={{display:'table'}} >
+              <div style={{display:'table-cell'}}>
+                W{this.props.wID} 
+              </div>
 
-			<p class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
-            	{transcriptions}
-            </p>
+              <div style={{display:'table-cell'}} id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+                <IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
+                  <PlayArrow />
+                </IconButton>
+                <IconButton color="primary" aria-label="play" onClick={this.pauseSentence.bind(this)}>
+                  <Pause />
+                </IconButton>
+              </div>
 
-            <p>
-            	{translations}
-            </p>
+              <div style={{display:'table-cell'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+                {transcriptions}
+              </div>
 
-            <p>
-           		{notes}
-            </p>
+              <div style={{display:'table-cell'}}>
+                {translations}
+              </div>
+
+              <div style={{display:'table-cell'}}>
+                {notes}
+              </div>       
+            </div>
+            :
+            <div>
+              <p>
+                {transcriptions}
+              </p>
+
+              <p>
+                {translations}
+              </p>
+
+              <p>
+                {notes}
+              </p>
+            </div>
+        }
+      
+
+			     
           
 
         </div>
+
     );
   }
 }

@@ -8,7 +8,6 @@ $oaiID = isset($_GET['oai_primary']) ? $_GET['oai_primary'] : NULL;
 
 $oaiPrimary = isset($_GET['oai_primary']) ? $_GET['oai_primary'] : NULL;
 $oaiSecondary = isset($_GET['oai_secondary']) ? $_GET['oai_secondary'] : NULL;
-$webvtt = isset($_GET['webvtt']) ? $_GET['webvtt'] : NULL;
 
 // ID du document
 // ID du fichier annotations
@@ -18,7 +17,7 @@ if($oaiPrimary == NULL && $oaiSecondary == NULL) die("You must provide an OAI ID
 $oaiID = ($oaiPrimary != NULL) ? $oaiPrimary : $oaiSecondary;
 
 // type de transcription par défaut quand absente
-$defaultKindOf = "phonetic";
+$defaultKindOf = "other";
 
 
 function recursiveParseXML($xmlTag,$o){
@@ -231,11 +230,20 @@ try{
 				//28/08/2020 : set a default language for transcription
 
 				$hasWholeTranscription = true;
+				$hasWholeTranslation = true;
 
 				//github #8 : whole transcription
 				if(!isset($annotationJson->TEXT->FORM)){
 					//si pas de whole transcription du texte
 					$hasWholeTranscription = false;
+					
+				}
+				//
+
+				//github #18 : whole translation
+				if(!isset($annotationJson->TEXT->TRANSL)){
+					//si pas de whole transcription du texte
+					$hasWholeTranslation = false;
 					
 				}
 				//
@@ -255,14 +263,23 @@ try{
 						}elseif(gettype($sentence->FORM)=="array"){
 
 							foreach ($sentence->FORM as $transcription) {
-
 								$wholeTranscription[$transcription->kindOf] .= $transcription->text."\n";
-
 							}
+						}	
+					}
+					//
 
-						}
+					//github #18 : whole translation
+					if(!$hasWholeTranslation && isset($sentence->TRANSL)){
 
-						
+						if(gettype($sentence->TRANSL)=="object"){
+							$wholeTranslation[$sentence->TRANSL->{"xml:lang"}] .= $sentence->TRANSL->text."\n";
+						}elseif(gettype($sentence->TRANSL)=="array"){
+
+							foreach ($sentence->TRANSL as $transcription) {
+								$wholeTranslation[$transcription->{"xml:lang"}] .= $transcription->text."\n";
+							}
+						}	
 					}
 					//
 				
@@ -316,20 +333,46 @@ try{
 						}
 
 					}
+		
+				}
+
+				///////////////////////////////////////////////////////////////////
+				// github #20
+				foreach ($annotationJson->WORDLIST->W as $keyW => &$word) {
+
+					completeTranscriptionLang($word->FORM,$langTranscriptions,$defaultKindOf);
+					completeTranslationLang($word->TRANSL,$langGlosses);
+					completeTranslationLang($word->NOTE,$langNotes);
 
 
-					//TEST ENHANCEMENT WEBVTT
-					if($webvtt){
-						
+					if(property_exists($word, "M")){
+
+						if(gettype($word->M)=="object"){
+							completeTranscriptionLang($word->M->FORM,$langTranscriptions,$defaultKindOf);
+							completeTranslationLang($word->M->TRANSL,$langGlosses);
+							completeTranslationLang($word->M->NOTE,$langNotes);
+
+
+						}elseif(gettype($word->M)=="array"){
+							foreach ($word->M as $keyM => &$morph) {
+								completeTranscriptionLang($morph->FORM,$langTranscriptions,$defaultKindOf);
+								completeTranslationLang($morph->TRANSL,$langGlosses);
+								completeTranslationLang($morph->NOTE,$langNotes);
+
+							}
+						}
+
 					}
 		
 				}
 
+				//////////////////////////////////////////////////////////////////
+
 				completeTranscriptionLang($annotationJson->TEXT->FORM,$langWholeTranscriptions,$langTranscriptions[0]);
 				completeTranslationLang($annotationJson->TEXT->TRANSL,$langWholeTranslations);
 				completeTranslationLang($annotationJson->TEXT->NOTE,$langNotes);
-				//github #8 : whole transcription
 
+				//github #8 : whole transcription
 				if(!$hasWholeTranscription){
 					//$annotationJson->TEXT->FORM = $wholeTranscription;
 					foreach ($wholeTranscription as $kindOf => $text) {
@@ -339,10 +382,22 @@ try{
 						);
 					}
 				}
-
-
-
 				//
+
+				//github #18 : whole translation
+				if(!$hasWholeTranslation){
+					//$annotationJson->TEXT->FORM = $wholeTranscription;
+					foreach ($wholeTranslation as $kindOf => $text) {
+						$annotationJson->TEXT->TRANSL[] = array(
+							"xml:lang"=>$kindOf,
+							"text"=>$text
+						);
+					}
+
+					$langWholeTranslations = $langTranslations;
+				}
+				//
+
 				//bug d'indexation dans REACT si index pas dans l'ordre (array_unique peut supprimer des items intermédiaires)
 				$langTranslations = array_values($langTranslations);
 				$langTranscriptions = array_values($langTranscriptions);
