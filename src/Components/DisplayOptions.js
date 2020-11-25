@@ -200,6 +200,7 @@ class DisplayOptions extends React.Component {
   handleGlossesOptions(event){
     if(event.target.name.length >0 ){
       var checkedGlosses = this.state.displayGlosses;
+      var isWordList = this.props.isWordList;
 
       const index = checkedGlosses.indexOf(event.target.name);
       if (index > -1) {
@@ -210,9 +211,10 @@ class DisplayOptions extends React.Component {
           });
       }else{
         checkedGlosses.push(event.target.name);
+
         document.querySelectorAll('.gloss.'+event.target.name).forEach(
           function(e){
-            e.style.display='block';
+            e.style.display=(isWordList === true)?'table-cell':'block';
           });
       }
 

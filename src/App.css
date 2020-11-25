@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.circle {
+  background: #333;
+  border-radius: 0.6em;
+  -moz-border-radius: 0.6em;
+  -webkit-border-radius: 0.6em;
+  color: #ffffff;
+  display: inline-block;
+  line-height: 1.2em;
+  margin-right: 5px;
+  text-align: center;
+  width: 1.2em; 
+  font-size: 0.75em;
+}
+
+img.doi {
+  width: 1em;
+}
+
+.wordlistWord{
+  display: table-cell;
+  width : 10em;
+}

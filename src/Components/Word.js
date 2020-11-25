@@ -92,17 +92,25 @@ class Word extends React.Component {
 
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
+    //<div style={{display:'table-cell'}}>
+
     if(this.props.w.TRANSL != undefined && this.props.w.TRANSL !== null){
 	    if(this.props.w.TRANSL.length == undefined){
+        var isGlossIncluded = this.props.displayOptions.glosses.includes(this.props.w.TRANSL["xml:lang"]);
+        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+
 	      translations.push(
-	              <Typography variant="body2" component="p" hidden={!this.props.displayOptions.glosses.includes(this.props.w.TRANSL["xml:lang"])} className={`gloss ${this.props.w.TRANSL['xml:lang']}`}>
+	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`gloss ${thisClassName} ${this.props.w.TRANSL['xml:lang']}`}>
 	                {this.props.w.TRANSL.text}
 	              </Typography>
 	            );
 	    }else{
 	      this.props.w.TRANSL.forEach((t) => {
+            var isGlossIncluded = this.props.displayOptions.glosses.includes(t["xml:lang"]);
+            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+
 	          translations.push(
-	              <Typography variant="body2" component="p" hidden={!this.props.displayOptions.glosses.includes(t["xml:lang"])} className={`gloss ${t['xml:lang']}`}>
+	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`gloss ${thisClassName} ${t['xml:lang']}`}>
 	                {t.text}
 	              </Typography>
 	            );
@@ -168,13 +176,11 @@ class Word extends React.Component {
                 </IconButton>
               </div>
 
-              <div style={{display:'table-cell'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+              <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
                 {transcriptions}
               </div>
 
-              <div style={{display:'table-cell'}}>
-                {translations}
-              </div>
+              {translations}
 
               <div style={{display:'table-cell'}}>
                 {notes}

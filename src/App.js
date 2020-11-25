@@ -33,6 +33,7 @@ class App extends React.Component {
 			langOptions : {
 				transcriptions:[],translations:[]
 			},
+			isWordList : false
 	    };
 	  }
 
@@ -135,12 +136,14 @@ class App extends React.Component {
 				          });
 			        }else{	
 			        	//27/08/2020 : options de langues
-
+			        	var isWordList = (result.annotations.WORDLIST !== undefined && result.annotations.WORDLIST !== null) ? true : false;
+			        	
 			        	this.setState({
 			        		langOptions: result.langues,
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
-				            doi : result.doi
+				            doi : result.doi,
+				            isWordList : isWordList
 				          });
 			        }
 			        
@@ -208,7 +211,7 @@ class App extends React.Component {
 		    	 	:
 		    	 	<div key={this.state.doi}>
 		    	 	<Container>
-					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} />
+					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} isWordList={this.state.isWordList}/>
 			    	</Container>
 			    	<Container>
  						<Annotations doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />

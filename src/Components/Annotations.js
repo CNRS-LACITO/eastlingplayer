@@ -123,10 +123,10 @@ class Annotations extends React.Component {
     }
 
     if(wordlist !== null && wordlist !== undefined){
-      wordlist.forEach((a) => {
+      //wordlist.forEach((a) => {
 
           // Get word(s) of the sentence
-        if(wordlist !== undefined && wordlist !== null){
+        //if(wordlist !== undefined && wordlist !== null){
 
           //W can be an array or an object depending on the number of children in the XML
           //Object if only one Word, Array if more than 1 word
@@ -160,8 +160,8 @@ class Annotations extends React.Component {
 
           } 
           
-        }
-      });
+        //}
+      //});
     }
     
 

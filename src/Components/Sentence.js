@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import Picture from './Picture';
 import Word from './Word';
-import { Card, CardHeader, Avatar, CardContent, Divider, Button } from '@material-ui/core';
+import Note from './Note';
+import { Card, CardHeader, Avatar, CardContent, Divider, Button, Badge } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { PlayArrow, Pause } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +14,8 @@ class Sentence extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
-	        displayOptions : this.props.displayOptions
+	        displayOptions : this.props.displayOptions,
+	        notes : null //#17
 	    };
 	}
 
@@ -31,7 +33,7 @@ class Sentence extends React.Component {
 
   	const transcriptions = [];
 	const translations = [];
-	const notes = [];
+	const notesJSON = [];
 	const words = [];
 	const canvas = [];
 
@@ -54,13 +56,43 @@ class Sentence extends React.Component {
 		}
 	}
 	
+	//#17
+	var idNote = 1;
+
+	// Get note(s) of the sentence
+	if(this.props.s.NOTE !== undefined && this.props.s.NOTE !== null){
+		if(this.props.s.NOTE.length === undefined){
+			/* #17
+			notes.push(
+		          <Typography hidden={!this.props.displayOptions.notes.includes(this.props.s.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.s.NOTE["xml:lang"]}`} >
+			          NOTE : {this.props.s.NOTE.message} {this.props.s.NOTE.text}
+			        </Typography>
+		        );
+		        */
+		    notesJSON.push({"id":idNote,"note": this.props.s.NOTE.message + this.props.s.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(this.props.s.NOTE['xml:lang']),lang:this.props.s.NOTE["xml:lang"]});
+		    idNote++;
+		}else{
+			this.props.s.NOTE.forEach((f) => {
+		      /*
+		      notes.push(
+		          <Typography hidden={!this.props.displayOptions.notes.includes(f["xml:lang"])} variant="body2" component="p" className={`note ${f["xml:lang"]}`} >
+			          NOTE : {f.message} {f.text}
+			        </Typography>
+		        );
+		        */
+		      notesJSON.push({"id":idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
+		      idNote++;
+		    });
+		}
+	}
+
 //
 	// Get transcription(s) of the sentence
 	if(this.props.s.FORM !== undefined && this.props.s.FORM !== null){
 		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription ${this.props.s.FORM.kindOf}`}>
-			          <b>{this.props.s.FORM.text}</b>
+			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup class='circle'>{n.id}</sup>)}
 			        </Typography>
 		        );
 
@@ -68,35 +100,13 @@ class Sentence extends React.Component {
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription ${f.kindOf}`}>
-			          <b>{f.text}</b>
+			          <b>{f.text}</b>{notesJSON.map(n=><sup class='circle'>n.id</sup>)}
 			        </Typography>
 		        );
 		    });
 		}
 	}
   	
-
-	// Get note(s) of the sentence
-	if(this.props.s.NOTE !== undefined && this.props.s.NOTE !== null){
-		if(this.props.s.NOTE.length === undefined){
-			notes.push(
-		          <Typography hidden={!this.props.displayOptions.notes.includes(this.props.s.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.s.NOTE["xml:lang"]}`} >
-			          NOTE : {this.props.s.NOTE.message} {this.props.s.NOTE.text}
-			        </Typography>
-		        );
-		}else{
-			this.props.s.NOTE.forEach((f) => {
-		      notes.push(
-		          <Typography hidden={!this.props.displayOptions.notes.includes(f["xml:lang"])} variant="body2" component="p" className={`note ${f["xml:lang"]}`} >
-			          NOTE : {f.message} {f.text}
-			        </Typography>
-		        );
-		    });
-		}
-	}
-  	
-
-
     
     if(this.props.s.AREA !== undefined && this.props.s.AREA !== null){
     	var coords = this.props.s.AREA.coords.split(',');
@@ -176,10 +186,17 @@ class Sentence extends React.Component {
 		
 
 	}
-	    
+	 
+	 var notes = [];
+	 //#17 NOTES
+	 notesJSON.forEach((n)=>{
+	 	notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
+	 });
+
     
     var avatarStyle={
-    	'backgroundColor': blue[800]
+    	'backgroundColor': blue[800],
+    	'display': 'inline-flex'
     }
 
     return (
@@ -197,12 +214,11 @@ class Sentence extends React.Component {
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-				<Button variant="contained" href={this.props.doi} target="_blank">doi</Button>
-
+				<IconButton href={this.props.doi} target="_blank"><img class="doi" src="/player/images/doi.png" alt="doi" /></IconButton>
 	        	<IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
 				  <PlayArrow />
 				</IconButton>
-				<IconButton color="primary" aria-label="play" onClick={this.pauseSentence.bind(this)}>
+				<IconButton color="primary" aria-label="pause" onClick={this.pauseSentence.bind(this)}>
 				  <Pause />
 				</IconButton>
 
