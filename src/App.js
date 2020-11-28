@@ -123,8 +123,8 @@ class App extends React.Component {
 	            hasSecondaryId: true,
 	        });
 
-	        //fetch(parserUrl+"?oai_secondary="+oai_secondary)
-		    fetch('https://eastling.huma-num.fr/player/parserFake.php?oai_secondary=EEE')
+	        fetch(parserUrl+"?oai_secondary="+oai_secondary)
+		    //fetch('https://eastling.huma-num.fr/player/parserFake.php?oai_secondary=EEE')
 		      .then(res => res.json())
 		      .then(
 		        (result) => {
