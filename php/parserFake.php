@@ -214,11 +214,9 @@ try{
 		}elseif($oaiSecondary != NULL){
 		//Traitement de la ressource secondaire
 
-			$sql = "SELECT * FROM secondary_resources WHERE oai =\"$oaiSecondary\"";
-
 			//On parse la table secondary_resources pour récupérer le fichier annotation
-			foreach  ($db->query($sql) as $row) {
-				$sUrlFile = $row['url_pangloss_file'];
+				$sUrlFile = 'https://eastling.huma-num.fr/player/test.xml';
+				
 				$doi = $row['doi'];
 
 				$xmlData = simplexml_load_file($sUrlFile);
@@ -422,7 +420,7 @@ try{
 						'wholeTranslations'=>$langWholeTranslations
 					)
 				);
-			}
+			
 
 			
 		}//if secondary

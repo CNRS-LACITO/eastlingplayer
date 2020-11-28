@@ -241,6 +241,10 @@ class DisplayOptions extends React.Component {
           function(e){
             e.style.display='block';
           });
+        document.querySelectorAll('sup.note.'+event.target.name).forEach(
+          function(e){
+            e.style.display='inline-block';
+          });
       }
 
       this.setState({displayNotes: checkedNotes},this.buildUrl());

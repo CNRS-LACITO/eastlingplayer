@@ -123,11 +123,12 @@ class App extends React.Component {
 	            hasSecondaryId: true,
 	        });
 
-	        fetch(parserUrl+"?oai_secondary="+oai_secondary)
+	        //fetch(parserUrl+"?oai_secondary="+oai_secondary)
+		    fetch('https://eastling.huma-num.fr/player/parserFake.php?oai_secondary=EEE')
 		      .then(res => res.json())
 		      .then(
 		        (result) => {
-
+		        	console.log(result);
 			        if(result.annotations["TEXT"] == undefined){
 			        	this.setState({
 				            isAnnotationsLoaded: true,
@@ -136,7 +137,9 @@ class App extends React.Component {
 				          });
 			        }else{	
 			        	//27/08/2020 : options de langues
-			        	var isWordList = (result.annotations.WORDLIST !== undefined && result.annotations.WORDLIST !== null) ? true : false;
+			        	if(result.annotations.WORDLIST !== undefined && result.annotations.WORDLIST !== null){
+			        		var isWordList = (result.annotations.WORDLIST.W !== undefined && result.annotations.WORDLIST.W !== null) ? true : false;
+			        	}
 			        	
 			        	this.setState({
 			        		langOptions: result.langues,

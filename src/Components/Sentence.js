@@ -17,6 +17,7 @@ class Sentence extends React.Component {
 	        displayOptions : this.props.displayOptions,
 	        notes : null //#17
 	    };
+	    this.idNote = 1;
 	}
 
 	playSentence(){
@@ -26,6 +27,20 @@ class Sentence extends React.Component {
 
 	pauseSentence(){
 		document.getElementById('player').pause();
+	}
+
+	getNotes(node,notesJSON){
+		if(node.NOTE !== undefined && node.NOTE !== null){
+			if(node.NOTE.length === undefined){
+			    notesJSON.push({"id":this.idNote,"note": node.NOTE.message + node.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(node.NOTE['xml:lang']),lang:node.NOTE["xml:lang"]});
+			    this.idNote++;
+			}else{
+				node.NOTE.forEach((f) => {
+			      notesJSON.push({"id":this.idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
+			      this.idNote++;
+			    });
+			}
+		}
 	}
   
   render() {
@@ -57,34 +72,8 @@ class Sentence extends React.Component {
 	}
 	
 	//#17
-	var idNote = 1;
-
 	// Get note(s) of the sentence
-	if(this.props.s.NOTE !== undefined && this.props.s.NOTE !== null){
-		if(this.props.s.NOTE.length === undefined){
-			/* #17
-			notes.push(
-		          <Typography hidden={!this.props.displayOptions.notes.includes(this.props.s.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.s.NOTE["xml:lang"]}`} >
-			          NOTE : {this.props.s.NOTE.message} {this.props.s.NOTE.text}
-			        </Typography>
-		        );
-		        */
-		    notesJSON.push({"id":idNote,"note": this.props.s.NOTE.message + this.props.s.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(this.props.s.NOTE['xml:lang']),lang:this.props.s.NOTE["xml:lang"]});
-		    idNote++;
-		}else{
-			this.props.s.NOTE.forEach((f) => {
-		      /*
-		      notes.push(
-		          <Typography hidden={!this.props.displayOptions.notes.includes(f["xml:lang"])} variant="body2" component="p" className={`note ${f["xml:lang"]}`} >
-			          NOTE : {f.message} {f.text}
-			        </Typography>
-		        );
-		        */
-		      notesJSON.push({"id":idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
-		      idNote++;
-		    });
-		}
-	}
+	this.getNotes(this.props.s,notesJSON);
 
 //
 	// Get transcription(s) of the sentence
@@ -92,7 +81,7 @@ class Sentence extends React.Component {
 		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription ${this.props.s.FORM.kindOf}`}>
-			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup class='circle'>{n.id}</sup>)}
+			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
 
@@ -100,7 +89,7 @@ class Sentence extends React.Component {
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription ${f.kindOf}`}>
-			          <b>{f.text}</b>{notesJSON.map(n=><sup class='circle'>n.id</sup>)}
+			          <b>{f.text}</b>{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
 		    });
@@ -131,23 +120,33 @@ class Sentence extends React.Component {
 		    			var divWord;
 		    			var morphemes = [];
 		    			w.M.forEach((m) =>{
+		    				// Get note(s) of the morpheme
+							this.getNotes(m,notesJSON);
+
 			    			morphemes.push(
-				          		<Word w={m} displayOptions={this.props.displayOptions} isMorph={true} />
+				          		<Word w={m} displayOptions={this.props.displayOptions} isMorph={true}  idNote={this.idNote} />
 				        	);
+
+
 			    		});
 			    		divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
 			    		words.push(divWord);
 
 		    		}else{
+		    			// Get note(s) of the morpheme
+						this.getNotes(w.M,notesJSON);
 		    			words.push(
-				          		<Word w={w.M} displayOptions={this.props.displayOptions} isMorph={true} />
+				          		<Word w={w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
 				        	);
 		    		}
 
 
 		    	}else{
+		    		// Get note(s) of the word
+					this.getNotes(w,notesJSON);
+
 		    		words.push(
-			          	<Word w={w} displayOptions={this.props.displayOptions} />
+			          	<Word w={w} displayOptions={this.props.displayOptions}  idNote={this.idNote} />
 			        );
 
 			        if(w.AREA !== undefined && w.AREA !== null){

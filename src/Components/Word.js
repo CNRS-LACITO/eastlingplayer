@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Button, Popover, Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { PlayArrow, Pause } from '@material-ui/icons';
+import Note from './Note';
+
 
 const useStyles = makeStyles({
   root: {
@@ -29,6 +31,7 @@ class Word extends React.Component {
 	      anchorEl: null,
           open: false
 	    };
+      this.idNote = this.props.idNote - 1;
 	}
 
   playSentence(){
@@ -79,6 +82,20 @@ class Word extends React.Component {
     document.querySelectorAll('canvas').forEach((c)=>c.style.border="none");
   };
 
+  getNotes(node,notesJSON){
+    if(node.NOTE !== undefined && node.NOTE !== null){
+      if(node.NOTE.length === undefined){
+          notesJSON.push({"id":this.idNote,"note": node.NOTE.message + node.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(node.NOTE['xml:lang']),lang:node.NOTE["xml:lang"]});
+          this.idNote++;
+      }else{
+        node.NOTE.forEach((f) => {
+            notesJSON.push({"id":this.idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
+            this.idNote++;
+          });
+      }
+    }
+  }
+
   render() {
 
     const buttonStyle = {
@@ -89,6 +106,8 @@ class Word extends React.Component {
     const transcriptions = [];
   	const translations = [];
     const notes = [];
+    const notesJSON = [];
+
 
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
@@ -117,28 +136,9 @@ class Word extends React.Component {
 	        });
 	    }
     }
-    
-  //
-  if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
-      if(this.props.w.FORM.length == undefined){
-        transcriptions.push(
-                  <Typography variant="body2" component="p">
-                    {this.props.w.FORM.text}
-                  </Typography>
-                );
-                word = this.props.w.FORM.text;
-        }else{
-          this.props.w.FORM.forEach((f) => {
-              transcriptions.push(
-                  <Typography variant="body2" component="p">
-                    {f.text}
-                  </Typography>
-                );
-            });
-            word = this.props.w.FORM[0].text;
-        }
-  }
-        // Get note(s) of the sentence
+
+  // Get note(s) of the sentence
+  /*
   if(this.props.w.NOTE != undefined && this.props.w.NOTE != null){
     if(this.props.w.NOTE.length == undefined){
       notes.push(
@@ -155,6 +155,35 @@ class Word extends React.Component {
             );
         });
     }
+  }
+*/
+
+  // Get note(s) of the word
+  this.getNotes(this.props.w,notesJSON);
+
+  notesJSON.forEach((n)=>{
+    notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
+   });
+    
+  //
+  if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
+      if(this.props.w.FORM.length == undefined){
+        transcriptions.push(
+                  <Typography variant="body2" component="p">
+                    {this.props.w.FORM.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+                  </Typography>
+                );
+                word = this.props.w.FORM.text;
+        }else{
+          this.props.w.FORM.forEach((f) => {
+              transcriptions.push(
+                  <Typography variant="body2" component="p">
+                    {f.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+                  </Typography>
+                );
+            });
+            word = this.props.w.FORM[0].text;
+        }
   }
 
     return (
@@ -196,9 +225,6 @@ class Word extends React.Component {
                 {translations}
               </p>
 
-              <p>
-                {notes}
-              </p>
             </div>
         }
       
