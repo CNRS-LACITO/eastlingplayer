@@ -56,20 +56,23 @@ class App extends React.Component {
 	  	var optionNotes = this.getUrlParameter("optionNotes");
 	  	var optionGlosses = this.getUrlParameter("optionGlosses");
 	  	var optionLang = this.getUrlParameter("optionLang");
+
+
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
 
 	  	this.setState({
 	        displayOptions: {
-	        	transcriptions : optionTranscriptions.split('+'),
-	        	translations : optionTranslations.split('+'),
-	        	glosses : optionGlosses.split('+'),
-	        	notes : optionNotes.split('+'),
+	        	transcriptions : (optionTranscriptions.length > 0) ? optionTranscriptions.split('+') : [],
+	        	translations : (optionTranslations.length > 0) ? optionTranslations.split('+') : [],
+	        	glosses : (optionGlosses.length > 0) ? optionGlosses.split('+') : [],
+	        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [],
 	        	wholeTranscriptions : (optionWholeTranscriptions == 'true'),
 	        	wholeTranslations : optionWholeTranslations.split('+'),
-	        	words : (optionWords == 'true')
+	        	words : (optionWords.length > 0) ? (optionWords == 'true') : 'true'
 	        },
 	    });
+
 	  	
 
 	  	if(oai_primary.length > 0){
@@ -140,9 +143,18 @@ class App extends React.Component {
 			        	if(result.annotations.WORDLIST !== undefined && result.annotations.WORDLIST !== null){
 			        		var isWordList = (result.annotations.WORDLIST.W !== undefined && result.annotations.WORDLIST.W !== null) ? true : false;
 			        	}
-			        	
+
 			        	this.setState({
 			        		langOptions: result.langues,
+			        		displayOptions:{
+			        			transcriptions : (optionTranscriptions.length > 0) ? optionTranscriptions.split('+') : [result.langues.transcriptions[0]],
+					        	translations : (optionTranslations.length > 0) ? optionTranslations.split('+') : [result.langues.translations[0]],
+					        	glosses : (optionGlosses.length > 0) ? optionGlosses.split('+') : [result.langues.glosses[0]],
+					        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [result.langues.notes[0]],
+					        	wholeTranscriptions : (optionWholeTranscriptions == 'true'),
+	        					wholeTranslations : optionWholeTranslations.split('+'),
+	        					words : (optionWords.length > 0) ? (optionWords == 'true') : 'true'
+			        		},
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
 				            doi : result.doi,
@@ -214,7 +226,7 @@ class App extends React.Component {
 		    	 	:
 		    	 	<div key={this.state.doi}>
 		    	 	<Container>
-					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} isWordList={this.state.isWordList}/>
+					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
 			    	</Container>
 			    	<Container>
  						<Annotations doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />

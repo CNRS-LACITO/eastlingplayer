@@ -10,16 +10,14 @@ class DisplayOptions extends React.Component {
         checkedWholeTranscriptions: this.props.displayOptions.wholeTranscriptions,
         displayWholeTranslations: this.props.displayOptions.wholeTranslations,
         words : this.props.displayOptions.words,
-        //notes : this.props.displayOptions.notes,
-        displayTranscriptions: this.props.displayOptions.transcriptions,
-        displayTranslations: this.props.displayOptions.translations,
+        displayTranscriptions: (this.props.displayOptions.transcriptions.length > 0) ? this.props.displayOptions.transcriptions:[this.props.langOptions.transcriptions[0]],
+        displayTranslations: (this.props.displayOptions.translations.length > 0) ? this.props.displayOptions.translations:[this.props.langOptions.translations[0]],
         displayGlosses: this.props.displayOptions.glosses,
         displayNotes: this.props.displayOptions.notes,
         langOptions:this.props.langOptions
     };
 
-    console.log(this.state.displayNotes);
-    console.log(this.state.langOptions);
+
     /*
     this.state.langOptions.transcriptions.forEach((transc) => {
       var newTrack = document.createElement("track");
@@ -88,15 +86,6 @@ class DisplayOptions extends React.Component {
             //e.style.display='none';
             (checked===true)?e.style.display='block':e.style.display='none';
           });
-
-/*
-      if(name === "notes")
-      document.querySelectorAll('.note').forEach(
-          function(e){
-            //e.style.display='none';
-            (checked===true)?e.style.display='block':e.style.display='none';
-          });
-*/
 
       if(name === "checkedWholeTranscriptions"){
         if(checked===false){
