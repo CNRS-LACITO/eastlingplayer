@@ -59,3 +59,11 @@ img.doi {
   display: table-cell;
   width : 10em;
 }
+
+.WORD.hasMorphemes{
+  background-color: #888;
+}
+
+.MORPHEME{
+  background-color: #eee;
+}

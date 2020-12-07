@@ -4,7 +4,6 @@ import {Button, Popover, Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { PlayArrow, Pause } from '@material-ui/icons';
 import Note from './Note';
-import Morpheme from './Morpheme';
 
 
 const useStyles = makeStyles({
@@ -25,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 
-class Word extends React.Component {
+class Morpheme extends React.Component {
 	constructor(props) {
 	    super(props);
 	    this.state = {
@@ -116,21 +115,21 @@ class Word extends React.Component {
 
     if(this.props.w.TRANSL != undefined && this.props.w.TRANSL !== null){
 	    if(this.props.w.TRANSL.length == undefined){
-        var isGlossIncluded = this.props.displayOptions.wordTranslations.includes(this.props.w.TRANSL["xml:lang"]);
-        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+        var isGlossIncluded = this.props.displayOptions.morphemeTranslations.includes(this.props.w.TRANSL["xml:lang"]);
+        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
 
 	      translations.push(
-	              <Typography variant="body2" component={this.props.isWordList === true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
+	              <Typography variant="body2" component={this.props.isWordList === true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} morpheme-${this.props.w.TRANSL['xml:lang']}`}>
 	                {this.props.w.TRANSL.text}
 	              </Typography>
 	            );
 	    }else{
 	      this.props.w.TRANSL.forEach((t) => {
-            var isGlossIncluded = this.props.displayOptions.wordTranslations.includes(t["xml:lang"]);
-            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+            var isGlossIncluded = this.props.displayOptions.morphemeTranslations.includes(t["xml:lang"]);
+            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
 
 	          translations.push(
-	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} word-${t['xml:lang']}`}>
+	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} morpheme-${t['xml:lang']}`}>
 	                {t.text}
 	              </Typography>
 	            );
@@ -159,7 +158,7 @@ class Word extends React.Component {
   }
 */
 
-  // Get note(s) of the word
+  // Get note(s) of the morpheme
   this.getNotes(this.props.w,notesJSON);
 
   notesJSON.forEach((n)=>{
@@ -170,7 +169,7 @@ class Word extends React.Component {
   if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
       if(this.props.w.FORM.length == undefined){
         transcriptions.push(
-                  <Typography variant="body2" component="p" className={`transcription word-${this.props.w.FORM.kindOf}`}>
+                  <Typography variant="body2" component="p" className={`transcription morpheme-${this.props.w.FORM.kindOf}`}>
                     {this.props.w.FORM.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
@@ -178,7 +177,7 @@ class Word extends React.Component {
         }else{
           this.props.w.FORM.forEach((f) => {
               transcriptions.push(
-                  <Typography variant="body2" component="p" className={`transcription word-${f.kindOf}`}>
+                  <Typography variant="body2" component="p" className={`transcription morpheme-${f.kindOf}`}>
                     {f.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
@@ -187,30 +186,8 @@ class Word extends React.Component {
         }
   }
 
-  var hasMorphemes = false;
-  var morphemes = [];
-
-  if(this.props.w.M !== undefined && this.props.w.M !== null){
-          hasMorphemes = true;
-          
-            if(this.props.w.M.length>0){
-              
-              this.props.w.M.forEach((m) =>{
-                morphemes.push(
-                      <Morpheme w={m} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
-                  );
-              });
-              
-
-            }else{
-            morphemes.push(
-                      <Morpheme w={this.props.w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
-                  );
-            }
-    }
-
     return (
-      <div id={this.props.w.id} class="WORD" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+      <div id={this.props.w.id} class="MORPHEME" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
       { 
             this.props.isWordList===true
             ?
@@ -228,10 +205,10 @@ class Word extends React.Component {
                 </IconButton>
               </div>
 
-              <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+              <div style={{display:'table-cell',width:'12em'}} class="morpheme" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
                 {transcriptions}
               </div>
-              {morphemes}
+
               {translations}
 
               <div style={{display:'table-cell'}}>
@@ -240,18 +217,20 @@ class Word extends React.Component {
             </div>
             :
             <div>
-              <div class="transcBlock">
+              <p>
                 {transcriptions}
-              </div>
-              <div class="morphemesBlock">
-                {morphemes}
-              </div>
-              <div class="translBlock">
+              </p>
+
+              <p>
                 {translations}
-              </div>
+              </p>
 
             </div>
-        }    
+        }
+      
+
+			     
+          
 
         </div>
 
@@ -259,4 +238,4 @@ class Word extends React.Component {
   }
 }
 
-export default Word;
+export default Morpheme;

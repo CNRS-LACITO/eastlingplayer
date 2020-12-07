@@ -19,6 +19,16 @@ $oaiID = ($oaiPrimary != NULL) ? $oaiPrimary : $oaiSecondary;
 // type de transcription par défaut quand absente
 $defaultKindOf = "other";
 
+function hasChild($parentTag,$childTagName){
+	$find=false;
+	if(sizeof($parentTag->childNodes)>1){
+		foreach($parentTag->childNodes as $c){
+			if($c->nodeName===$childTagName)
+			$find=true;
+		}
+	}
+	return $find;
+}
 
 function recursiveParseXML($xmlTag,$o){
 //fonction pour convertir le XML en JSON
@@ -58,9 +68,9 @@ function recursiveParseXML($xmlTag,$o){
 					$o->{$xmlTag->nodeName}->{$a->nodeName}=$a->nodeValue;
 				}	
 			}
-			if(sizeof($xmlTag->childNodes)>1){
+			if(sizeof($xmlTag->childNodes)>1 && !hasChild($xmlTag,'FOREIGN')){
 				foreach($xmlTag->childNodes as $c){
-					if($c->nodeName!='#text')
+					if($c->nodeName!='#text' && $c->nodeName!='FOREIGN')
 					recursiveParseXML($c,$o->{$xmlTag->nodeName});
 				}
 			}else{
@@ -73,13 +83,13 @@ function recursiveParseXML($xmlTag,$o){
 function completeTranscriptionLang(&$nodeTranscription, &$langTranscriptions, $default){
 //On met la propriété kindOf par défaut si elle n'est pas renseigné dans le document
 //On enrichit la liste des types de transcriptions existant dans le document
+	
 
 	if(gettype($nodeTranscription)=="array"){
 	//le noeud peut contenir plusieurs transcriptions...
-		
 		foreach ($nodeTranscription as $keyF => $transcription) {
-		
-			if(!property_exists($transcription, "kindOf")){
+
+			if((gettype($transcription)==="object" && !property_exists($transcription, "kindOf")) || (gettype($transcription)==="array" && array_key_exists('kindOf', $transcription))){
 				$langTranscriptions[] = $default;
 				$transcription->kindOf = $default;
 			}else{
@@ -101,8 +111,9 @@ function completeTranscriptionLang(&$nodeTranscription, &$langTranscriptions, $d
 
 	}
 
-	$langTranscriptions = array_unique($langTranscriptions);
-	
+	//$langTranscriptions = array_unique($langTranscriptions);
+	$langTranscriptions = array_values(array_unique($langTranscriptions));
+
 }
 
 function completeTranslationLang(&$nodeTranslation, &$langTranslations,$default){
@@ -112,7 +123,7 @@ function completeTranslationLang(&$nodeTranslation, &$langTranslations,$default)
 	//le noeud peut contenir plusieurs traductions...
 
 		foreach ($nodeTranslation as $transl) {
-			if(property_exists($transl, "xml:lang")){
+			if((gettype($transl)==="object" && property_exists($transl, "xml:lang")) || (gettype($transl)==="array" && array_key_exists("xml:lang",$transl)) ){
 				$langTranslations[]=$transl->{"xml:lang"};
 			}else{
 				$langTranslations[]=$default;
@@ -130,7 +141,149 @@ function completeTranslationLang(&$nodeTranslation, &$langTranslations,$default)
 
 	}
 
-	$langTranslations = array_unique($langTranslations);
+	//$langTranslations = array_unique($langTranslations);
+	$langTranslations = array_values(array_unique($langTranslations));
+
+}
+
+function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "){
+//On concatène les annotations (transc, transl) du niveau inférieur si pas disponibles
+	$transcConcat = array();
+	$translConcat = array();
+
+	$hasTransc = true;
+	$hasTransl = true;
+
+	if(!isset($nodeParent->FORM) || $nodeParent->FORM === null || sizeof($nodeParent->FORM)===0)
+		$hasTransc = false;
+	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0)
+		$hasTransl = false;
+
+	if(property_exists($nodeParent, $nodeChild)){
+		if(gettype($nodeParent->$nodeChild)==="object"){
+			if(isset($nodeParent->$nodeChild->FORM)){
+
+				if(gettype($nodeParent->$nodeChild->FORM)=="object"){
+					$transcConcat[$nodeParent->$nodeChild->FORM->kindOf] .= $nodeParent->$nodeChild->FORM->text.$separator;
+				}elseif(gettype($nodeParent->$nodeChild->FORM)=="array"){
+
+					foreach ($nodeParent->$nodeChild->FORM as $transcription) {
+						if(gettype($transcription) === "object"){
+							$transcConcat[$transcription->kindOf] .= $transcription->text.$separator;
+						}else{
+							$transcConcat[$transcription["kindOf"]] .= $transcription["text"].$separator;
+						}
+					}
+				}	
+			}
+			//
+			if(isset($nodeParent->$nodeChild->TRANSL)){
+
+				if(gettype($nodeParent->$nodeChild->TRANSL)=="object"){
+					$translConcat[$nodeParent->$nodeChild->TRANSL->{"xml:lang"}] .= $nodeParent->$nodeChild->TRANSL->text.$separator;
+				}elseif(gettype($nodeParent->$nodeChild->TRANSL)=="array"){
+
+					foreach ($nodeParent->$nodeChild->TRANSL as $translation) {
+						if(gettype($translation) === "object"){
+							$translConcat[$translation->{"xml:lang"}] .= $translation->text.$separator;
+						}else{
+							$translConcat[$translation["xml:lang"]] .= $translation["text"].$separator;
+						}
+					}
+				}	
+			}
+		}elseif(gettype($nodeParent->$nodeChild)=="array"){
+			foreach ($nodeParent->$nodeChild as $c) {
+				
+				if(isset($c->FORM)){
+					//if only one FORM
+					if(gettype($c->FORM)=="object"){
+						$transcConcat[$c->FORM->kindOf] .= $c->FORM->text.$separator;
+					//if multiple FORM
+					}elseif(gettype($c->FORM)=="array"){
+						
+						foreach ($c->FORM as $transcription) {
+							
+							if(gettype($transcription) === "object"){
+								
+								$transcConcat[$transcription->kindOf] .= $transcription->text.$separator;
+							}else{
+								
+								$transcConcat[$transcription["kindOf"]] .= $transcription["text"].$separator;
+							}
+						}
+					}	
+				}
+				//
+				if(isset($c->TRANSL)){
+
+					if(gettype($c->TRANSL)=="object"){
+						$translConcat[$c->TRANSL->{"xml:lang"}] .= $c->TRANSL->text.$separator;
+					}elseif(gettype($c->TRANSL)=="array"){
+
+						foreach ($c->TRANSL as $translation) {
+							if(gettype($translation) === "object"){
+								$translConcat[$translation->{"xml:lang"}] .= $translation->text.$separator;
+							}else{
+								$translConcat[$translation["xml:lang"]] .= $translation["text"].$separator;
+							}
+							
+						}
+					}	
+				}
+			}
+		}
+	}
+
+	switch ($nodeChild) {
+		case 'S':
+			$parent = "text";
+			break;
+		case 'W':
+			$parent = "sentence";
+			break;
+		case 'M':
+			$parent = "word";
+			break;
+		
+		default:
+			$parent = "text";
+			break;
+	}
+
+	foreach($transcConcat as $kindOf => $text){
+		$resTranscConcat[] = (object)array(
+			"kindOf"=>$kindOf,"text"=>trim($text)
+		);
+
+		if(!$hasTransc){
+			$typeOf[$parent]["transcriptions"][]=$kindOf;
+			$typeOf[$parent]["transcriptions"] = array_values(array_unique($typeOf[$parent]["transcriptions"]));
+		}
+	}
+
+	foreach($translConcat as $xmlLang => $text){
+		$resTranslConcat[] = (object)array(
+			"xml:lang"=>$xmlLang,"text"=>trim($text)
+		);
+
+		if(!$hasTransl){
+			$typeOf[$parent]["translations"][]=$xmlLang;
+			$typeOf[$parent]["translations"] = array_values(array_unique($typeOf[$parent]["translations"]));
+		}
+	}
+
+
+	if(!$hasTransc){
+		$nodeParent->FORM = $resTranscConcat;
+		$nodeParent->DEBUG = "Concat. FORM";
+	}
+
+	if(!$hasTransl){
+		$nodeParent->TRANSL = $resTranslConcat;
+		$nodeParent->DEBUG .= "Concat. TRANSL";
+	}	
+
 }
 
 
@@ -232,37 +385,77 @@ try{
 				$langNotes = [];
 				$langWholeTranslations = [];
 
+				//https://github.com/CNRS/eastlingplayer/issues/32
+				$typeOf = array(
+					'text'=>array(
+						'transcriptions'=>array(),
+						'translations'=>array()
+					),
+					'sentence'=>array(
+						'transcriptions'=>array(),
+						'translations'=>array()
+					),
+					'word'=>array(
+						'transcriptions'=>array(),
+						'translations'=>array()
+					),
+					'morpheme'=>array(
+						'transcriptions'=>array(),
+						'translations'=>array()
+					)
+				);
+
+
 				//27/08/2020 : get the different languages available
 				//28/08/2020 : set a default language for transcription
 
 				$hasWholeTranscription = true;
 				$hasWholeTranslation = true;
 
-				//github #8 : whole transcription
-				if(!isset($annotationJson->TEXT->FORM)){
+				
+				//github #18 : whole translation
+				if(isset($annotationJson->TEXT->FORM) && gettype($annotationJson->TEXT->FORM) ==="object"){
 					//si pas de whole transcription du texte
-					$hasWholeTranscription = false;
+					$firstObject = $annotationJson->TEXT->FORM;
+					$annotationJson->TEXT->FORM = [];
+					$annotationJson->TEXT->FORM[] = $firstObject;
 					
 				}
-				//
 
 				//github #18 : whole translation
-				if(!isset($annotationJson->TEXT->TRANSL)){
+				if(!isset($annotationJson->TEXT->FORM) || $annotationJson->TEXT->FORM === null){
 					//si pas de whole transcription du texte
-					$hasWholeTranslation = false;
+					$annotationJson->TEXT->FORM = [];
+				}
+
+				//github #18 : whole translation
+				if(isset($annotationJson->TEXT->TRANSL) && gettype($annotationJson->TEXT->TRANSL) ==="object"){
+					//si pas de whole transcription du texte
+					$firstObject = $annotationJson->TEXT->TRANSL;
+					$annotationJson->TEXT->TRANSL = [];
+					$annotationJson->TEXT->TRANSL[] = $firstObject;
 					
 				}
+
+				//github #18 : whole translation
+				if(!isset($annotationJson->TEXT->TRANSL) || $annotationJson->TEXT->TRANSL === null){
+					//si pas de whole transcription du texte
+					$annotationJson->TEXT->TRANSL = [];
+				}
+
 				//
 
 				foreach ($annotationJson->TEXT->S as $keyS => &$sentence) {
 
-					completeTranscriptionLang($sentence->FORM,$langTranscriptions,$defaultKindOf);
-					completeTranslationLang($sentence->TRANSL,$langTranslations,$defaultKindOf);
 					completeTranslationLang($sentence->NOTE,$langNotes,$defaultKindOf);
+
+					completeTranscriptionLang($sentence->FORM,$typeOf["sentence"]["transcriptions"],$defaultKindOf);
+					completeTranslationLang($sentence->TRANSL,$typeOf["sentence"]["translations"],$defaultKindOf);
 
 
 					//github #8 : whole transcription
-					if(!$hasWholeTranscription && isset($sentence->FORM)){
+					//if(!$hasWholeTranscription && isset($sentence->FORM)){
+					if(isset($sentence->FORM)){
 
 						if(gettype($sentence->FORM)=="object"){
 							$wholeTranscription[$sentence->FORM->kindOf] .= $sentence->FORM->text."\n";
@@ -276,7 +469,8 @@ try{
 					//
 
 					//github #18 : whole translation
-					if(!$hasWholeTranslation && isset($sentence->TRANSL)){
+					//if(!$hasWholeTranslation && isset($sentence->TRANSL)){
+					if(isset($sentence->TRANSL)){
 
 						if(gettype($sentence->TRANSL)=="object"){
 							$wholeTranslation[$sentence->TRANSL->{"xml:lang"}] .= $sentence->TRANSL->text."\n";
@@ -290,53 +484,76 @@ try{
 					//
 				
 					if(property_exists($sentence, "W")){
+						
 
 						if(gettype($sentence->W)=="object"){
-							completeTranscriptionLang($sentence->W->FORM,$langTranscriptions,$defaultKindOf);
-							completeTranslationLang($sentence->W->TRANSL,$langGlosses,$defaultKindOf);
 							completeTranslationLang($sentence->W->NOTE,$langNotes,$defaultKindOf);
+
+							completeTranscriptionLang($sentence->W->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
+							completeTranslationLang($sentence->W->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
 							//Morphème
 							if(property_exists($sentence->W, "M")){
+
+								concatenateAnnotation($sentence->W, "M",$typeOf);
+
 								if(gettype($sentence->W->M)=="object"){
 								//un seul morphème...
-									completeTranscriptionLang($sentence->W->M->FORM,$langTranscriptions,$defaultKindOf);
-									completeTranslationLang($sentence->W->M->TRANSL,$langGlosses,$defaultKindOf);
 									completeTranslationLang($sentence->W->M->NOTE,$langNotes,$defaultKindOf);
+									//#32
+									completeTranscriptionLang($sentence->W->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
+									completeTranslationLang($sentence->W->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 								}elseif(gettype($sentence->W->M)=="array"){
 								//ou plusieurs morphèmes
 									foreach ($sentence->W->M as $keyM => &$morph) {
-										completeTranscriptionLang($morph->FORM,$langTranscriptions,$defaultKindOf);
-										completeTranslationLang($morph->TRANSL,$langGlosses,$defaultKindOf);
 										completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
+										//#32
+										completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
+										completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 									}
 								}
 							}
 
+
 						}elseif(gettype($sentence->W)=="array"){
 							foreach ($sentence->W as $keyW => &$word) {
-								completeTranscriptionLang($word->FORM,$langTranscriptions,$defaultKindOf);
-								completeTranslationLang($word->TRANSL,$langGlosses,$defaultKindOf);
 								completeTranslationLang($word->NOTE,$langNotes,$defaultKindOf);
+								//32
+								completeTranscriptionLang($word->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
+								completeTranslationLang($word->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
+
 
 								//Morphème
 								if(property_exists($word, "M")){
+									
+									concatenateAnnotation($word, "M",$typeOf);
+
 									if(gettype($word->M)=="object"){
 									//un seul morphème...
-										completeTranscriptionLang($word->M->FORM,$langTranscriptions,$defaultKindOf);
-										completeTranslationLang($word->M->TRANSL,$langGlosses,$defaultKindOf);
 										completeTranslationLang($word->M->NOTE,$langNotes,$defaultKindOf);
+										//32
+										completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
+										completeTranslationLang($word->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
+
+
 									}elseif(gettype($word->M)=="array"){
 									//ou plusieurs morphèmes
 										foreach ($word->M as $keyM => &$morph) {
-											completeTranscriptionLang($morph->FORM,$langTranscriptions,$defaultKindOf);
-											completeTranslationLang($morph->TRANSL,$langGlosses,$defaultKindOf);
 											completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
+
+											//32
+											completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
+											completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
+
 										}
 									}
 								}
 
 							}
 						}
+
+
+						concatenateAnnotation($sentence, "W",$typeOf);
+
 
 					}
 		
@@ -349,6 +566,9 @@ try{
 					completeTranscriptionLang($word->FORM,$langTranscriptions,$defaultKindOf);
 					completeTranslationLang($word->TRANSL,$langGlosses,$defaultKindOf);
 					completeTranslationLang($word->NOTE,$langNotes,$defaultKindOf);
+					//32
+					completeTranscriptionLang($word->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
+					completeTranslationLang($word->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
 
 
 					if(property_exists($word, "M")){
@@ -357,6 +577,9 @@ try{
 							completeTranscriptionLang($word->M->FORM,$langTranscriptions,$defaultKindOf);
 							completeTranslationLang($word->M->TRANSL,$langGlosses,$defaultKindOf);
 							completeTranslationLang($word->M->NOTE,$langNotes,$defaultKindOf);
+							//32
+							completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
+							completeTranslationLang($word->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
 
 						}elseif(gettype($word->M)=="array"){
@@ -364,6 +587,9 @@ try{
 								completeTranscriptionLang($morph->FORM,$langTranscriptions,$defaultKindOf);
 								completeTranslationLang($morph->TRANSL,$langGlosses,$defaultKindOf);
 								completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
+								//32
+								completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
+								completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
 							}
 						}
@@ -372,37 +598,14 @@ try{
 		
 				}
 
+				concatenateAnnotation($annotationJson->TEXT,"S",$typeOf,"\n");
 				//////////////////////////////////////////////////////////////////
 
-				completeTranscriptionLang($annotationJson->TEXT->FORM,$langWholeTranscriptions,$langTranscriptions[0]);
-				completeTranslationLang($annotationJson->TEXT->TRANSL,$langWholeTranslations,$defaultKindOf);
+				completeTranscriptionLang($annotationJson->TEXT->FORM,$typeOf["text"]["transcriptions"],$defaultKindOf);
+				completeTranslationLang($annotationJson->TEXT->TRANSL,$typeOf["text"]["translations"],$defaultKindOf);
 				completeTranslationLang($annotationJson->TEXT->NOTE,$langNotes,$defaultKindOf);
 
-				//github #8 : whole transcription
-				if(!$hasWholeTranscription){
-					//$annotationJson->TEXT->FORM = $wholeTranscription;
-					foreach ($wholeTranscription as $kindOf => $text) {
-						$annotationJson->TEXT->FORM[] = array(
-							"kindOf"=>$kindOf,
-							"text"=>$text
-						);
-					}
-				}
-				//
-
-				//github #18 : whole translation
-				if(!$hasWholeTranslation){
-					//$annotationJson->TEXT->FORM = $wholeTranscription;
-					foreach ($wholeTranslation as $kindOf => $text) {
-						$annotationJson->TEXT->TRANSL[] = array(
-							"xml:lang"=>$kindOf,
-							"text"=>$text
-						);
-					}
-
-					$langWholeTranslations = $langTranslations;
-				}
-				//
+				$typeOf["note"]["translations"]=$langNotes;
 
 				//bug d'indexation dans REACT si index pas dans l'ordre (array_unique peut supprimer des items intermédiaires)
 				$langTranslations = array_values($langTranslations);
@@ -414,13 +617,7 @@ try{
 					'oai_type'=>'secondary',
 					'doi'=>$doi,
 					'annotations'=>$annotationJson,
-					'langues'=>array(
-						'transcriptions'=>$langTranscriptions,
-						'translations'=>$langTranslations,
-						'glosses'=>$langGlosses,
-						'notes'=>$langNotes,
-						'wholeTranslations'=>$langWholeTranslations
-					)
+					'typeOf'=>$typeOf,
 				);
 			}
 

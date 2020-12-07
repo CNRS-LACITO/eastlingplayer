@@ -42,9 +42,7 @@ class Annotations extends React.Component {
     trackTranslation.mode="showing";
     
 
-    if(player.textTracks.length === 1){
-      console.log("track creation");
-      
+    if(player.textTracks.length === 1){     
       //var trackTranscription = player.addTextTrack("subtitles","transcription");
       //var trackTranslation = player.addTextTrack("subtitles","translation");
       
@@ -169,14 +167,14 @@ class Annotations extends React.Component {
     if(this.props.annotations.TEXT.FORM !== undefined && this.props.annotations.TEXT.FORM !== null){
       if(this.props.annotations.TEXT.FORM.length === undefined){
         wholeTranscriptions.push(
-                <Typography hidden={(!this.props.displayOptions.wholeTranscriptions) || (!this.props.displayOptions.transcriptions.includes(this.props.annotations.TEXT.FORM.kindOf))} variant="body2" component="p" className={this.props.annotations.TEXT.FORM.kindOf + " wholeTranscriptions"}>
+                <Typography hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(this.props.annotations.TEXT.FORM.kindOf))} variant="body2" component="p" className={"text"+this.props.annotations.TEXT.FORM.kindOf + " transcription"}>
                   {this.props.annotations.TEXT.FORM.text}
                 </Typography>
               );
       }else{
         this.props.annotations.TEXT.FORM.forEach((f) => {
             wholeTranscriptions.push(
-                <Typography hidden={(!this.props.displayOptions.wholeTranscriptions) || (!this.props.displayOptions.transcriptions.includes(f.kindOf))} variant="body2" component="p" className={f.kindOf + " wholeTranscriptions"}>
+                <Typography hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(f.kindOf))} variant="body2" component="p" className={"text-" + f.kindOf + " transcription"}>
                   {f.text}
                 </Typography>
               );
@@ -187,15 +185,16 @@ class Annotations extends React.Component {
     // Get whole translation(s) of the doc
     if(this.props.annotations.TEXT.TRANSL !== null && this.props.annotations.TEXT.TRANSL !== undefined){
       if(this.props.annotations.TEXT.TRANSL.length === undefined){
+
         wholeTranslations.push(
-                <Typography hidden={!this.props.displayOptions.wholeTranslations.includes(this.props.annotations.TEXT.TRANSL["xml:lang"])} variant="body2" component="p" className={`wholetranslation ${this.props.annotations.TEXT.TRANSL['xml:lang']}`}>
+                <Typography hidden={!this.props.displayOptions.textTranslations.includes(this.props.annotations.TEXT.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation text-${this.props.annotations.TEXT.TRANSL['xml:lang']}`}>
                   {this.props.annotations.TEXT.TRANSL.text}
                 </Typography>
               );
       }else{
         this.props.annotations.TEXT.TRANSL.forEach((t) => {
             wholeTranslations.push(
-                <Typography hidden={!this.props.displayOptions.wholeTranslations.includes(t["xml:lang"])} variant="body2" component="p" className={`wholetranslation ${t['xml:lang']}`}>
+                <Typography hidden={!this.props.displayOptions.textTranslations.includes(t["xml:lang"])} variant="body2" component="p" className={`translation text-${t['xml:lang']}`}>
                   {t.text}
                 </Typography>
               );

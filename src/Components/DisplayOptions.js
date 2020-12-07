@@ -6,16 +6,23 @@ class DisplayOptions extends React.Component {
   constructor(props) {
 
     super(props);
+
     this.state = {
-        checkedWholeTranscriptions: this.props.displayOptions.wholeTranscriptions,
-        displayWholeTranslations: this.props.displayOptions.wholeTranslations,
         words : this.props.displayOptions.words,
-        displayTranscriptions: (this.props.displayOptions.transcriptions.length > 0) ? this.props.displayOptions.transcriptions:[this.props.langOptions.transcriptions[0]],
-        displayTranslations: (this.props.displayOptions.translations.length > 0) ? this.props.displayOptions.translations:[this.props.langOptions.translations[0]],
-        displayGlosses: this.props.displayOptions.glosses,
+        textTranscriptions: (this.props.displayOptions.textTranscriptions.length > 0) ? this.props.displayOptions.textTranscriptions:[this.props.options.text.transcriptions[0]],
+        textTranslations: (this.props.displayOptions.textTranslations.length > 0) ? this.props.displayOptions.textTranslations:[this.props.options.text.translations[0]],
+        sentenceTranscriptions: (this.props.displayOptions.sentenceTranscriptions.length > 0) ? this.props.displayOptions.sentenceTranscriptions:[this.props.options.sentence.transcriptions[0]],
+        sentenceTranslations: (this.props.displayOptions.sentenceTranslations.length > 0) ? this.props.displayOptions.sentenceTranslations:[this.props.options.sentence.translations[0]],
+        wordTranscriptions: (this.props.displayOptions.wordTranscriptions.length > 0) ? this.props.displayOptions.wordTranscriptions:[this.props.options.word.transcriptions[0]],
+        wordTranslations: (this.props.displayOptions.wordTranslations.length > 0) ? this.props.displayOptions.wordTranslations:[this.props.options.word.translations[0]],
+        morphemeTranscriptions: (this.props.displayOptions.morphemeTranscriptions.length > 0) ? this.props.displayOptions.morphemeTranscriptions:[this.props.options.morpheme.transcriptions[0]],
+        morphemeTranslations: (this.props.displayOptions.morphemeTranslations.length > 0) ? this.props.displayOptions.morphemeTranslations:[this.props.options.morpheme.translations[0]],
         displayNotes: this.props.displayOptions.notes,
-        langOptions:this.props.langOptions
+        langOptions:this.props.langOptions,
+        options:this.props.options
     };
+
+    console.log(props.langOptions);
 
 
     /*
@@ -41,14 +48,16 @@ class DisplayOptions extends React.Component {
   buildUrl(){
 
       var params = new URLSearchParams(window.location.search);
-      params.set('optionWords',this.state.words.toString());
-      //params.set('optionNotes',this.state.notes.toString());
-      params.set('optionTranscriptions',this.state.displayTranscriptions.join('+'));
-      params.set('optionTranslations',this.state.displayTranslations.join('+'));
-      params.set('optionGlosses',this.state.displayGlosses.join('+'));
+      params.set('optionTextTranscriptions',this.state.textTranscriptions.join('+'));
+      params.set('optionTextTranslations',this.state.textTranslations.join('+'));
+      params.set('optionSentenceTranscriptions',this.state.sentenceTranscriptions.join('+'));
+      params.set('optionSentenceTranslations',this.state.sentenceTranslations.join('+'));
+      params.set('optionWordTranscriptions',this.state.wordTranscriptions.join('+'));
+      params.set('optionWordTranslations',this.state.wordTranslations.join('+'));
+      params.set('optionMorphemeTranscriptions',this.state.morphemeTranscriptions.join('+'));
+      params.set('optionMorphemeTranslations',this.state.morphemeTranslations.join('+'));
       params.set('optionNotes',this.state.displayNotes.join('+'));
-      params.set('optionWholeTranscriptions',this.state.checkedWholeTranscriptions.toString());
-      params.set('optionWholeTranslations',this.state.displayWholeTranslations.join('+'));
+      params.set('optionWords',this.state.words);
 
       var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 
@@ -61,7 +70,7 @@ class DisplayOptions extends React.Component {
         e.style.display='none';
       });
 
-    var checkedTranscriptions = this.state.displayTranscriptions;
+    var checkedTranscriptions = this.state.displayTextTranscriptions;
     console.log(checkedTranscriptions);
     for(var i=0;i<checkedTranscriptions.length;i++){
       if(checkedTranscriptions[i].length>0){
@@ -87,28 +96,17 @@ class DisplayOptions extends React.Component {
             (checked===true)?e.style.display='block':e.style.display='none';
           });
 
-      if(name === "checkedWholeTranscriptions"){
-        if(checked===false){
-          document.querySelectorAll('.wholeTranscriptions').forEach(
-            function(e){
-              e.style.display='none';
-            });
-        }else{
-          this.checkTranscriptions();
-        }
-      }
-      
-    
-
     });
   }
 
   handleTranscriptionOptions(event){
 
     if(event.target.name.length >0 ){
-      var checkedTranscriptions = this.state.displayTranscriptions;
+      var inputName = event.target.name.split('-');
+      var checkedTranscriptions = this.state[[inputName[0]]+"Transcriptions"];
 
-      const index = checkedTranscriptions.indexOf(event.target.name);
+      const index = checkedTranscriptions.indexOf(inputName[1]);
+
       if (index > -1) {
         //if the transcription is disabled
         checkedTranscriptions.splice(index, 1);
@@ -119,7 +117,7 @@ class DisplayOptions extends React.Component {
           });
 
       }else{
-        checkedTranscriptions.push(event.target.name);
+        checkedTranscriptions.push(inputName[1]);
 
         document.querySelectorAll('.transcription.'+event.target.name).forEach(
           function(e){
@@ -128,9 +126,7 @@ class DisplayOptions extends React.Component {
       }
 
 
-      this.setState({displayTranscriptions: checkedTranscriptions},this.buildUrl());
-      if(this.state.checkedWholeTranscriptions===true)
-        this.checkTranscriptions();
+      this.setState({[inputName[0]+'Transcriptions']: checkedTranscriptions},this.buildUrl());
 
     }
     
@@ -138,9 +134,10 @@ class DisplayOptions extends React.Component {
 
   handleTranslationOptions(event){
     if(event.target.name.length >0 ){
-      var checkedTranslations = this.state.displayTranslations;
+      var inputName = event.target.name.split('-');
+      var checkedTranslations = this.state[[inputName[0]]+"Translations"];
 
-      const index = checkedTranslations.indexOf(event.target.name);
+      const index = checkedTranslations.indexOf(inputName[1]);
       if (index > -1) {
         checkedTranslations.splice(index, 1);
         document.querySelectorAll('.translation.'+event.target.name).forEach(
@@ -148,66 +145,14 @@ class DisplayOptions extends React.Component {
             e.style.display='none';
           });
       }else{
-        checkedTranslations.push(event.target.name);
+        checkedTranslations.push(inputName[1]);
         document.querySelectorAll('.translation.'+event.target.name).forEach(
           function(e){
             e.style.display='block';
           });
       }
 
-      this.setState({displayTranslations: checkedTranslations},this.buildUrl());
-
-    }
-    
-  }
-
-  handleWholeTranslationOptions(event){
-    if(event.target.name.length >0 ){
-      var checkedWholeTranslations = this.state.displayWholeTranslations;
-
-      const index = checkedWholeTranslations.indexOf(event.target.name);
-      if (index > -1) {
-        checkedWholeTranslations.splice(index, 1);
-        document.querySelectorAll('.wholetranslation.'+event.target.name).forEach(
-          function(e){
-            e.style.display='none';
-          });
-      }else{
-        checkedWholeTranslations.push(event.target.name);
-        document.querySelectorAll('.wholetranslation.'+event.target.name).forEach(
-          function(e){
-            e.style.display='block';
-          });
-      }
-
-      this.setState({displayWholeTranslations: checkedWholeTranslations},this.buildUrl());
-
-    }
-    
-  }
-
-  handleGlossesOptions(event){
-    if(event.target.name.length >0 ){
-      var checkedGlosses = this.state.displayGlosses;
-      var isWordList = this.props.isWordList;
-
-      const index = checkedGlosses.indexOf(event.target.name);
-      if (index > -1) {
-        checkedGlosses.splice(index, 1);
-        document.querySelectorAll('.gloss.'+event.target.name).forEach(
-          function(e){
-            e.style.display='none';
-          });
-      }else{
-        checkedGlosses.push(event.target.name);
-
-        document.querySelectorAll('.gloss.'+event.target.name).forEach(
-          function(e){
-            e.style.display=(isWordList === true)?'table-cell':'block';
-          });
-      }
-
-      this.setState({displayGlosses: checkedGlosses},this.buildUrl());
+      this.setState({[inputName[0]+'Translations']: checkedTranslations},this.buildUrl());
 
     }
     
@@ -252,11 +197,11 @@ class DisplayOptions extends React.Component {
         <FormGroup row>
         
         <div class="optionTransc">
-        <FormLabel component="legend">Transcriptions</FormLabel>
+        <FormLabel component="legend">Text transcriptions</FormLabel>
         <FormGroup>
-        {this.state.langOptions.transcriptions.map(transc => (
+        {this.state.options.text.transcriptions.map(transc => (
           <FormControlLabel
-            control={<Checkbox checked={this.state.displayTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={transc} />}
+            control={<Checkbox checked={this.state.textTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"text-"+transc} />}
             label={transc}
           />
         ))}
@@ -264,42 +209,88 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransl">
-        <FormLabel component="legend">Translations</FormLabel>
+        <FormLabel component="legend">Text translations</FormLabel>
         <FormGroup>
-        {this.state.langOptions.translations.map(transl => (
+        {this.state.options.text.translations.map(transl => (
           <FormControlLabel
-            control={<Checkbox checked={this.state.displayTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={transl} />}
+            control={<Checkbox checked={this.state.textTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"text-"+transl} />}
             label={transl}
           />
         ))}
         </FormGroup>
-        </div>           
-
-        <div class="optionWholeTransc">
-          <FormControlLabel
-            control={
-              <Switch 
-                checked={this.state.checkedWholeTranscriptions}
-                onChange={this.handleChecked.bind(this)}
-                name="checkedWholeTranscriptions"
-                color="primary"
-              />
-            }
-            label="Whole text transcription"
-          />
         </div>
 
-        <div class="optionWholeTransl">  
-          <FormLabel component="legend">Whole text translation</FormLabel>
+        <div class="optionTransc">
+        <FormLabel component="legend">Sentence transcriptions</FormLabel>
         <FormGroup>
-        {this.state.langOptions.wholeTranslations.map(transl => (
+        {this.state.options.sentence.transcriptions.map(transc => (
           <FormControlLabel
-            control={<Checkbox checked={this.state.displayWholeTranslations.includes(transl)} onChange={this.handleWholeTranslationOptions.bind(this)} name={transl} />}
+            control={<Checkbox checked={this.state.sentenceTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"sentence-"+transc} />}
+            label={transc}
+          />
+        ))}
+        </FormGroup>
+        </div>
+
+        <div class="optionTransl">
+        <FormLabel component="legend">Sentence translations</FormLabel>
+        <FormGroup>
+        {this.state.options.sentence.translations.map(transl => (
+          <FormControlLabel
+            control={<Checkbox checked={this.state.sentenceTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"sentence-"+transl} />}
             label={transl}
           />
         ))}
-        </FormGroup> 
+        </FormGroup>
         </div>
+
+        <div class="optionTransc">
+        <FormLabel component="legend">Word transcriptions</FormLabel>
+        <FormGroup>
+        {this.state.options.word.transcriptions.map(transc => (
+          <FormControlLabel
+            control={<Checkbox checked={this.state.wordTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"word-"+transc} />}
+            label={transc}
+          />
+        ))}
+        </FormGroup>
+        </div>
+
+        <div class="optionTransl">
+        <FormLabel component="legend">Word translations</FormLabel>
+        <FormGroup>
+        {this.state.options.word.translations.map(transl => (
+          <FormControlLabel
+            control={<Checkbox checked={this.state.wordTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"word-"+transl} />}
+            label={transl}
+          />
+        ))}
+        </FormGroup>
+        </div>
+
+        <div class="optionTransc">
+        <FormLabel component="legend">Morpheme transcriptions</FormLabel>
+        <FormGroup>
+        {this.state.options.morpheme.transcriptions.map(transc => (
+          <FormControlLabel
+            control={<Checkbox checked={this.state.morphemeTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"morpheme-"+transc} />}
+            label={transc}
+          />
+        ))}
+        </FormGroup>
+        </div>
+
+        <div class="optionTransl">
+        <FormLabel component="legend">Morpheme translations</FormLabel>
+        <FormGroup>
+        {this.state.options.morpheme.translations.map(transl => (
+          <FormControlLabel
+            control={<Checkbox checked={this.state.morphemeTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"morpheme-"+transl} />}
+            label={transl}
+          />
+        ))}
+        </FormGroup>
+        </div>                  
 
         <div class="optionWords">
           <FormControlLabel
@@ -309,28 +300,17 @@ class DisplayOptions extends React.Component {
                 onChange={this.handleChecked.bind(this)}
                 name="words"
                 color="primary"
+                labelPlacement="start"
               />
             }
             label="Words"
           />
         </div>
 
-        <div class="optionGlosses">
-          <FormLabel component="legend">Glosses</FormLabel>
-          <FormGroup>
-          {this.state.langOptions.glosses.map(gl => (
-            <FormControlLabel
-              control={<Checkbox checked={this.state.displayGlosses.includes(gl)} onChange={this.handleGlossesOptions.bind(this)} name={gl} />}
-              label={gl}
-            />
-          ))}
-          </FormGroup>
-          </div>
-
           <div class="optionNotes">
           <FormLabel component="legend">Notes</FormLabel>
           <FormGroup>
-          {this.state.langOptions.notes.map(nl => (
+          {this.state.options.note.translations.map(nl => (
             <FormControlLabel
               control={<Checkbox checked={this.state.displayNotes.includes(nl)} onChange={this.handleNotesOptions.bind(this)} name={nl} />}
               label={nl}

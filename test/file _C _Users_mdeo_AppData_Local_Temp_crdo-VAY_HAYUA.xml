@@ -1,0 +1,1160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TEXT SYSTEM "https://cocoon.huma-num.fr/schemas/Archive.dtd">
+<TEXT id="crdo-VAY_HAYUA" xml:lang="x-sil-vay">
+    <HEADER>
+        <TITLE xml:lang="en">The couple and the bear</TITLE>
+        <TITLE xml:lang="fr">Le couple et l'ours</TITLE>
+        <SOUNDFILE href="Nepal/Hayu/HAYUA.mp3"/>
+    </HEADER>
+    <S id="HAYUAs1" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="1.1803" end="6.4712"/>
+        <FORM kindOf="phono">aː̃ki yiknoŋ <FOREIGN xml:lang="ne">bhālu</FOREIGN>-ha dusi dzaːkom ɩxtse.</FORM>
+        <TRANSL xml:lang="en">They say that a bear ate the bajra-millet in our field.</TRANSL>
+        <TRANSL xml:lang="fr">On dit qu'un ours mangeait le millet dans nos champs.</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">aː̃ki</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">yik</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">dusi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">dza</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">ko</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs2" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="6.4712" end="12.7389"/>
+        <FORM kindOf="phono">mi dusi dzaːnoŋ, "mi dusi tha dzo!" pa tot laxtsem ɩxtse. "gona mɩtsɩ mʊ̆mo e?" ɩxtom ɩxtse. </FORM>
+        <TRANSL xml:lang="en">The farmer chased him, saying "Don't eat that millet!" -- "What will you give me, eh?" he said.</TRANSL>
+        <TRANSL xml:lang="fr">Alors on l'a chassé en disant, "Hé, ne mange pas ce millet! -- Qu'est ce que tu me donnes a manger?</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">dusi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">dza</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">dusi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">tha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">dzo</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pa</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">tot</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">lat</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">gona</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mɩtsɩ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">mʊm</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">mo</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">e</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">to</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs3" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="12.7390" end="18.9254"/>
+        <FORM kindOf="phono">"mɩtsɩ mʊ̆mo e?" ɩʔnoŋ, "ga gon pipira mʊmnom <FOREIGN xml:lang="ne">beskana</FOREIGN> tsʊːtsʊ-ha <FOREIGN xml:lang="ne">hai</FOREIGN>!" ɩxtsem ɩxtse.</FORM>
+        <TRANSL xml:lang="en">"What will you give me?" -- "I'll give you bread, well roasted," he said.</TRANSL>
+        <TRANSL xml:lang="fr">-- Je te ferai manger des galettes, bien grillées."</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mɩtsɩ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">mʊm</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">mo</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">e</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ga</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">gon</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pipira</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">mʊm</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">no</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">beskana</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">tsʊː-tsʊ</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">hai</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs4" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="18.9254" end="24.6234"/>
+        <FORM kindOf="phono">a roːmi-ha <FOREIGN xml:lang="ne">piṭho</FOREIGN> reːkom ɩxtse <FOREIGN xml:lang="ne">cha</FOREIGN>
+            <FOREIGN xml:lang="ne">pāthī</FOREIGN>mʊ.</FORM>
+        <TRANSL xml:lang="en">His wife ground some flour, 6 pecks worth.</TRANSL>
+        <TRANSL xml:lang="fr">Alors sa femme a moulu six picotins de farine.</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">a</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">roːmi</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">piṭho</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">re</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">ko</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">cha</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">pāthī</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">mʊ</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs5" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="24.6234" end="28.9376"/>
+        <FORM kindOf="phono">
+            <FOREIGN xml:lang="ne">piṭho</FOREIGN> reːnoŋ a roːtso-ha <FOREIGN xml:lang="ne">cāhim̐</FOREIGN> ki huptom ɩxtse, <FOREIGN xml:lang="ne">kuco</FOREIGN> pʊŋpʊŋ-ha.</FORM>
+        <TRANSL xml:lang="en">While she milled flour, her husband swept up the oil [? the flour], after tressing a broom.</TRANSL>
+        <TRANSL xml:lang="fr">Après quoi son mari a fait un balai et a ramassé l'huile [? la farine], </TRANSL>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">piṭho</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">re</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">a</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">roːtso</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">cāhim̐</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ki</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">hup</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">to</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">kuco</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">pʊŋ-pʊŋ</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs6" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="28.9376" end="40.8219"/>
+        <FORM kindOf="phono">
+            <FOREIGN xml:lang="ne">kuco</FOREIGN> pʊŋpʊŋ-ha ki hupnoŋ, bokim pʊŋpʊŋ-ha ki huptom ɩxtse, ʊlawo kolu <FOREIGN xml:lang="ne">ṭhekī</FOREIGN>noŋ. </FORM>
+        <TRANSL xml:lang="en">He made a broom [hesitation over the Nepali word "broom"] and swept up the oil -- after making a broom [native word], into a big wooden vessel.</TRANSL>
+        <TRANSL xml:lang="fr">Il a fait un balai [hésitation sur le mot népali "balai"] et ramassé l'huile -- ayant fait un balai [le narrateur retrouve le mot hayu] -- dans un grand recipient de bois.</TRANSL>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">kuco</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">pʊŋ-pʊŋ</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ki</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">hup</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">bokim</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">pʊŋ-pʊŋ</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ki</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">hup</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">to</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ʊlawo</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">kolu</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ṭhekī</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs7" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="40.8219" end="49.4095"/>
+        <FORM kindOf="phono">ki huptom ɩxtse. mi pipira le lhek tsʊ cucu-ha dza cuxtotshem ɩxtse yʊxkɩtso. <FOREIGN xml:lang="ne">bhālu</FOREIGN> nomothɩp grimsɩt doŋmi ɩxtse.</FORM>
+        <TRANSL xml:lang="en">He gathered the oil, and when they the bread was well roasted, they ate it up, the couple -- and right at sunset, the bear turned up.</TRANSL>
+        <TRANSL xml:lang="fr">Il a ramassé l'huile, et lorsqu'ils ont eu bien fait grillé le pain, ils l'ont tout mangé -- sur quoi, au coucher du soleil, ponctuellement, l'ours est arrivé.</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ki</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">hup</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">to</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pipira</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">le</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">lhek</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">tsʊ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">cu-cu</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">dza</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">cut</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">totshe</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">yʊxkɩtso</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">nomothɩp</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">grimsɩt</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">doŋ</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs8" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="49.4095" end="56.2063"/>
+        <FORM kindOf="phono">
+            <FOREIGN xml:lang="ne">bhālu</FOREIGN> doŋmi ɩxtse, mi <FOREIGN xml:lang="ne">bhālu</FOREIGN> doŋnoŋ pipira momot-ha kin laʔnatshem i ʊlawo <FOREIGN xml:lang="ne">ghyāmpo</FOREIGN>
+            <FOREIGN xml:lang="ne">bhiter</FOREIGN>noŋ.</FORM>
+        <TRANSL xml:lang="en">When the bear arrived, they had finished off the bread and had gone to hide in a big pot.</TRANSL>
+        <TRANSL xml:lang="fr">Lorsque l'ours est arrivé, le couple avait dévoré le pain et s'était caché dans un énorme pot en terre.</TRANSL>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">doŋ</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">doŋ</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pipira</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">mo-mot</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">kin</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">lat</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">natshe</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">i</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ʊlawo</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ghyāmpo</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhiter</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs9" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="56.1944" end="59.0027"/>
+        <FORM kindOf="phono">
+            <FOREIGN xml:lang="ne">ghyāmpo</FOREIGN>
+            <FOREIGN xml:lang="ne">bhiter</FOREIGN>noŋ kin laxta.</FORM>
+        <TRANSL xml:lang="en">They were hidden in a the big clay pot.</TRANSL>
+        <TRANSL xml:lang="fr">Ils étaient allés se cacher dans le pot.</TRANSL>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ghyāmpo</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhiter</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">kin</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">lat</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">ta</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs10" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="59.0027" end="64.5379"/>
+        <FORM kindOf="phono">
+            <FOREIGN xml:lang="ne">ghyāmpo</FOREIGN>
+            <FOREIGN xml:lang="ne">bhiter</FOREIGN>noŋ kĭnoŋ <FOREIGN xml:lang="ne">bhālu</FOREIGN> doŋmi ɩxtse, namsaŋ thaʔnoŋ <FOREIGN xml:lang="ne">ghyāmpo</FOREIGN>
+            <FOREIGN xml:lang="ne">bhiter</FOREIGN>noŋ.</FORM>
+        <TRANSL xml:lang="en">They were hidden in the pot and the bear turned up, following the scent [of the bread] to the pot.</TRANSL>
+        <TRANSL xml:lang="fr">Pendant qu'ils était cachés, l'ours est arrivé, en suivant l'odeur [? du pain] jusqu'à dans le pot.</TRANSL>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ghyāmpo</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhiter</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">kin</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">doŋ</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">namsaŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">that</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ghyāmpo</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhiter</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs11" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="64.5379" end="76.2188"/>
+        <FORM kindOf="phono">mi <FOREIGN xml:lang="ne">ghyāmpo</FOREIGN> na klĩgot bubu-ha khoknoŋ ena <FOREIGN xml:lang="ne">kāphal</FOREIGN> phumnoŋ doŋ laʔnatshem ɩxtse <FOREIGN xml:lang="ne">cautārā</FOREIGN>noŋ. <FOREIGN xml:lang="ne">ṭuppā</FOREIGN>noŋ <FOREIGN xml:lang="ne">bhālu</FOREIGN> dza laxtsem ɩxtse <FOREIGN xml:lang="ne">kāphal</FOREIGN>.</FORM>
+        <TRANSL xml:lang="en">He took off carrying that pot and they [dual: (?) the couple] arrived at a berry-tree, at a rest-platform, and the bear went to eat berries up in the top of the tree. </TRANSL>
+        <TRANSL xml:lang="fr">Il a mis le pot sur son épaule et il est parti en l'emportant. Ils [duel: l'ours et le pot (?)] sont arrivés à un arbre fruitier (Myrica esculenta), à un muret de repos, et l'ours a grimpé en haut de l'arbre pour manger les baies.</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ghyāmpo</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">na</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">klĩgot</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">bu-bu</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">khok</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ena</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">kāphal</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">phum</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">doŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">lat</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">natshe</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">cautārā</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ṭuppā</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">dza</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">lat</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">kāphal</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs12" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="76.2188" end="80.8585"/>
+        <FORM kindOf="phono">konoŋ <FOREIGN xml:lang="ne">ghyāmpo</FOREIGN> taːta-ha pexti lok kɩː̃tsem ɩxtse a roːtsomʊ.</FORM>
+        <TRANSL xml:lang="en">He had put the pot down on the ground, and then the husband had a fart coming on.</TRANSL>
+        <TRANSL xml:lang="fr">Le pot était posé par terre, et dedans le mari sentait qu'un pet allait sortir.</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ko</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">ghyāmpo</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">taː-ta</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pexti</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">lok</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">kɩn</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">a</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">roːtso</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">mʊ</FORM>
+            </M>
+        </W>
+    </S>
+    <S id="HAYUAs13" who="narrator" xml:lang="x-sil-vay">
+        <AUDIO start="80.8585" end="94.7372"/>
+        <FORM kindOf="phono">"tha pextse! tha!" pa roːmi-ha ɩɩt-ha, ɩʔnoŋ blaŋga! pexti pexta. <FOREIGN xml:lang="ne">bhālu</FOREIGN> '<FOREIGN xml:lang="ne">banduk</FOREIGN> oxpom' pa ramsa-ha dʊkdʊ-ha hikuli menmi ɩxtse.</FORM>
+        <TRANSL xml:lang="en">"Don't fart, don't!" said his wife -- she said it and he farted explosively. The bear, thinking a gun had gone off, fell down from fright and died on the spot.</TRANSL>
+        <TRANSL xml:lang="fr">"Ne pète pas! Ne pète pas!" a dit sa femme -- VLAN! il a pété, et l'ours, croyant entendre exploser un fusil, en est tombé de frayeur et il est mort sur le coup, dit-on.</TRANSL>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">tha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">pet</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">tha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pa</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">roːmi</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">ɩ-ɩt</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">noŋ</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">blaŋga</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pexti</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">pet</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">ta</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">bhālu</FORM>
+            </M>
+        </W>
+        <W>
+            <M xml:lang="ne" class="misc">
+                <FORM kindOf="phono">banduk</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">op</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">po</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">m</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">pa</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">ramsa</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="conjpart">
+                <FORM kindOf="phono">dʊk-dʊ</FORM>
+            </M>
+            <M class="postposition">
+                <FORM kindOf="phono">ha</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="misc">
+                <FORM kindOf="phono">hikuli</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem" sclass="nasalized">
+                <FORM kindOf="phono">men</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">mi</FORM>
+            </M>
+        </W>
+        <W>
+            <M class="verbstem">
+                <FORM kindOf="phono">ɩt</FORM>
+            </M>
+            <M class="verbsuffix">
+                <FORM kindOf="phono">tse</FORM>
+            </M>
+        </W>
+    </S>
+</TEXT>

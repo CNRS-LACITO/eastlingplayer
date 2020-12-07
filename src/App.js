@@ -33,6 +33,7 @@ class App extends React.Component {
 			langOptions : {
 				transcriptions:[],translations:[]
 			},
+			options : {},
 			isWordList : false
 	    };
 	  }
@@ -48,33 +49,41 @@ class App extends React.Component {
 	  	var oai_primary = this.getUrlParameter("oai_primary");
 	  	var oai_secondary = this.getUrlParameter("oai_secondary");
 	  	//25/08/2020 : récupérer les options d'affichage dans l'URL (Edouard SOMBIE)
-	  	var optionTranscriptions = this.getUrlParameter("optionTranscriptions");
-	  	var optionTranslations = this.getUrlParameter("optionTranslations");
+	  	var optionTextTranscriptions = this.getUrlParameter("optionTextTranscriptions");
+	  	var optionTextTranslations = this.getUrlParameter("optionTextTranslations");
+	  	var optionSentenceTranscriptions = this.getUrlParameter("optionSentenceTranscriptions");
+	  	var optionSentenceTranslations = this.getUrlParameter("optionSentenceTranslations");
+	  	var optionWordTranscriptions = this.getUrlParameter("optionWordTranscriptions");
+	  	var optionWordTranslations = this.getUrlParameter("optionWordTranslations");
+	  	var optionMorphemeTranscriptions = this.getUrlParameter("optionMorphemeTranscriptions");
+	  	var optionMorphemeTranslations = this.getUrlParameter("optionMorphemeTranslations");
 	  	var optionWholeTranscriptions = this.getUrlParameter("optionWholeTranscriptions");
 	  	var optionWholeTranslations = this.getUrlParameter("optionWholeTranslations");
 	  	var optionWords = this.getUrlParameter("optionWords");
 	  	var optionNotes = this.getUrlParameter("optionNotes");
 	  	var optionGlosses = this.getUrlParameter("optionGlosses");
-	  	var optionLang = this.getUrlParameter("optionLang");
-
+	  	var optionLang = this.getUrlParameter("lang");
 
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
 
 	  	this.setState({
 	        displayOptions: {
-	        	transcriptions : (optionTranscriptions.length > 0) ? optionTranscriptions.split('+') : [],
-	        	translations : (optionTranslations.length > 0) ? optionTranslations.split('+') : [],
-	        	glosses : (optionGlosses.length > 0) ? optionGlosses.split('+') : [],
+	        	textTranscriptions : (optionTextTranscriptions.length > 0) ? optionTextTranscriptions.split('+') : [],
+	        	textTranslations : (optionTextTranslations.length > 0) ? optionTextTranslations.split('+') : [],
+	        	sentenceTranscriptions : (optionSentenceTranscriptions.length > 0) ? optionSentenceTranscriptions.split('+') : [],
+	        	sentenceTranslations : (optionSentenceTranslations.length > 0) ? optionSentenceTranslations.split('+') : [],
+	        	wordTranscriptions : (optionWordTranscriptions.length > 0) ? optionWordTranscriptions.split('+') : [],
+	        	wordTranslations : (optionWordTranslations.length > 0) ? optionWordTranslations.split('+') : [],
+	        	morphemeTranscriptions : (optionMorphemeTranscriptions.length > 0) ? optionMorphemeTranscriptions.split('+') : [],
+	        	morphemeTranslations : (optionMorphemeTranslations.length > 0) ? optionMorphemeTranslations.split('+') : [],
 	        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [],
-	        	wholeTranscriptions : (optionWholeTranscriptions == 'true'),
-	        	wholeTranslations : optionWholeTranslations.split('+'),
-	        	words : (optionWords.length > 0) ? (optionWords == 'true') : 'true'
+	        	words : (optionWords.length > 0) ? (optionWords === 'true') : true,
+	        	lang : (optionLang.length > 0) ? optionLang : 'fr',
 	        },
 	    });
 
 	  	
-
 	  	if(oai_primary.length > 0){
 
 	  		this.setState({
@@ -146,20 +155,25 @@ class App extends React.Component {
 
 			        	this.setState({
 			        		langOptions: result.langues,
+			        		options: result.typeOf,
 			        		displayOptions:{
-			        			transcriptions : (optionTranscriptions.length > 0) ? optionTranscriptions.split('+') : [result.langues.transcriptions[0]],
-					        	translations : (optionTranslations.length > 0) ? optionTranslations.split('+') : [result.langues.translations[0]],
-					        	glosses : (optionGlosses.length > 0) ? optionGlosses.split('+') : [result.langues.glosses[0]],
-					        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [result.langues.notes[0]],
-					        	wholeTranscriptions : (optionWholeTranscriptions == 'true'),
-	        					wholeTranslations : optionWholeTranslations.split('+'),
-	        					words : (optionWords.length > 0) ? (optionWords == 'true') : 'true'
+					        	textTranscriptions : (optionTextTranscriptions.length > 0) ? optionTextTranscriptions.split('+') : [result.typeOf.text.transcriptions[0]],
+					        	textTranslations : (optionTextTranslations.length > 0) ? optionTextTranslations.split('+') : [result.typeOf.text.translations[0]],
+					        	sentenceTranscriptions : (optionSentenceTranscriptions.length > 0) ? optionSentenceTranscriptions.split('+') : [result.typeOf.sentence.transcriptions[0]],
+					        	sentenceTranslations : (optionSentenceTranslations.length > 0) ? optionSentenceTranslations.split('+') : [result.typeOf.sentence.translations[0]],
+					        	wordTranscriptions : (optionWordTranscriptions.length > 0) ? optionWordTranscriptions.split('+') : [result.typeOf.word.transcriptions[0]],
+					        	wordTranslations : (optionWordTranslations.length > 0) ? optionWordTranslations.split('+') : [result.typeOf.word.translations[0]],
+					        	morphemeTranscriptions : (optionMorphemeTranscriptions.length > 0) ? optionMorphemeTranscriptions.split('+') : [result.typeOf.morpheme.transcriptions[0]],
+					        	morphemeTranslations : (optionMorphemeTranslations.length > 0) ? optionMorphemeTranslations.split('+') : [result.typeOf.morpheme.translations[0]],
+					        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [result.typeOf.note.translations[0]],
+					        	words : (optionWords.length > 0) ? (optionWords === 'true') : true,
 			        		},
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
 				            doi : result.doi,
 				            isWordList : isWordList
 				          });
+
 			        }
 			        
  
@@ -226,10 +240,10 @@ class App extends React.Component {
 		    	 	:
 		    	 	<div key={this.state.doi}>
 		    	 	<Container>
-					    <DisplayOptions displayOptions={this.state.displayOptions} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
+					    <DisplayOptions displayOptions={this.state.displayOptions} options={this.state.options} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
 			    	</Container>
 			    	<Container>
- 						<Annotations doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
+ 						<Annotations doi={this.state.doi} options={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
  			    	</Container>
  			    	</div>
 			    	]

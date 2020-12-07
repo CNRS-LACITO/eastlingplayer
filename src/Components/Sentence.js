@@ -1,6 +1,7 @@
 import React, {Fragment} from 'react';
 import Picture from './Picture';
 import Word from './Word';
+import Morpheme from './Morpheme';
 import Note from './Note';
 import { Card, CardHeader, Avatar, CardContent, Divider, Button, Badge } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
@@ -29,6 +30,13 @@ class Sentence extends React.Component {
 		document.getElementById('player').pause();
 	}
 
+	playPauseSentence(){
+		document.getElementById('player').currentTime = this.props.s.AUDIO.start;
+		document.getElementById('player').play();
+		document.getElementById('player').pause();
+	}
+
+
 	getNotes(node,notesJSON){
 		if(node.NOTE !== undefined && node.NOTE !== null){
 			if(node.NOTE.length === undefined){
@@ -56,14 +64,14 @@ class Sentence extends React.Component {
 	if(this.props.s.TRANSL !== null && this.props.s.TRANSL !== undefined){
 		if(this.props.s.TRANSL.length === undefined){
 			translations.push(
-		          <Typography hidden={!this.props.displayOptions.translations.includes(this.props.s.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation ${this.props.s.TRANSL['xml:lang']}`}>
+		          <Typography hidden={!this.props.displayOptions.sentenceTranslations.includes(this.props.s.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation sentence-${this.props.s.TRANSL['xml:lang']}`}>
 			          <b>{this.props.s.TRANSL.text}</b>
 			        </Typography>
 		        );
 		}else{
 			this.props.s.TRANSL.forEach((t) => {
 		      translations.push(
-		        	<Typography hidden={!this.props.displayOptions.translations.includes(t["xml:lang"])} variant="body2" component="p" className={`translation ${t["xml:lang"]}`}>
+		        	<Typography hidden={!this.props.displayOptions.sentenceTranslations.includes(t["xml:lang"])} variant="body2" component="p" className={`translation sentence-${t["xml:lang"]}`}>
 			        	<b>{t.text}</b>
 			       	</Typography>
 		        );
@@ -80,7 +88,7 @@ class Sentence extends React.Component {
 	if(this.props.s.FORM !== undefined && this.props.s.FORM !== null){
 		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
-		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription ${this.props.s.FORM.kindOf}`}>
+		          <Typography hidden={!this.props.displayOptions.sentenceTranscriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription sentence-${this.props.s.FORM.kindOf}`}>
 			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
@@ -88,7 +96,7 @@ class Sentence extends React.Component {
 		}else{
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
-		          <Typography hidden={!this.props.displayOptions.transcriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription ${f.kindOf}`}>
+		          <Typography hidden={!this.props.displayOptions.sentenceTranscriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription sentence-${f.kindOf}`}>
 			          <b>{f.text}</b>{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
@@ -115,29 +123,36 @@ class Sentence extends React.Component {
 		    this.props.s.W.forEach((w) => {
 
 		    	if(w.M !== undefined && w.M !== null){
+					var morphemes = [];
+					var divWord;
+
 
 		    		if(w.M.length>0){
-		    			var divWord;
-		    			var morphemes = [];
+		    			
 		    			w.M.forEach((m) =>{
 		    				// Get note(s) of the morpheme
 							this.getNotes(m,notesJSON);
 
 			    			morphemes.push(
-				          		<Word w={m} displayOptions={this.props.displayOptions} isMorph={true}  idNote={this.idNote} />
+				          		<Morpheme w={m} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
 				        	);
 
 
 			    		});
-			    		divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
+			    		//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
+						divWord = <Word w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
 			    		words.push(divWord);
 
 		    		}else{
 		    			// Get note(s) of the morpheme
 						this.getNotes(w.M,notesJSON);
-		    			words.push(
-				          		<Word w={w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+						morphemes.push(
+				          		<Morpheme w={w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
 				        	);
+						//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
+						divWord = <Word w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
+			    		words.push(divWord);
+		    			
 		    		}
 
 
@@ -146,7 +161,7 @@ class Sentence extends React.Component {
 					this.getNotes(w,notesJSON);
 
 		    		words.push(
-			          	<Word w={w} displayOptions={this.props.displayOptions}  idNote={this.idNote} />
+			          	<Word w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />
 			        );
 
 			        if(w.AREA !== undefined && w.AREA !== null){
@@ -213,7 +228,7 @@ class Sentence extends React.Component {
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-				<IconButton href={this.props.doi} target="_blank"><img class="doi" src="/player/images/doi.png" alt="doi" /></IconButton>
+				<IconButton href={this.props.doi} target="_blank"><img class="doi" src="/images/doi.png" alt="doi" /></IconButton>
 	        	<IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
 				  <PlayArrow />
 				</IconButton>
