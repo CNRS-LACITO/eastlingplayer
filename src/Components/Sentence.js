@@ -3,7 +3,7 @@ import Picture from './Picture';
 import Word from './Word';
 import Morpheme from './Morpheme';
 import Note from './Note';
-import { Card, CardHeader, Avatar, CardContent, Divider, Button, Badge } from '@material-ui/core';
+import { Card, CardHeader, Avatar, CardContent, Divider, Button, Badge, Popper } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { PlayArrow, Pause } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
@@ -16,7 +16,8 @@ class Sentence extends React.Component {
 	    super(props);
 	    this.state = {
 	        displayOptions : this.props.displayOptions,
-	        notes : null //#17
+	        notes : null, //#17
+	        anchorEl : null
 	    };
 	    this.idNote = 1;
 	}
@@ -59,6 +60,16 @@ class Sentence extends React.Component {
 	const notesJSON = [];
 	const words = [];
 	const canvas = [];
+
+	//DOI PopUp
+
+	const showDoi = (event) => {
+		console.log(this.state.anchorEl);
+	    this.setState({ anchorEl: this.state.anchorEl ? null : event.currentTarget});
+	  };
+	const open = Boolean(this.state.anchorEl);
+    const id = open ? 'simple-popper' : undefined;
+    /////////
 
 	// Get translation(s) of the sentence
 	if(this.props.s.TRANSL !== null && this.props.s.TRANSL !== undefined){
@@ -228,7 +239,11 @@ class Sentence extends React.Component {
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-				<IconButton href={this.props.doi} target="_blank"><img class="doi" src="/images/doi.png" alt="doi" /></IconButton>
+				<IconButton aria-describedby={id} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img class="doi" src="/images/doi.png" alt="doi" /></IconButton>
+	        	<Popper id={"doi_S"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_S"+this.props.sID)}>
+			      <div>{this.props.doi}</div>
+			    </Popper>
+
 	        	<IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
 				  <PlayArrow />
 				</IconButton>
