@@ -44,11 +44,10 @@ class Player extends React.Component {
 
           if(window.currentSentence !== t.sentence){ 
             window.currentSentence = t.sentence;
-            let event = new Event("Sentence changed");
+            let event = new Event("sentence-changed");
             document.dispatchEvent(event);
             document.querySelector('.SENTENCE#'+t.sentence).scrollIntoView();
             window.scrollBy(0, -50);
-            document.querySelector('.SENTENCE#'+t.sentence).classList.add("currentSentence");
           }
           
         } 

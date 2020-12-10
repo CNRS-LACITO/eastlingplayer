@@ -5,9 +5,8 @@ import Morpheme from './Morpheme';
 import Note from './Note';
 import { Card, CardHeader, Avatar, CardContent, Divider, Button, Badge, Popper } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
-import { PlayArrow, Pause } from '@material-ui/icons';
 import Typography from '@material-ui/core/Typography';
-
+import PlayButton from './PlayButton';
 import blue from "@material-ui/core/colors/blue";
 
 class Sentence extends React.Component {
@@ -20,21 +19,6 @@ class Sentence extends React.Component {
 	        anchorEl : null
 	    };
 	    this.idNote = 1;
-	}
-
-	playSentence(){
-		document.getElementById('player').currentTime = this.props.s.AUDIO.start;
-		document.getElementById('player').play();
-	}
-
-	pauseSentence(){
-		document.getElementById('player').pause();
-	}
-
-	playPauseSentence(){
-		document.getElementById('player').currentTime = this.props.s.AUDIO.start;
-		document.getElementById('player').play();
-		document.getElementById('player').pause();
 	}
 
 
@@ -244,13 +228,7 @@ class Sentence extends React.Component {
 			      <div>{this.props.doi}</div>
 			    </Popper>
 
-	        	<IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
-				  <PlayArrow />
-				</IconButton>
-				<IconButton color="primary" aria-label="pause" onClick={this.pauseSentence.bind(this)}>
-				  <Pause />
-				</IconButton>
-
+				<PlayButton start={this.props.s.AUDIO.start} id={this.props.s.id} />
 				<p class="transcBlock" style={{display: "inline-block"}}>
 	        		{transcriptions}
 	        	</p>

@@ -1,10 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, Popover, Typography} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { PlayArrow, Pause } from '@material-ui/icons';
 import Note from './Note';
 import Morpheme from './Morpheme';
+import PlayButton from './PlayButton';
 
 
 const useStyles = makeStyles({
@@ -35,15 +34,6 @@ class Word extends React.Component {
       this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
       console.log(this.idNote);
 	}
-
-  playSentence(){
-    document.getElementById('player').currentTime = this.props.w.AUDIO.start;
-    document.getElementById('player').play();
-  }
-
-  pauseSentence(){
-    document.getElementById('player').pause();
-  }
 
   handleClick = (event) => {
     //console.log(event.currentTarget);
@@ -215,12 +205,7 @@ class Word extends React.Component {
               </div>
 
               <div style={{display:'table-cell'}} id={this.props.w.id} hidden={!this.props.displayOptions.words} >
-                <IconButton color="primary" aria-label="play" onClick={this.playSentence.bind(this)}>
-                  <PlayArrow />
-                </IconButton>
-                <IconButton color="primary" aria-label="play" onClick={this.pauseSentence.bind(this)}>
-                  <Pause />
-                </IconButton>
+                <PlayButton start={this.props.w.AUDIO.start}/>
               </div>
 
               <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
