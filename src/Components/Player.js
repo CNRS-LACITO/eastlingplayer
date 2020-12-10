@@ -7,26 +7,53 @@ class Player extends React.Component {
     super(props);
   }
 
-
-  componentDidMount() {
+    componentDidMount() {
 
     const s = document.createElement('script');
-     
+    
     s.type = 'text/javascript';
-    s.async = true;
 
-    var scriptStr = "var wordidList=[];var startTimeList=[];var endTimeList=[];"
-    scriptStr +="function updatePosition(time){startTimeList.some(function(t,index,_arr){ if(t < time && endTimeList[index]> time){highlight(wordidList[index]);} })}";
+    var scriptStr = "var wordidList=[];var startTimeList=[];var endTimeList=[];var timeList=[];"
+    //scriptStr +="function updatePosition(time){startTimeList.some(function(t,index,_arr){ if(t < time && endTimeList[index]> time){highlight(wordidList[index]);} })}";
+    //scriptStr +="function updatePosition(time){timeList.some(function(t,index,_arr){ if(t.start < time && t.end> time){console.log(t);highlight(t.mID ?? t.wID ?? t.sID);} })}";
     scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime)};";
     //scriptStr +="function highlight(id){document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollIntoView();window.scrollBy(0, -50);document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollLeft=document.querySelector('[wordid=\"'+id+'\"]').offsetLeft;document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';";
-    scriptStr +="function highlight(id){console.log(id);document.querySelector('[id=\"'+id+'\"]').scrollIntoView();window.scrollBy(0, -50);/*document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';*/";
+    scriptStr +="function highlight(id){console.log(id);document.querySelector('[wordid=\"'+id+'\"]').scrollIntoView();window.scrollBy(0, -50);/*document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';*/";
     scriptStr +="document.querySelectorAll('canvas:not([wordid=\"'+id+'\"])').forEach(function(e){e.style.border='none'});}";
     //document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement
-    //console.log(scriptStr);
 
     s.innerHTML = scriptStr;
-
     this.instance.appendChild(s);
+
+    window.highlight=function highlight(id,timeVar){
+      
+      if(timeVar.type!=="S"){
+        document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
+                  e.style.border='none'; 
+                });
+        document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';
+      }
+
+    };
+
+    window.updatePosition=function updatePosition(time){
+      window.timeList.some(function(t,index,_arr){ 
+        if(t.start < time && t.end> time){
+
+          window.highlight(t.morpheme ?? t.word ?? t.sentence,t);
+
+          if(window.currentSentence !== t.sentence){ 
+            window.currentSentence = t.sentence;
+            let event = new Event("Sentence changed");
+            document.dispatchEvent(event);
+            document.querySelector('.SENTENCE#'+t.sentence).scrollIntoView();
+            window.scrollBy(0, -50);
+            document.querySelector('.SENTENCE#'+t.sentence).classList.add("currentSentence");
+          }
+          
+        } 
+      }
+    )};
 
   }
 

@@ -34,7 +34,8 @@ class App extends React.Component {
 				transcriptions:[],translations:[]
 			},
 			options : {},
-			isWordList : false
+			isWordList : false,
+			timeList : []
 	    };
 	  }
 
@@ -66,7 +67,6 @@ class App extends React.Component {
 
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
-
 	  	this.setState({
 	        displayOptions: {
 	        	textTranscriptions : (optionTextTranscriptions.length > 0) ? optionTextTranscriptions.split('+') : [],
@@ -91,8 +91,6 @@ class App extends React.Component {
 	        });
 
 	        fetch(parserUrl+"?oai_primary="+oai_primary)
-		    //fetch(parserUrl+"?idDoc="+oai_primary)
-
 		      .then(res => res.json())
 		      .then(
 		        (result) => {
@@ -141,7 +139,7 @@ class App extends React.Component {
 		      .then(
 		        (result) => {
 		        	console.log(result);
-			        if(result.annotations["TEXT"] == undefined){
+			        if(result.annotations["TEXT"] == undefined || result.annotations["WORDLIST"] == undefined ){
 			        	this.setState({
 				            isAnnotationsLoaded: true,
 				            hasAnnotationsError:true,
@@ -156,6 +154,7 @@ class App extends React.Component {
 			        	this.setState({
 			        		langOptions: result.langues,
 			        		options: result.typeOf,
+			        		timeList: result.timeList,
 			        		displayOptions:{
 					        	textTranscriptions : (optionTextTranscriptions.length > 0) ? optionTextTranscriptions.split('+') : [result.typeOf.text.transcriptions[0]],
 					        	textTranslations : (optionTextTranslations.length > 0) ? optionTextTranslations.split('+') : [result.typeOf.text.translations[0]],
@@ -172,8 +171,7 @@ class App extends React.Component {
 				            annotations : result.annotations,
 				            doi : result.doi,
 				            isWordList : isWordList
-				          });
-
+				        });
 			        }
 			        
  
@@ -243,7 +241,7 @@ class App extends React.Component {
 					    <DisplayOptions displayOptions={this.state.displayOptions} options={this.state.options} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
 			    	</Container>
 			    	<Container>
- 						<Annotations doi={this.state.doi} options={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
+ 						<Annotations timeList={this.state.timeList} doi={this.state.doi} options={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
  			    	</Container>
  			    	</div>
 			    	]

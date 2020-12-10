@@ -44,24 +44,6 @@ class Word extends React.Component {
     document.getElementById('player').pause();
   }
 
-    componentDidMount() {
-      if(this.props.w.AUDIO != undefined){
-        const s = document.createElement('script'); 
-        s.type = 'text/javascript';
-        s.async = true;
-
-        var scriptStr = "wordidList.push('"+this.props.w.id+"');";
-        scriptStr += "startTimeList.push("+this.props.w.AUDIO.start+");"
-        scriptStr += "endTimeList.push("+this.props.w.AUDIO.end+");"
-
-
-        s.innerHTML = scriptStr;
-
-        this.instance.appendChild(s);
-      }
-      
-    }
-
   handleClick = (event) => {
     //console.log(event.currentTarget);
     this.setState({
@@ -96,7 +78,19 @@ class Word extends React.Component {
       }
     }
   }
-
+/*
+  componentDidMount() {
+      if(this.props.w.AUDIO != undefined){
+        window.timeList.push({
+          start:parseFloat(this.props.w.AUDIO.start).toFixed(3),
+          end:parseFloat(this.props.w.AUDIO.end).toFixed(3),
+          mID:null,
+          wID:this.props.w.id,
+          sID:this.props.sID
+        });
+      }
+  }
+*/
   render() {
 
     const buttonStyle = {

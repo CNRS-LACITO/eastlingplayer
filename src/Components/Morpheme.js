@@ -42,25 +42,19 @@ class Morpheme extends React.Component {
   pauseSentence(){
     document.getElementById('player').pause();
   }
-
-    componentDidMount() {
+/*
+  componentDidMount() {
       if(this.props.w.AUDIO != undefined){
-        const s = document.createElement('script'); 
-        s.type = 'text/javascript';
-        s.async = true;
-
-        var scriptStr = "wordidList.push('"+this.props.w.id+"');";
-        scriptStr += "startTimeList.push("+this.props.w.AUDIO.start+");"
-        scriptStr += "endTimeList.push("+this.props.w.AUDIO.end+");"
-
-
-        s.innerHTML = scriptStr;
-
-        this.instance.appendChild(s);
+        window.timeList.push({
+          start:this.props.w.AUDIO.start,
+          end:this.props.w.AUDIO.end,
+          mID:this.props.w.id,
+          wID:this.props.wID,
+          sID:this.props.sID
+        });
       }
-      
-    }
-
+  }
+*/
   handleClick = (event) => {
     //console.log(event.currentTarget);
     this.setState({

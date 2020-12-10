@@ -379,11 +379,7 @@ try{
 				$annotationJson = new stdClass();
 				recursiveParseXML($annotationXml,$annotationJson);
 
-				$langTranscriptions = [];
-				$langTranslations = [];
-				$langGlosses = [];
 				$langNotes = [];
-				$langWholeTranslations = [];
 
 				//https://github.com/CNRS/eastlingplayer/issues/32
 				$typeOf = array(
@@ -411,6 +407,8 @@ try{
 
 				$hasWholeTranscription = true;
 				$hasWholeTranslation = true;
+
+				$timeList = array();
 
 				
 				//github #18 : whole translation
@@ -447,16 +445,14 @@ try{
 
 				foreach ($annotationJson->TEXT->S as $keyS => &$sentence) {
 
+					//langues disponibles
 					completeTranslationLang($sentence->NOTE,$langNotes,$defaultKindOf);
-
 					completeTranscriptionLang($sentence->FORM,$typeOf["sentence"]["transcriptions"],$defaultKindOf);
 					completeTranslationLang($sentence->TRANSL,$typeOf["sentence"]["translations"],$defaultKindOf);
 
 
 					//github #8 : whole transcription
-					//if(!$hasWholeTranscription && isset($sentence->FORM)){
 					if(isset($sentence->FORM)){
-
 						if(gettype($sentence->FORM)=="object"){
 							$wholeTranscription[$sentence->FORM->kindOf] .= $sentence->FORM->text."\n";
 						}elseif(gettype($sentence->FORM)=="array"){
@@ -481,16 +477,41 @@ try{
 							}
 						}	
 					}
+
 					//
-				
+					if(property_exists($sentence, "AUDIO")){
+						$timeList[]=array(
+							"start"=>$sentence->AUDIO->start,
+							"end"=>$sentence->AUDIO->end,
+							"sentence"=>$sentence->id,
+							"word"=>null,
+							"morpheme"=>null,
+							"type"=>"S"
+						);
+					}
+					//
+											
 					if(property_exists($sentence, "W")){
 						
-
 						if(gettype($sentence->W)=="object"){
 							completeTranslationLang($sentence->W->NOTE,$langNotes,$defaultKindOf);
 
 							completeTranscriptionLang($sentence->W->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
 							completeTranslationLang($sentence->W->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
+
+							//
+							if(property_exists($sentence->W, "AUDIO")){
+								$timeList[]=array(
+									"start"=>$sentence->W->AUDIO->start,
+									"end"=>$sentence->W->AUDIO->end,
+									"sentence"=>$sentence->id,
+									"word"=>$sentence->W->id,
+									"morpheme"=>null,
+									"type"=>"W"
+								);
+							}
+							//
+
 							//Morphème
 							if(property_exists($sentence->W, "M")){
 
@@ -502,6 +523,18 @@ try{
 									//#32
 									completeTranscriptionLang($sentence->W->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
 									completeTranslationLang($sentence->W->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
+									//
+									if(property_exists($sentence->W->M, "AUDIO")){
+										$timeList[]=array(
+											"start"=>$sentence->W->M->AUDIO->start,
+											"end"=>$sentence->W->M->AUDIO->end,
+											"sentence"=>$sentence->id,
+											"word"=>$sentence->W->id,
+											"morpheme"=>$sentence->W->M->id,
+											"type"=>"M"
+										);
+									}
+									//
 								}elseif(gettype($sentence->W->M)=="array"){
 								//ou plusieurs morphèmes
 									foreach ($sentence->W->M as $keyM => &$morph) {
@@ -509,6 +542,19 @@ try{
 										//#32
 										completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
 										completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
+
+										//
+										if(property_exists($morph, "AUDIO")){
+											$timeList[]=array(
+												"start"=>$morph->AUDIO->start,
+												"end"=>$morph->AUDIO->end,
+												"sentence"=>$sentence->id,
+												"word"=>$sentence->W->id,
+												"morpheme"=>$morph->id,
+												"type"=>"M"
+											);
+										}
+										//
 									}
 								}
 							}
@@ -521,7 +567,18 @@ try{
 								completeTranscriptionLang($word->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
 								completeTranslationLang($word->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
 
-
+								//
+								if(property_exists($word, "AUDIO")){
+									$timeList[]=array(
+										"start"=>$word->AUDIO->start,
+										"end"=>$word->AUDIO->end,
+										"sentence"=>$sentence->id,
+										"word"=>$word->id,
+										"morpheme"=>null,
+										"type"=>"W"
+									);
+								}
+								//
 								//Morphème
 								if(property_exists($word, "M")){
 									
@@ -534,6 +591,19 @@ try{
 										completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
 										completeTranslationLang($word->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
+										//
+										if(property_exists($word->M, "AUDIO")){
+											$timeList[]=array(
+												"start"=>$word->M->AUDIO->start,
+												"end"=>$word->M->AUDIO->end,
+												"sentence"=>$sentence->id,
+												"word"=>$word->id,
+												"morpheme"=>$word->M->id,
+												"type"=>"M"
+											);
+										}
+										//
+
 
 									}elseif(gettype($word->M)=="array"){
 									//ou plusieurs morphèmes
@@ -543,6 +613,20 @@ try{
 											//32
 											completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
 											completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
+
+
+											//
+											if(property_exists($morph, "AUDIO")){
+												$timeList[]=array(
+													"start"=>$morph->AUDIO->start,
+													"end"=>$morph->AUDIO->end,
+													"sentence"=>$sentence->id,
+													"word"=>$word->id,
+													"morpheme"=>$morph->id,
+													"type"=>"M"
+												);
+											}
+											//
 
 										}
 									}
@@ -563,8 +647,6 @@ try{
 				// github #20
 				foreach ($annotationJson->WORDLIST->W as $keyW => &$word) {
 
-					completeTranscriptionLang($word->FORM,$langTranscriptions,$defaultKindOf);
-					completeTranslationLang($word->TRANSL,$langGlosses,$defaultKindOf);
 					completeTranslationLang($word->NOTE,$langNotes,$defaultKindOf);
 					//32
 					completeTranscriptionLang($word->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
@@ -574,8 +656,7 @@ try{
 					if(property_exists($word, "M")){
 
 						if(gettype($word->M)=="object"){
-							completeTranscriptionLang($word->M->FORM,$langTranscriptions,$defaultKindOf);
-							completeTranslationLang($word->M->TRANSL,$langGlosses,$defaultKindOf);
+
 							completeTranslationLang($word->M->NOTE,$langNotes,$defaultKindOf);
 							//32
 							completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
@@ -584,8 +665,6 @@ try{
 
 						}elseif(gettype($word->M)=="array"){
 							foreach ($word->M as $keyM => &$morph) {
-								completeTranscriptionLang($morph->FORM,$langTranscriptions,$defaultKindOf);
-								completeTranslationLang($morph->TRANSL,$langGlosses,$defaultKindOf);
 								completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
 								//32
 								completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
@@ -608,16 +687,17 @@ try{
 				$typeOf["note"]["translations"]=$langNotes;
 
 				//bug d'indexation dans REACT si index pas dans l'ordre (array_unique peut supprimer des items intermédiaires)
-				$langTranslations = array_values($langTranslations);
-				$langTranscriptions = array_values($langTranscriptions);
-				$langGlosses = array_values($langGlosses);
 				$langNotes = array_values($langNotes);
 
 				$response = array(
 					'oai_type'=>'secondary',
 					'doi'=>$doi,
 					'annotations'=>$annotationJson,
+					'langues'=>array(
+						'notes'=>$langNotes,
+					),
 					'typeOf'=>$typeOf,
+					'timeList'=>$timeList
 				);
 			}
 

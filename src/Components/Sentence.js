@@ -51,7 +51,19 @@ class Sentence extends React.Component {
 			}
 		}
 	}
-  
+/*
+  componentDidMount() {
+      if(this.props.s.AUDIO != undefined){
+        window.timeList.push({
+          start:parseFloat(this.props.s.AUDIO.start).toFixed(3),
+          end:parseFloat(this.props.s.AUDIO.end).toFixed(3),
+          mID:null,
+          wID:null,
+          sID:this.props.s.id
+        });
+      }
+  }
+*/  
   render() {
 
 
@@ -145,23 +157,23 @@ class Sentence extends React.Component {
 							this.getNotes(m,notesJSON);
 
 			    			morphemes.push(
-				          		<Morpheme w={m} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+				          		<Morpheme wID={w.id} w={m} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
 				        	);
 
 
 			    		});
 			    		//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
-						divWord = <Word w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
+						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
 			    		words.push(divWord);
 
 		    		}else{
 		    			// Get note(s) of the morpheme
 						this.getNotes(w.M,notesJSON);
 						morphemes.push(
-				          		<Morpheme w={w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+				          		<Morpheme wID={w.id} w={w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
 				        	);
 						//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
-						divWord = <Word w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
+						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
 			    		words.push(divWord);
 		    			
 		    		}
@@ -172,7 +184,7 @@ class Sentence extends React.Component {
 					this.getNotes(w,notesJSON);
 
 		    		words.push(
-			          	<Word w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />
+			          	<Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />
 			        );
 
 			        if(w.AREA !== undefined && w.AREA !== null){
@@ -225,7 +237,7 @@ class Sentence extends React.Component {
     }
 
     return (
-      <div>
+      <div id={this.props.s.id} class="SENTENCE" ref={el => (this.instance = el)}>
 		<Card> 
 	      <CardContent>  	
 	      		{(this.props.s.AREA !== undefined) ? 
@@ -234,7 +246,7 @@ class Sentence extends React.Component {
 	      		):(<div></div>)
 	      		}
 	       	
-	        <div class="SENTENCE" style={{textAlign:"initial"}}>
+	        <div style={{textAlign:"initial"}}>
 
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 

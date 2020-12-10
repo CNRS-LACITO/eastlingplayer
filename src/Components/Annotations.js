@@ -19,6 +19,10 @@ class Annotations extends React.Component {
     return false;
   }
 
+  componentDidMount() {
+        window.timeList = this.props.timeList;
+  }
+
   render() {
     console.log(this.state.isLoaded);
 
@@ -224,7 +228,7 @@ class Annotations extends React.Component {
 //
 
     return (
-      <div>
+      <div ref={el => (this.instance = el)}>
         <div class="TEXT">
           <Container fixed id="documentTranscriptionsBlock">
                  {wholeTranscriptions}
