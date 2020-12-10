@@ -51,19 +51,7 @@ class Sentence extends React.Component {
 			}
 		}
 	}
-/*
-  componentDidMount() {
-      if(this.props.s.AUDIO != undefined){
-        window.timeList.push({
-          start:parseFloat(this.props.s.AUDIO.start).toFixed(3),
-          end:parseFloat(this.props.s.AUDIO.end).toFixed(3),
-          mID:null,
-          wID:null,
-          sID:this.props.s.id
-        });
-      }
-  }
-*/  
+
   render() {
 
 
@@ -157,7 +145,7 @@ class Sentence extends React.Component {
 							this.getNotes(m,notesJSON);
 
 			    			morphemes.push(
-				          		<Morpheme wID={w.id} w={m} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+				          		<Morpheme wID={w.id} w={m} displayOptions={this.props.displayOptions} idNote={this.idNote} />
 				        	);
 
 
@@ -170,7 +158,7 @@ class Sentence extends React.Component {
 		    			// Get note(s) of the morpheme
 						this.getNotes(w.M,notesJSON);
 						morphemes.push(
-				          		<Morpheme wID={w.id} w={w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+				          		<Morpheme wID={w.id} w={w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} />
 				        	);
 						//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
 						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;

@@ -118,10 +118,10 @@ class DisplayOptions extends React.Component {
 
       }else{
         checkedTranscriptions.push(inputName[1]);
-
+        var isWordList = this.props.isWordList;
         document.querySelectorAll('.transcription.'+event.target.name).forEach(
           function(e){
-            e.style.display='block';
+            e.style.display=(isWordList)?'table-cell':'block';
           });
       }
 
@@ -143,12 +143,14 @@ class DisplayOptions extends React.Component {
         document.querySelectorAll('.translation.'+event.target.name).forEach(
           function(e){
             e.style.display='none';
+
           });
       }else{
         checkedTranslations.push(inputName[1]);
+        var isWordList = this.props.isWordList;
         document.querySelectorAll('.translation.'+event.target.name).forEach(
           function(e){
-            e.style.display='block';
+            e.style.display=(isWordList)?'table-cell':'block';
           });
       }
 

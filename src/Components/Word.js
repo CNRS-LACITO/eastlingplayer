@@ -32,7 +32,8 @@ class Word extends React.Component {
 	      anchorEl: null,
           open: false
 	    };
-      this.idNote = this.props.idNote - 1;
+      this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
+      console.log(this.idNote);
 	}
 
   playSentence(){
@@ -191,14 +192,14 @@ class Word extends React.Component {
               
               this.props.w.M.forEach((m) =>{
                 morphemes.push(
-                      <Morpheme w={m} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+                      <Morpheme w={m} displayOptions={this.props.displayOptions} idNote={this.idNote} />
                   );
               });
               
 
             }else{
             morphemes.push(
-                      <Morpheme w={this.props.w.M} displayOptions={this.props.displayOptions} isMorph={true} idNote={this.idNote} />
+                      <Morpheme w={this.props.w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} />
                   );
             }
     }

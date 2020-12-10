@@ -31,7 +31,7 @@ class Morpheme extends React.Component {
 	      anchorEl: null,
           open: false
 	    };
-      this.idNote = this.props.idNote - 1;
+      this.idNote = this.props.idNote - 1 ?? 1;
 	}
 
   playSentence(){
@@ -42,19 +42,7 @@ class Morpheme extends React.Component {
   pauseSentence(){
     document.getElementById('player').pause();
   }
-/*
-  componentDidMount() {
-      if(this.props.w.AUDIO != undefined){
-        window.timeList.push({
-          start:this.props.w.AUDIO.start,
-          end:this.props.w.AUDIO.end,
-          mID:this.props.w.id,
-          wID:this.props.wID,
-          sID:this.props.sID
-        });
-      }
-  }
-*/
+
   handleClick = (event) => {
     //console.log(event.currentTarget);
     this.setState({

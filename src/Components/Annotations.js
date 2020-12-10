@@ -1,6 +1,7 @@
 import React from 'react';
 import Sentence from './Sentence';
 import Word from './Word';
+import Morpheme from './Morpheme';
 import { Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 
@@ -142,12 +143,12 @@ class Annotations extends React.Component {
                   if(w.M.length>0){
                     w.M.forEach((m) =>{
                       annotationItems.push(
-                            <Word w={m} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} isMorph={true} />
+                            <Morpheme w={m} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} />
                         );
                     });
                   }else{
                     annotationItems.push(
-                            <Word w={w.M} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} isMorph={true} />
+                            <Morpheme w={w.M} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} />
                         );
                   }
 
