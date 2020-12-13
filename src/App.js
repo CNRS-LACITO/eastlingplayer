@@ -65,6 +65,8 @@ class App extends React.Component {
 	  	var optionGlosses = this.getUrlParameter("optionGlosses");
 	  	var optionLang = this.getUrlParameter("lang");
 
+	  	console.log(optionTextTranscriptions);
+	  	console.log(optionTextTranscriptions.length);
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
 	  	this.setState({
@@ -82,6 +84,13 @@ class App extends React.Component {
 	        	lang : (optionLang.length > 0) ? optionLang : 'fr',
 	        },
 	    });
+
+	    if(document.location.search.indexOf("lang")<0){
+	    	var params = new URLSearchParams(window.location.search);
+		    params.set('lang',(optionLang.length > 0)?optionLang:'fr');
+		    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
+		    window.history.pushState('test','',newUrl);
+	    }
 
 	  	
 	  	if(oai_primary.length > 0){
@@ -156,16 +165,17 @@ class App extends React.Component {
 			        		options: result.typeOf,
 			        		timeList: result.timeList,
 			        		displayOptions:{
-					        	textTranscriptions : (optionTextTranscriptions.length > 0) ? optionTextTranscriptions.split('+') : [result.typeOf.text.transcriptions[0]],
-					        	textTranslations : (optionTextTranslations.length > 0) ? optionTextTranslations.split('+') : [result.typeOf.text.translations[0]],
-					        	sentenceTranscriptions : (optionSentenceTranscriptions.length > 0) ? optionSentenceTranscriptions.split('+') : [result.typeOf.sentence.transcriptions[0]],
-					        	sentenceTranslations : (optionSentenceTranslations.length > 0) ? optionSentenceTranslations.split('+') : [result.typeOf.sentence.translations[0]],
-					        	wordTranscriptions : (optionWordTranscriptions.length > 0) ? optionWordTranscriptions.split('+') : [result.typeOf.word.transcriptions[0]],
-					        	wordTranslations : (optionWordTranslations.length > 0) ? optionWordTranslations.split('+') : [result.typeOf.word.translations[0]],
-					        	morphemeTranscriptions : (optionMorphemeTranscriptions.length > 0) ? optionMorphemeTranscriptions.split('+') : [result.typeOf.morpheme.transcriptions[0]],
-					        	morphemeTranslations : (optionMorphemeTranslations.length > 0) ? optionMorphemeTranslations.split('+') : [result.typeOf.morpheme.translations[0]],
-					        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [result.typeOf.note.translations[0]],
-					        	words : (optionWords.length > 0) ? (optionWords === 'true') : true,
+					        	textTranscriptions : (document.location.search.indexOf("optionTextTranscriptions") > 0) ? optionTextTranscriptions.split('+') : [result.typeOf.text.transcriptions[0]],
+					        	textTranslations : (document.location.search.indexOf("optionTextTranslations") > 0) ? optionTextTranslations.split('+') : [result.typeOf.text.translations[0]],
+					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : [result.typeOf.sentence.transcriptions[0]],
+					        	sentenceTranslations : (document.location.search.indexOf("optionSentenceTranslations") > 0) ? optionSentenceTranslations.split('+') : [result.typeOf.sentence.translations[0]],
+					        	wordTranscriptions : (document.location.search.indexOf("optionWordTranscriptions") > 0) ? optionWordTranscriptions.split('+') : [result.typeOf.word.transcriptions[0]],
+					        	wordTranslations : (document.location.search.indexOf("optionWordTranslations") > 0) ? optionWordTranslations.split('+') : [result.typeOf.word.translations[0]],
+					        	morphemeTranscriptions : (document.location.search.indexOf("optionMorphemeTranscriptions") > 0) ? optionMorphemeTranscriptions.split('+') : [result.typeOf.morpheme.transcriptions[0]],
+					        	morphemeTranslations : (document.location.search.indexOf("optionMorphemeTranslations") > 0) ? optionMorphemeTranslations.split('+') : [result.typeOf.morpheme.translations[0]],
+					        	notes : (document.location.search.indexOf("optionNotes") > 0) ? optionNotes.split('+') : [result.typeOf.note.translations[0]],
+					        	words : (document.location.search.indexOf("optionWords") > 0) ? (optionWords === 'true') : true,
+					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
 			        		},
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,

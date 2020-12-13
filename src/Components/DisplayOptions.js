@@ -19,10 +19,9 @@ class DisplayOptions extends React.Component {
         morphemeTranslations: (this.props.displayOptions.morphemeTranslations.length > 0) ? this.props.displayOptions.morphemeTranslations:[this.props.options.morpheme.translations[0]],
         displayNotes: this.props.displayOptions.notes,
         langOptions:this.props.langOptions,
-        options:this.props.options
+        options:this.props.options,
+        lang:this.props.displayOptions.lang
     };
-
-    console.log(props.langOptions);
 
 
     /*
@@ -58,6 +57,7 @@ class DisplayOptions extends React.Component {
       params.set('optionMorphemeTranslations',this.state.morphemeTranslations.join('+'));
       params.set('optionNotes',this.state.displayNotes.join('+'));
       params.set('optionWords',this.state.words);
+      params.set('lang',this.state.lang);
 
       var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 
