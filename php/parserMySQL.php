@@ -691,6 +691,8 @@ try{
 
 				$response = array(
 					'oai_type'=>'secondary',
+					'urlFile'=>$sUrlFile,
+					'extensionFile'=> pathinfo($sUrlFile, PATHINFO_EXTENSION),
 					'doi'=>$doi,
 					'annotations'=>$annotationJson,
 					'langues'=>array(

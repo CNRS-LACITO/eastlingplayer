@@ -35,7 +35,9 @@ class App extends React.Component {
 			},
 			options : {},
 			isWordList : false,
-			timeList : []
+			timeList : [],
+			urlFile : '',
+			extensionFile : ''
 	    };
 	  }
 
@@ -180,7 +182,9 @@ class App extends React.Component {
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
 				            doi : result.doi,
-				            isWordList : isWordList
+				            isWordList : isWordList,
+				            urlFile : result.urlFile,
+				            extensionFile : result.extensionFile
 				        });
 			        }
 			        
@@ -251,7 +255,7 @@ class App extends React.Component {
 					    <DisplayOptions displayOptions={this.state.displayOptions} options={this.state.options} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
 			    	</Container>
 			    	<Container>
- 						<Annotations timeList={this.state.timeList} doi={this.state.doi} options={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
+ 						<Annotations urlFile={this.state.urlFile} extensionFile={this.state.extensionFile} timeList={this.state.timeList} doi={this.state.doi} options={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
  			    	</Container>
  			    	</div>
 			    	]

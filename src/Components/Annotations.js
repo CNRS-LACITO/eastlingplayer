@@ -244,6 +244,9 @@ class Annotations extends React.Component {
         <Container fixed id="documentAnnotationsBlock">
               {annotationItems}
         </Container>
+        <Container hidden={this.props.extensionFile==='pdf'}>
+          <embed src={this.props.urlFile} width="100%" height="500px" type='application/pdf'/>
+        </Container>
       </div>
     );
   }
