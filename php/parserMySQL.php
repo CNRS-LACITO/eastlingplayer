@@ -159,6 +159,8 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 	if(!isset($nodeParent->FORM) || $nodeParent->FORM === null || sizeof($nodeParent->FORM)===0){
 		$hasTransc = false;
+		$nodeParent->FORM = (object)array();
+
 	}else{
 		if(gettype($nodeParent->FORM)=="array"){
 			foreach ($nodeParent->FORM as $c) {
@@ -172,6 +174,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0){
 		$hasTransl = false;
+		$nodeParent->TRANSL = (object)array();
 	}else{
 
 		if(gettype($nodeParent->TRANSL)=="array"){
@@ -288,6 +291,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 	foreach($transcConcat as $kindOf => $text){
 		if(!$hasTransc || !in_array($kindOf,$hasTranscTypeOf)){
+
 			$typeOf[$parent]["transcriptions"][]=$kindOf;
 			$typeOf[$parent]["transcriptions"] = array_values(array_unique($typeOf[$parent]["transcriptions"]));
 
@@ -306,6 +310,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 	foreach($translConcat as $xmlLang => $text){
 		if(!$hasTransl || !in_array($xmlLang,$hasTranslTypeOf)){
+
 			$typeOf[$parent]["translations"][]=$xmlLang;
 			$typeOf[$parent]["translations"] = array_values(array_unique($typeOf[$parent]["translations"]));
 

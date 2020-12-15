@@ -172,7 +172,7 @@ class Annotations extends React.Component {
     if(this.props.annotations.TEXT.FORM !== undefined && this.props.annotations.TEXT.FORM !== null){
       if(this.props.annotations.TEXT.FORM.length === undefined){
         wholeTranscriptions.push(
-                <Typography hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(this.props.annotations.TEXT.FORM.kindOf))} variant="body2" component="p" className={"text"+this.props.annotations.TEXT.FORM.kindOf + " transcription"}>
+                <Typography hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(this.props.annotations.TEXT.FORM.kindOf))} variant="body2" component="p" className={"text-"+this.props.annotations.TEXT.FORM.kindOf + " transcription"}>
                   {this.props.annotations.TEXT.FORM.text}
                 </Typography>
               );
