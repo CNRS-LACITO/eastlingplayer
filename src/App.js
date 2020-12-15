@@ -9,7 +9,9 @@ import Annotations from './Components/Annotations';
 
 import './App.css';
 
+
 const parserUrl = "https://eastling.huma-num.fr/player/parserMySQL.php";
+
 
 class App extends React.Component {
 

@@ -4,7 +4,7 @@ import { FormGroup, FormControlLabel, FormLabel, Switch, Checkbox } from '@mater
 class DisplayOptions extends React.Component {
 
   constructor(props) {
-
+    
     super(props);
 
     this.state = {
