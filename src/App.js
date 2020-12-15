@@ -150,7 +150,7 @@ class App extends React.Component {
 		      .then(
 		        (result) => {
 		        	console.log(result);
-			        if(result.annotations["TEXT"] == undefined || result.annotations["WORDLIST"] == undefined ){
+			        if(result.annotations["TEXT"] == undefined && result.annotations["WORDLIST"] == undefined ){
 			        	this.setState({
 				            isAnnotationsLoaded: true,
 				            hasAnnotationsError:true,
@@ -167,8 +167,8 @@ class App extends React.Component {
 			        		options: result.typeOf,
 			        		timeList: result.timeList,
 			        		displayOptions:{
-					        	textTranscriptions : (document.location.search.indexOf("optionTextTranscriptions") > 0) ? optionTextTranscriptions.split('+') : [result.typeOf.text.transcriptions[0]],
-					        	textTranslations : (document.location.search.indexOf("optionTextTranslations") > 0) ? optionTextTranslations.split('+') : [result.typeOf.text.translations[0]],
+					        	textTranscriptions : (document.location.search.indexOf("optionTextTranscriptions") > 0) ? optionTextTranscriptions.split('+') : [],
+					        	textTranslations : (document.location.search.indexOf("optionTextTranslations") > 0) ? optionTextTranslations.split('+') : [],
 					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : [result.typeOf.sentence.transcriptions[0]],
 					        	sentenceTranslations : (document.location.search.indexOf("optionSentenceTranslations") > 0) ? optionSentenceTranslations.split('+') : [result.typeOf.sentence.translations[0]],
 					        	wordTranscriptions : (document.location.search.indexOf("optionWordTranscriptions") > 0) ? optionWordTranscriptions.split('+') : [result.typeOf.word.transcriptions[0]],

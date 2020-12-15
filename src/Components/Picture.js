@@ -27,7 +27,7 @@ class Picture extends React.Component {
           'border': '0px',
           'object-fit': 'none',
           'object-position':cssBGPosition,
-
+          //'max-width' : 'inherit'
         };
 
 

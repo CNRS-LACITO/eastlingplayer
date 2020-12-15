@@ -154,24 +154,51 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 	$hasTransc = true;
 	$hasTransl = true;
 
-	if(!isset($nodeParent->FORM) || $nodeParent->FORM === null || sizeof($nodeParent->FORM)===0)
+	$hasTranscTypeOf = array();
+	$hasTranslTypeOf = array();
+
+	if(!isset($nodeParent->FORM) || $nodeParent->FORM === null || sizeof($nodeParent->FORM)===0){
 		$hasTransc = false;
-	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0)
+	}else{
+		if(gettype($nodeParent->FORM)=="array"){
+			foreach ($nodeParent->FORM as $c) {
+				$hasTranscTypeOf[] = (strlen($c->kindOf)>0)?$c->kindOf:"other";
+			}
+		}elseif(gettype($nodeParent->FORM)=="object"){
+				$hasTranscTypeOf[] = (strlen($nodeParent->FORM->kindOf)>0)?$nodeParent->FORM->kindOf:"other";
+		}
+		
+	}
+
+	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0){
 		$hasTransl = false;
+	}else{
+
+		if(gettype($nodeParent->TRANSL)=="array"){
+			foreach ($nodeParent->TRANSL as $c) {
+				$hasTranslTypeOf[] = $c->{"xml:lang"};
+			}
+		}elseif(gettype($nodeParent->TRANSL)=="object"){
+				$hasTranslTypeOf[] = $nodeParent->TRANSL->{"xml:lang"};
+		}
+	}
 
 	if(property_exists($nodeParent, $nodeChild)){
 		if(gettype($nodeParent->$nodeChild)==="object"){
 			if(isset($nodeParent->$nodeChild->FORM)){
 
 				if(gettype($nodeParent->$nodeChild->FORM)=="object"){
-					$transcConcat[$nodeParent->$nodeChild->FORM->kindOf] .= $nodeParent->$nodeChild->FORM->text.$separator;
+					$kindOfForm = (strlen($nodeParent->$nodeChild->FORM->kindOf)>0)?$nodeParent->$nodeChild->FORM->kindOf:"other";
+					$transcConcat[$kindOfForm] .= $nodeParent->$nodeChild->FORM->text.$separator;
 				}elseif(gettype($nodeParent->$nodeChild->FORM)=="array"){
 
 					foreach ($nodeParent->$nodeChild->FORM as $transcription) {
 						if(gettype($transcription) === "object"){
-							$transcConcat[$transcription->kindOf] .= $transcription->text.$separator;
+							$kindOfForm = (strlen($transcription->kindOf)>0)?$transcription->kindOf:"other";
+							$transcConcat[$kindOfForm] .= $transcription->text.$separator;
 						}else{
-							$transcConcat[$transcription["kindOf"]] .= $transcription["text"].$separator;
+							$kindOfForm = (strlen($transcription["kindOf"])>0)?$transcription-["kindOf"]:"other";
+							$transcConcat[$kindOfForm] .= $transcription["text"].$separator;
 						}
 					}
 				}	
@@ -180,36 +207,40 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 			if(isset($nodeParent->$nodeChild->TRANSL)){
 
 				if(gettype($nodeParent->$nodeChild->TRANSL)=="object"){
-					$translConcat[$nodeParent->$nodeChild->TRANSL->{"xml:lang"}] .= $nodeParent->$nodeChild->TRANSL->text.$separator;
+					$xmlLang = (strlen($nodeParent->$nodeChild->TRANSL->{"xml:lang"})>0)?$nodeParent->$nodeChild->TRANSL->{"xml:lang"}:"other";
+					$translConcat[$xmlLang] .= $nodeParent->$nodeChild->TRANSL->text.$separator;
 				}elseif(gettype($nodeParent->$nodeChild->TRANSL)=="array"){
 
 					foreach ($nodeParent->$nodeChild->TRANSL as $translation) {
 						if(gettype($translation) === "object"){
-							$translConcat[$translation->{"xml:lang"}] .= $translation->text.$separator;
+							$xmlLang = (strlen($translation->{"xml:lang"})>0)?$translation->{"xml:lang"}:"other";
+							$translConcat[$xmlLang] .= $translation->text.$separator;
 						}else{
-							$translConcat[$translation["xml:lang"]] .= $translation["text"].$separator;
+							$xmlLang = (strlen($translation["xml:lang"])>0)?$translation["xml:lang"]:"other";
+							$translConcat[$xmlLang] .= $translation["text"].$separator;
 						}
 					}
 				}	
 			}
 		}elseif(gettype($nodeParent->$nodeChild)=="array"){
 			foreach ($nodeParent->$nodeChild as $c) {
-				
+
 				if(isset($c->FORM)){
 					//if only one FORM
 					if(gettype($c->FORM)=="object"){
-						$transcConcat[$c->FORM->kindOf] .= $c->FORM->text.$separator;
+						$kindOfForm = (strlen($c->FORM->kindOf)>0)?$c->FORM->kindOf:"other";
+						$transcConcat[$kindOfForm] .= $c->FORM->text.$separator;
 					//if multiple FORM
 					}elseif(gettype($c->FORM)=="array"){
 						
 						foreach ($c->FORM as $transcription) {
 							
 							if(gettype($transcription) === "object"){
-								
-								$transcConcat[$transcription->kindOf] .= $transcription->text.$separator;
+								$kindOfForm = (strlen($transcription->kindOf)>0)?$transcription->kindOf:"other";
+								$transcConcat[$kindOfForm] .= $transcription->text.$separator;
 							}else{
-								
-								$transcConcat[$transcription["kindOf"]] .= $transcription["text"].$separator;
+								$kindOfForm = (strlen($transcription["kindOf"])>0)?$transcription["kindOf"]:"other";
+								$transcConcat[$kindOfForm] .= $transcription["text"].$separator;
 							}
 						}
 					}	
@@ -218,14 +249,17 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 				if(isset($c->TRANSL)){
 
 					if(gettype($c->TRANSL)=="object"){
-						$translConcat[$c->TRANSL->{"xml:lang"}] .= $c->TRANSL->text.$separator;
+						$xmlLang = (strlen($c->TRANSL->{"xml:lang"})>0)?$c->TRANSL->{"xml:lang"}:"other";
+						$translConcat[$xmlLang] .= $c->TRANSL->text.$separator;
 					}elseif(gettype($c->TRANSL)=="array"){
 
 						foreach ($c->TRANSL as $translation) {
 							if(gettype($translation) === "object"){
-								$translConcat[$translation->{"xml:lang"}] .= $translation->text.$separator;
+								$xmlLang = (strlen($translation->{"xml:lang"})>0)?$translation->{"xml:lang"}:"other";
+								$translConcat[$xmlLang] .= $translation->text.$separator;
 							}else{
-								$translConcat[$translation["xml:lang"]] .= $translation["text"].$separator;
+								$xmlLang = (strlen($translation["xml:lang"])>0)?$translation["xml:lang"]:"other";
+								$translConcat[$xmlLang] .= $translation["text"].$separator;
 							}
 							
 						}
@@ -251,38 +285,41 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 			break;
 	}
 
-	foreach($transcConcat as $kindOf => $text){
-		$resTranscConcat[] = (object)array(
-			"kindOf"=>$kindOf,"text"=>trim($text)
-		);
 
-		if(!$hasTransc){
+	foreach($transcConcat as $kindOf => $text){
+		if(!$hasTransc || !in_array($kindOf,$hasTranscTypeOf)){
 			$typeOf[$parent]["transcriptions"][]=$kindOf;
 			$typeOf[$parent]["transcriptions"] = array_values(array_unique($typeOf[$parent]["transcriptions"]));
+
+			if(gettype($nodeParent->FORM)=="array"){
+				$nodeParent->FORM[] = (object)array(
+					"kindOf"=>$kindOf,"text"=>trim($text),"debug"=>$hasTranscTypeOf
+				);
+			}elseif(gettype($nodeParent->FORM)=="object"){
+				$nodeParent->FORM = (object)array(
+					"kindOf"=>$kindOf,"text"=>trim($text),"debug"=>$hasTranscTypeOf
+				);
+			}
+
 		}
 	}
 
 	foreach($translConcat as $xmlLang => $text){
-		$resTranslConcat[] = (object)array(
-			"xml:lang"=>$xmlLang,"text"=>trim($text)
-		);
-
-		if(!$hasTransl){
+		if(!$hasTransl || !in_array($xmlLang,$hasTranslTypeOf)){
 			$typeOf[$parent]["translations"][]=$xmlLang;
 			$typeOf[$parent]["translations"] = array_values(array_unique($typeOf[$parent]["translations"]));
+
+			if(gettype($nodeParent->TRANSL)=="array"){
+				$nodeParent->TRANSL[] = (object)array(
+					"xml:lang"=>$xmlLang,"text"=>trim($text),"debug"=>'CONCAT'
+				);
+			}elseif(gettype($nodeParent->TRANSL)=="object"){
+				$nodeParent->TRANSL = (object)array(
+					"xml:lang"=>$xmlLang,"text"=>trim($text),"debug"=>'CONCAT'
+				);
+			}
 		}
 	}
-
-
-	if(!$hasTransc){
-		$nodeParent->FORM = $resTranscConcat;
-		$nodeParent->DEBUG = "Concat. FORM";
-	}
-
-	if(!$hasTransl){
-		$nodeParent->TRANSL = $resTranslConcat;
-		$nodeParent->DEBUG .= "Concat. TRANSL";
-	}	
 
 }
 
@@ -421,12 +458,14 @@ try{
 				}
 
 				//github #18 : whole translation
+
 				if(!isset($annotationJson->TEXT->FORM) || $annotationJson->TEXT->FORM === null){
 					//si pas de whole transcription du texte
 					$annotationJson->TEXT->FORM = [];
 				}
 
 				//github #18 : whole translation
+
 				if(isset($annotationJson->TEXT->TRANSL) && gettype($annotationJson->TEXT->TRANSL) ==="object"){
 					//si pas de whole transcription du texte
 					$firstObject = $annotationJson->TEXT->TRANSL;
@@ -441,7 +480,7 @@ try{
 					$annotationJson->TEXT->TRANSL = [];
 				}
 
-				//
+				//BUG
 
 				foreach ($annotationJson->TEXT->S as $keyS => &$sentence) {
 
@@ -465,7 +504,6 @@ try{
 					//
 
 					//github #18 : whole translation
-					//if(!$hasWholeTranslation && isset($sentence->TRANSL)){
 					if(isset($sentence->TRANSL)){
 
 						if(gettype($sentence->TRANSL)=="object"){
@@ -642,7 +680,7 @@ try{
 					}
 		
 				}
-
+/*
 				///////////////////////////////////////////////////////////////////
 				// github #20
 				foreach ($annotationJson->WORDLIST->W as $keyW => &$word) {
@@ -677,12 +715,14 @@ try{
 		
 				}
 
+*/
+
 				concatenateAnnotation($annotationJson->TEXT,"S",$typeOf,"\n");
 				//////////////////////////////////////////////////////////////////
 
 				completeTranscriptionLang($annotationJson->TEXT->FORM,$typeOf["text"]["transcriptions"],$defaultKindOf);
 				completeTranslationLang($annotationJson->TEXT->TRANSL,$typeOf["text"]["translations"],$defaultKindOf);
-				completeTranslationLang($annotationJson->TEXT->NOTE,$langNotes,$defaultKindOf);
+				//completeTranslationLang($annotationJson->TEXT->NOTE,$langNotes,$defaultKindOf);
 
 				$typeOf["note"]["translations"]=$langNotes;
 
