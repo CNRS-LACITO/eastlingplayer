@@ -152,7 +152,7 @@ class App extends React.Component {
 		      .then(
 		        (result) => {
 		        	console.log(result);
-			        if(result.annotations["TEXT"] == undefined && result.annotations["WORDLIST"] == undefined ){
+			        if(result==null || (result.annotations["TEXT"] == undefined && result.annotations["WORDLIST"] == undefined )){
 			        	this.setState({
 				            isAnnotationsLoaded: true,
 				            hasAnnotationsError:true,
@@ -206,7 +206,6 @@ class App extends React.Component {
 
 
 	  render(){
-	  	console.log("render App");
 	  	return (
 		    <div className="App">	
 

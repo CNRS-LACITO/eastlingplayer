@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormGroup, FormControlLabel, FormLabel, Switch, Checkbox } from '@material-ui/core';
+import { Provider, Translate, Translator } from 'react-translated';
 
 class DisplayOptions extends React.Component {
 
@@ -193,13 +194,13 @@ class DisplayOptions extends React.Component {
 
     return (
       <div>
-        <h2>Display Options</h2>
+        <h2><Translate text='Display options'/></h2>
         {
         
         <FormGroup row>
         
         <div class="optionTransc">
-        <FormLabel component="legend">Text transcriptions</FormLabel>
+        <FormLabel component="legend"><Translate text='Text transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.text.transcriptions.map(transc => (
           <FormControlLabel
@@ -211,7 +212,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransl">
-        <FormLabel component="legend">Text translations</FormLabel>
+        <FormLabel component="legend"><Translate text='Text translation'/></FormLabel>
         <FormGroup>
         {this.state.options.text.translations.map(transl => (
           <FormControlLabel
@@ -223,7 +224,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransc">
-        <FormLabel component="legend">Sentence transcriptions</FormLabel>
+        <FormLabel component="legend"><Translate text='Sentence transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.sentence.transcriptions.map(transc => (
           <FormControlLabel
@@ -235,7 +236,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransl">
-        <FormLabel component="legend">Sentence translations</FormLabel>
+        <FormLabel component="legend"><Translate text='Sentence translation'/></FormLabel>
         <FormGroup>
         {this.state.options.sentence.translations.map(transl => (
           <FormControlLabel
@@ -247,7 +248,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransc">
-        <FormLabel component="legend">Word transcriptions</FormLabel>
+        <FormLabel component="legend"><Translate text='Word transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.word.transcriptions.map(transc => (
           <FormControlLabel
@@ -259,7 +260,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransl">
-        <FormLabel component="legend">Word translations</FormLabel>
+        <FormLabel component="legend"><Translate text='Word translation'/></FormLabel>
         <FormGroup>
         {this.state.options.word.translations.map(transl => (
           <FormControlLabel
@@ -271,7 +272,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransc">
-        <FormLabel component="legend">Morpheme transcriptions</FormLabel>
+        <FormLabel component="legend"><Translate text='Morpheme transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.morpheme.transcriptions.map(transc => (
           <FormControlLabel
@@ -283,7 +284,7 @@ class DisplayOptions extends React.Component {
         </div>
 
         <div class="optionTransl">
-        <FormLabel component="legend">Morpheme translations</FormLabel>
+        <FormLabel component="legend"><Translate text='Morpheme translation'/></FormLabel>
         <FormGroup>
         {this.state.options.morpheme.translations.map(transl => (
           <FormControlLabel
@@ -305,7 +306,7 @@ class DisplayOptions extends React.Component {
                 labelPlacement="start"
               />
             }
-            label="Words"
+            label=<Translate text='Words'/>
           />
         </div>
 
