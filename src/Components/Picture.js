@@ -27,13 +27,13 @@ class Picture extends React.Component {
           'border': '0px',
           'object-fit': 'none',
           'object-position':cssBGPosition,
-          //'max-width' : 'inherit'
+          'max-width' : 'inherit !important'
         };
 
 
     return (
           <div>
-          <div sentenceId={this.props.sentenceId} style={{position:'relative',textAlign:'initial',overflow:'auto'}}>
+          <div sentenceId={this.props.sentenceId} style={{position:'relative',textAlign:'initial'}}>
            <img alt={this.props.imageSrc} src={this.props.imageSrc} style={imgStyle} width={image_width} height={image_scope} usemap={usemap} />
            <div>
            {this.props.canvas}
