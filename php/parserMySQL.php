@@ -159,7 +159,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 	if(!isset($nodeParent->FORM) || $nodeParent->FORM === null || sizeof($nodeParent->FORM)===0){
 		$hasTransc = false;
-		$nodeParent->FORM = (object)array();
+		$nodeParent->FORM = array();
 
 	}else{
 		if(gettype($nodeParent->FORM)=="array"){
@@ -174,7 +174,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0){
 		$hasTransl = false;
-		$nodeParent->TRANSL = (object)array();
+		$nodeParent->TRANSL = array();
 	}else{
 
 		if(gettype($nodeParent->TRANSL)=="array"){
@@ -685,7 +685,7 @@ try{
 					}
 		
 				}
-/*
+
 				///////////////////////////////////////////////////////////////////
 				// github #20
 				foreach ($annotationJson->WORDLIST->W as $keyW => &$word) {
@@ -720,7 +720,7 @@ try{
 		
 				}
 
-*/
+
 
 				concatenateAnnotation($annotationJson->TEXT,"S",$typeOf,"\n");
 				//////////////////////////////////////////////////////////////////

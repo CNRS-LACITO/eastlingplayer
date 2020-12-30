@@ -32,11 +32,9 @@ class Word extends React.Component {
           open: false
 	    };
       this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
-      console.log(this.idNote);
 	}
 
   handleClick = (event) => {
-    //console.log(event.currentTarget);
     this.setState({
       anchorEl: event.currentTarget,
       open: true

@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import PlayButton from './PlayButton';
 import blue from "@material-ui/core/colors/blue";
 
+//BUG POPOVER
+//https://codepen.io/chocochip/pen/zYxMgRG
 class Sentence extends React.Component {
 
 	constructor(props) {
@@ -36,9 +38,10 @@ class Sentence extends React.Component {
 		}
 	}
 
+
   render() {
 
-
+  	this.idNote = 1;
   	const transcriptions = [];
 	const translations = [];
 	const notesJSON = [];
@@ -48,11 +51,11 @@ class Sentence extends React.Component {
 	//DOI PopUp
 
 	const showDoi = (event) => {
-		console.log(this.state.anchorEl);
+		//console.log(event.currentTarget.id);
 	    this.setState({ anchorEl: this.state.anchorEl ? null : event.currentTarget});
 	  };
 	const open = Boolean(this.state.anchorEl);
-    const id = open ? 'simple-popper' : undefined;
+    const popperId = open ? 'simple-popper' : undefined;
     /////////
 
 	// Get translation(s) of the sentence
@@ -218,12 +221,12 @@ class Sentence extends React.Component {
 	      		):(<div></div>)
 	      		}
 	       	
-	        <div style={{textAlign:"initial"}}>
+	        <div style={{textAlign:"initial"}} class="annotationsBlock">
 
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-				<IconButton aria-describedby={id} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img class="doi" src="/images/doi.png" alt="doi" /></IconButton>
+				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img class="doi" src="/images/doi.png" alt="doi" /></IconButton>
 	        	<Popper id={"doi_S"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_S"+this.props.sID)}>
 			      <div>{this.props.doi}</div>
 			    </Popper>

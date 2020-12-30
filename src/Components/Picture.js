@@ -32,7 +32,7 @@ class Picture extends React.Component {
 
 
     return (
-          <div>
+          <div class="pictureBlock">
           <div sentenceId={this.props.sentenceId} style={{position:'relative',textAlign:'initial'}}>
            <img alt={this.props.imageSrc} src={this.props.imageSrc} style={imgStyle} width={image_width} height={image_scope} usemap={usemap} />
            <div>
