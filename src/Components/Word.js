@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Button, Popover, Typography} from '@material-ui/core';
+import {Button, Popover, Typography, Popper} from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
 import Note from './Note';
 import Morpheme from './Morpheme';
 import PlayButton from './PlayButton';
@@ -81,6 +82,7 @@ class Word extends React.Component {
   }
 */
   render() {
+    this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
 
     const buttonStyle = {
       'text-transform': 'lowercase'
@@ -92,6 +94,14 @@ class Word extends React.Component {
     const notes = [];
     const notesJSON = [];
 
+    //DOI PopUp
+    const showDoi = (event) => {
+      //console.log(event.currentTarget.id);
+        this.setState({ anchorEl: this.state.anchorEl ? null : event.currentTarget});
+      };
+    const open = Boolean(this.state.anchorEl);
+      const popperId = open ? 'simple-popper' : undefined;
+    /////////
 
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
@@ -201,9 +211,19 @@ class Word extends React.Component {
               <div style={{display:'table-cell'}}>
                 W{this.props.wID} 
               </div>
+              <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img class="doi" src="" alt="doi" /></IconButton>
+                <Popper id={"doi_W"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_W"+this.props.sID)}>
+                <div>{this.props.doi}</div>
+              </Popper>
 
               <div style={{display:'table-cell'}} id={this.props.w.id} hidden={!this.props.displayOptions.words} >
-                <PlayButton start={this.props.w.AUDIO.start}/>
+                { 
+                this.props.w.hasOwnProperty('AUDIO')
+                ?
+                <PlayButton start={this.props.w.AUDIO?this.props.w.AUDIO.start:0} isWordList={true} />
+                :
+                <div></div>
+                }
               </div>
 
               <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >

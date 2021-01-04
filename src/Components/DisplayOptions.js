@@ -199,7 +199,7 @@ class DisplayOptions extends React.Component {
         
         <FormGroup row>
         
-        <div class="optionTransc">
+        <div class="optionTransc" hidden={this.state.options.text.transcriptions.length==0}>
         <FormLabel component="legend"><Translate text='Text transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.text.transcriptions.map(transc => (
@@ -211,7 +211,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransl">
+        <div class="optionTransl" hidden={this.state.options.text.translations.length==0}>
         <FormLabel component="legend"><Translate text='Text translation'/></FormLabel>
         <FormGroup>
         {this.state.options.text.translations.map(transl => (
@@ -223,7 +223,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransc">
+        <div class="optionTransc" hidden={this.state.options.sentence.transcriptions.length==0}>
         <FormLabel component="legend"><Translate text='Sentence transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.sentence.transcriptions.map(transc => (
@@ -235,7 +235,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransl">
+        <div class="optionTransl" hidden={this.state.options.sentence.translations.length==0}>
         <FormLabel component="legend"><Translate text='Sentence translation'/></FormLabel>
         <FormGroup>
         {this.state.options.sentence.translations.map(transl => (
@@ -247,7 +247,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransc">
+        <div class="optionTransc" hidden={this.state.options.word.transcriptions.length==0} >
         <FormLabel component="legend"><Translate text='Word transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.word.transcriptions.map(transc => (
@@ -259,7 +259,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransl">
+        <div class="optionTransl" hidden={this.state.options.word.translations.length==0}>
         <FormLabel component="legend"><Translate text='Word translation'/></FormLabel>
         <FormGroup>
         {this.state.options.word.translations.map(transl => (
@@ -271,7 +271,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransc">
+        <div class="optionTransc" hidden={this.state.options.morpheme.transcriptions.length==0}>
         <FormLabel component="legend"><Translate text='Morpheme transcription'/></FormLabel>
         <FormGroup>
         {this.state.options.morpheme.transcriptions.map(transc => (
@@ -283,7 +283,7 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>
 
-        <div class="optionTransl">
+        <div class="optionTransl" hidden={this.state.options.morpheme.translations.length==0}>
         <FormLabel component="legend"><Translate text='Morpheme translation'/></FormLabel>
         <FormGroup>
         {this.state.options.morpheme.translations.map(transl => (
@@ -310,7 +310,7 @@ class DisplayOptions extends React.Component {
           />
         </div>
 
-          <div class="optionNotes">
+          <div class="optionNotes" hidden={this.state.options.note.translations.length==0}>
           <FormLabel component="legend">Notes</FormLabel>
           <FormGroup>
           {this.state.options.note.translations.map(nl => (

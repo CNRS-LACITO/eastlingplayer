@@ -25,8 +25,6 @@ class Annotations extends React.Component {
   }
 
   render() {
-    console.log(this.state.isLoaded);
-
     var annotationItems = [];
     var wholeTranscriptions = [];
     var wholeTranslations = [];
@@ -103,8 +101,11 @@ class Annotations extends React.Component {
             }
           }
 
-          const cueTransc = new VTTCue(a.AUDIO.start, a.AUDIO.end, transcSubtitle);
-          const cueTransl = new VTTCue(a.AUDIO.start, a.AUDIO.end, translSubtitle);
+          var cueStart = (a.AUDIO != undefined)?a.AUDIO.start:0;
+          var cueEnd = (a.AUDIO != undefined)?a.AUDIO.end:0;
+
+          const cueTransc = new VTTCue(cueStart, cueEnd, transcSubtitle);
+          const cueTransl = new VTTCue(cueStart, cueEnd, translSubtitle);
 
           cueTransc.size = 99;
           cueTransl.size = 99;
@@ -154,8 +155,10 @@ class Annotations extends React.Component {
 
 
                 }else{
+                  ++sID;
+                  var doiWordUrl = doi + "#W" + sID;
                   annotationItems.push(
-                    <Word w={w} wID={++sID} displayOptions={this.props.displayOptions} isWordList={true} />
+                    <Word w={w} wID={sID} displayOptions={this.props.displayOptions} isWordList={true} doi={doiWordUrl} />
                   );
                 } 
                 

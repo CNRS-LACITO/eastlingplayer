@@ -226,12 +226,17 @@ class Sentence extends React.Component {
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img class="doi" src="/images/doi.png" alt="doi" /></IconButton>
+				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img class="doi" src="" alt="doi" /></IconButton>
 	        	<Popper id={"doi_S"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_S"+this.props.sID)}>
 			      <div>{this.props.doi}</div>
 			    </Popper>
-
-				<PlayButton start={this.props.s.AUDIO.start} id={this.props.s.id} />
+			    { 
+		    	 	this.props.s.hasOwnProperty('AUDIO')
+		    	 	?
+					<PlayButton start={this.props.s.AUDIO?this.props.s.AUDIO.start:0} id={this.props.s.id} />
+					:
+					<div></div>
+				}
 				<p class="transcBlock" style={{display: "inline-block"}}>
 	        		{transcriptions}
 	        	</p>

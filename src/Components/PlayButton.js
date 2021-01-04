@@ -25,7 +25,7 @@ class PlayButton extends React.Component {
   playPause(){
     
     //si on change de phrase
-    if(this.props.id!==window.currentSentence){
+    if(this.props.id!==window.currentSentence || this.props.isWordList === true){
       document.getElementById('player').currentTime = this.props.start;
     }
     

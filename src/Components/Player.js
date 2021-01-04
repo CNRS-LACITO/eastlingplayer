@@ -18,7 +18,7 @@ class Player extends React.Component {
     //scriptStr +="function updatePosition(time){timeList.some(function(t,index,_arr){ if(t.start < time && t.end> time){console.log(t);highlight(t.mID ?? t.wID ?? t.sID);} })}";
     scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime)};";
     //scriptStr +="function highlight(id){document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollIntoView();window.scrollBy(0, -50);document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollLeft=document.querySelector('[wordid=\"'+id+'\"]').offsetLeft;document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';";
-    scriptStr +="function highlight(id){console.log(id);document.querySelector('[wordid=\"'+id+'\"]').scrollIntoView();window.scrollBy(0, -50);/*document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';*/";
+    scriptStr +="function highlight(id){console.log(id);document.querySelector('[wordid=\"'+id+'\"]').scrollIntoView();window.scrollBy(0, 300);/*document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';*/";
     scriptStr +="document.querySelectorAll('canvas:not([wordid=\"'+id+'\"])').forEach(function(e){e.style.border='none'});}";
     //document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement
 
@@ -47,7 +47,7 @@ class Player extends React.Component {
             let event = new Event("sentence-changed");
             document.dispatchEvent(event);
             document.querySelector('.SENTENCE#'+t.sentence).scrollIntoView();
-            window.scrollBy(0, -50);
+            window.scrollBy(0, -150);
           }
           
         } 
