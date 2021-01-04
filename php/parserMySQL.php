@@ -146,7 +146,7 @@ function completeTranslationLang(&$nodeTranslation, &$langTranslations,$default)
 
 }
 
-function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "){
+function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"){
 //On concatène les annotations (transc, transl) du niveau inférieur si pas disponibles
 	$transcConcat = array();
 	$translConcat = array();
@@ -297,11 +297,11 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 			if(gettype($nodeParent->FORM)=="array"){
 				$nodeParent->FORM[] = (object)array(
-					"kindOf"=>$kindOf,"text"=>trim($text),"debug"=>$hasTranscTypeOf
+					"kindOf"=>$kindOf,"text"=>trim($text,$separator),"concat"=>'TRUE'
 				);
 			}elseif(gettype($nodeParent->FORM)=="object"){
 				$nodeParent->FORM = (object)array(
-					"kindOf"=>$kindOf,"text"=>trim($text),"debug"=>$hasTranscTypeOf
+					"kindOf"=>$kindOf,"text"=>trim($text,$separator),"concat"=>'TRUE'
 				);
 			}
 
@@ -316,11 +316,11 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = " "
 
 			if(gettype($nodeParent->TRANSL)=="array"){
 				$nodeParent->TRANSL[] = (object)array(
-					"xml:lang"=>$xmlLang,"text"=>trim($text),"debug"=>'CONCAT'
+					"xml:lang"=>$xmlLang,"text"=>trim($text,$separator),"concat"=>'TRUE'
 				);
 			}elseif(gettype($nodeParent->TRANSL)=="object"){
 				$nodeParent->TRANSL = (object)array(
-					"xml:lang"=>$xmlLang,"text"=>trim($text),"debug"=>'CONCAT'
+					"xml:lang"=>$xmlLang,"text"=>trim($text,$separator),"concat"=>'TRUE'
 				);
 			}
 		}

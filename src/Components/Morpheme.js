@@ -150,16 +150,22 @@ class Morpheme extends React.Component {
   //
   if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
       if(this.props.w.FORM.length == undefined){
+        var isGlossIncluded = this.props.displayOptions.morphemeTranscriptions.includes(this.props.w.FORM.kindOf);
+        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
+
         transcriptions.push(
-                  <Typography variant="body2" component="p" className={`transcription morpheme-${this.props.w.FORM.kindOf}`}>
+                  <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} morpheme-${this.props.w.FORM.kindOf}`}>
                     {this.props.w.FORM.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
         }else{
           this.props.w.FORM.forEach((f) => {
+            var isGlossIncluded = this.props.displayOptions.morphemeTranscriptions.includes(f.kindOf);
+            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
+
               transcriptions.push(
-                  <Typography variant="body2" component="p" className={`transcription morpheme-${f.kindOf}`}>
+                  <Typography variant="body2" component="p" className={`transcription ${thisClassName} morpheme-${f.kindOf}`}>
                     {f.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );

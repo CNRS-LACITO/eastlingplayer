@@ -241,7 +241,7 @@ class Sentence extends React.Component {
 	        		{transcriptions}
 	        	</p>
 
-	        	<p class="wordsBlock" hidden={!this.props.displayOptions.words}>
+	        	<p class="wordsBlock">
 					{words}
 				</p>
 

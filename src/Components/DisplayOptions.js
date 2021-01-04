@@ -9,7 +9,7 @@ class DisplayOptions extends React.Component {
     super(props);
 
     this.state = {
-        words : this.props.displayOptions.words,
+        //#41 words : this.props.displayOptions.words,
         textTranscriptions: (this.props.displayOptions.textTranscriptions.length > 0) ? this.props.displayOptions.textTranscriptions:[],
         textTranslations: (this.props.displayOptions.textTranslations.length > 0) ? this.props.displayOptions.textTranslations:[],
         sentenceTranscriptions: (this.props.displayOptions.sentenceTranscriptions.length > 0) ? this.props.displayOptions.sentenceTranscriptions:[this.props.options.sentence.transcriptions[0]],
@@ -57,7 +57,7 @@ class DisplayOptions extends React.Component {
       params.set('optionMorphemeTranscriptions',this.state.morphemeTranscriptions.join('+'));
       params.set('optionMorphemeTranslations',this.state.morphemeTranslations.join('+'));
       params.set('optionNotes',this.state.displayNotes.join('+'));
-      params.set('optionWords',this.state.words);
+      //#41 params.set('optionWords',this.state.words);
       params.set('lang',this.state.lang);
 
       var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
@@ -89,14 +89,13 @@ class DisplayOptions extends React.Component {
     var name = event.target.name;
     this.setState({[event.target.name]: checked},()=>{
       this.buildUrl();
-
+/* #41
       if(name === "words")
       document.querySelectorAll('.wordsBlock').forEach(
           function(e){
-            //e.style.display='none';
             (checked===true)?e.style.display='block':e.style.display='none';
           });
-
+*/
     });
   }
 
@@ -294,21 +293,6 @@ class DisplayOptions extends React.Component {
         ))}
         </FormGroup>
         </div>                  
-
-        <div class="optionWords">
-          <FormControlLabel
-            control={
-              <Switch
-                checked={this.state.words}
-                onChange={this.handleChecked.bind(this)}
-                name="words"
-                color="primary"
-                labelPlacement="start"
-              />
-            }
-            label=<Translate text='Words'/>
-          />
-        </div>
 
           <div class="optionNotes" hidden={this.state.options.note.translations.length==0}>
           <FormLabel component="legend">Notes</FormLabel>

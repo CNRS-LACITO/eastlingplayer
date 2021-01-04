@@ -162,16 +162,22 @@ class Word extends React.Component {
   //
   if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
       if(this.props.w.FORM.length == undefined){
+        var isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(this.props.w.FORM.kindOf);
+        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+
         transcriptions.push(
-                  <Typography variant="body2" component="p" className={`transcription word-${this.props.w.FORM.kindOf}`}>
+                  <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${this.props.w.FORM.kindOf}`}>
                     {this.props.w.FORM.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
         }else{
           this.props.w.FORM.forEach((f) => {
+            var isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(f.kindOf);
+            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+
               transcriptions.push(
-                  <Typography variant="body2" component="p" className={`transcription word-${f.kindOf}`}>
+                  <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${f.kindOf}`}>
                     {f.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
@@ -216,7 +222,7 @@ class Word extends React.Component {
                 <div>{this.props.doi}</div>
               </Popper>
 
-              <div style={{display:'table-cell'}} id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+              <div style={{display:'table-cell'}} id={this.props.w.id} >
                 { 
                 this.props.w.hasOwnProperty('AUDIO')
                 ?
@@ -226,7 +232,7 @@ class Word extends React.Component {
                 }
               </div>
 
-              <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} hidden={!this.props.displayOptions.words} >
+              <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} >
                 {transcriptions}
               </div>
               {morphemes}
