@@ -105,7 +105,10 @@ class DisplayOptions extends React.Component {
       var inputName = event.target.name.split('-');
       var checkedTranscriptions = this.state[[inputName[0]]+"Transcriptions"];
 
-      const index = checkedTranscriptions.indexOf(inputName[1]);
+
+      var transName = event.target.name.split(inputName[0]+'-');
+
+      const index = checkedTranscriptions.indexOf(transName[1]);
 
       if (index > -1) {
         //if the transcription is disabled
@@ -117,7 +120,7 @@ class DisplayOptions extends React.Component {
           });
 
       }else{
-        checkedTranscriptions.push(inputName[1]);
+        checkedTranscriptions.push(transName[1]);
         var isWordList = this.props.isWordList;
         document.querySelectorAll('.transcription.'+event.target.name).forEach(
           function(e){
@@ -137,7 +140,9 @@ class DisplayOptions extends React.Component {
       var inputName = event.target.name.split('-');
       var checkedTranslations = this.state[[inputName[0]]+"Translations"];
 
-      const index = checkedTranslations.indexOf(inputName[1]);
+      var transName = event.target.name.split(inputName[0]+'-');
+
+      const index = checkedTranslations.indexOf(transName[1]);
       if (index > -1) {
         checkedTranslations.splice(index, 1);
         document.querySelectorAll('.translation.'+event.target.name).forEach(
@@ -146,7 +151,7 @@ class DisplayOptions extends React.Component {
 
           });
       }else{
-        checkedTranslations.push(inputName[1]);
+        checkedTranslations.push(transName[1]);
         var isWordList = this.props.isWordList;
         document.querySelectorAll('.translation.'+event.target.name).forEach(
           function(e){
