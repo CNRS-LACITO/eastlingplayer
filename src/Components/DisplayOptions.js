@@ -21,7 +21,9 @@ class DisplayOptions extends React.Component {
         displayNotes: this.props.displayOptions.notes,
         langOptions:this.props.langOptions,
         options:this.props.options,
-        lang:this.props.displayOptions.lang
+        lang:this.props.displayOptions.lang,
+        mode:this.props.displayOptions.mode,
+
     };
 
 
@@ -59,6 +61,7 @@ class DisplayOptions extends React.Component {
       params.set('optionNotes',this.state.displayNotes.join('+'));
       //#41 params.set('optionWords',this.state.words);
       params.set('lang',this.state.lang);
+      params.set('mode',this.state.mode);
 
       var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 
@@ -84,20 +87,7 @@ class DisplayOptions extends React.Component {
     }
   }
 
-  handleChecked(event){
-    var checked = event.target.checked;
-    var name = event.target.name;
-    this.setState({[event.target.name]: checked},()=>{
-      this.buildUrl();
-/* #41
-      if(name === "words")
-      document.querySelectorAll('.wordsBlock').forEach(
-          function(e){
-            (checked===true)?e.style.display='block':e.style.display='none';
-          });
-*/
-    });
-  }
+
 
   handleTranscriptionOptions(event){
 

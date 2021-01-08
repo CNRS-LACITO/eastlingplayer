@@ -68,6 +68,7 @@ class App extends React.Component {
 	  	var optionNotes = this.getUrlParameter("optionNotes");
 	  	var optionGlosses = this.getUrlParameter("optionGlosses");
 	  	var optionLang = this.getUrlParameter("lang");
+		var optionMode = this.getUrlParameter("mode");
 
 	  	console.log(optionTextTranscriptions);
 	  	console.log(optionTextTranscriptions.length);
@@ -86,12 +87,21 @@ class App extends React.Component {
 	        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [],
 	        	//words : (optionWords.length > 0) ? (optionWords === 'true') : true,
 	        	lang : (optionLang.length > 0) ? optionLang : 'fr',
+	        	mode : (optionMode.length > 0) ? optionMode : 'normal',
+
 	        },
 	    });
 
 	    if(document.location.search.indexOf("lang")<0){
 	    	var params = new URLSearchParams(window.location.search);
 		    params.set('lang',(optionLang.length > 0)?optionLang:'fr');
+		    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
+		    window.history.pushState('test','',newUrl);
+	    }
+
+	    if(document.location.search.indexOf("mode")<0){
+	    	var params = new URLSearchParams(window.location.search);
+		    params.set('mode',(optionMode.length > 0)?optionMode:'normal');
 		    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 		    window.history.pushState('test','',newUrl);
 	    }
@@ -171,15 +181,16 @@ class App extends React.Component {
 			        		displayOptions:{
 					        	textTranscriptions : (document.location.search.indexOf("optionTextTranscriptions") > 0) ? optionTextTranscriptions.split('+') : [],
 					        	textTranslations : (document.location.search.indexOf("optionTextTranslations") > 0) ? optionTextTranslations.split('+') : [],
-					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : [result.typeOf.sentence.transcriptions[0]],
-					        	sentenceTranslations : (document.location.search.indexOf("optionSentenceTranslations") > 0) ? optionSentenceTranslations.split('+') : [result.typeOf.sentence.translations[0]],
-					        	wordTranscriptions : (document.location.search.indexOf("optionWordTranscriptions") > 0) ? optionWordTranscriptions.split('+') : (isWordList?[result.typeOf.word.transcriptions[0]]:[]),
-					        	wordTranslations : (document.location.search.indexOf("optionWordTranslations") > 0) ? optionWordTranslations.split('+') : (isWordList?[result.typeOf.word.translations[0]]:[]),
-					        	morphemeTranscriptions : (document.location.search.indexOf("optionMorphemeTranscriptions") > 0) ? optionMorphemeTranscriptions.split('+') : [],
-					        	morphemeTranslations : (document.location.search.indexOf("optionMorphemeTranslations") > 0) ? optionMorphemeTranslations.split('+') : [],
+					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.sentence.transcriptions:[result.typeOf.sentence.transcriptions[0]]),
+					        	sentenceTranslations : (document.location.search.indexOf("optionSentenceTranslations") > 0) ? optionSentenceTranslations.split('+') : ((optionMode === "pro")?result.typeOf.sentence.translations:[result.typeOf.sentence.translations[0]]),
+					        	wordTranscriptions : (document.location.search.indexOf("optionWordTranscriptions") > 0) ? optionWordTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.word.transcriptions:(isWordList?[result.typeOf.word.transcriptions[0]]:[])),
+					        	wordTranslations : (document.location.search.indexOf("optionWordTranslations") > 0) ? optionWordTranslations.split('+') : ((optionMode === "pro")?result.typeOf.word.translations:(isWordList?[result.typeOf.word.translations[0]]:[])),
+					        	morphemeTranscriptions : (document.location.search.indexOf("optionMorphemeTranscriptions") > 0) ? optionMorphemeTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.morpheme.transcriptions:(isWordList?[result.typeOf.morpheme.transcriptions[0]]:[])),
+					        	morphemeTranslations : (document.location.search.indexOf("optionMorphemeTranslations") > 0) ? optionMorphemeTranslations.split('+') : ((optionMode === "pro")?result.typeOf.morpheme.translations:(isWordList?[result.typeOf.morpheme.translations[0]]:[])),
 					        	notes : (document.location.search.indexOf("optionNotes") > 0) ? optionNotes.split('+') : [],
 					        	//words : (document.location.search.indexOf("optionWords") > 0) ? (optionWords === 'true') : true,
 					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
+					        	mode : (document.location.search.indexOf("mode") > 0) ? optionMode : 'normal',
 			        		},
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
