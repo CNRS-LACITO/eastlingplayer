@@ -86,7 +86,7 @@ class DisplayOptions extends React.Component {
         //if the transcription is disabled
         checkedTranscriptions.splice(index, 1);
         console.log(checkedTranscriptions);
-        console.log(this.state.options.sentence);
+        console.log(this.state);
 
         document.querySelectorAll('.transcription.'+event.target.name).forEach(
           function(e){
@@ -108,7 +108,7 @@ class DisplayOptions extends React.Component {
         "options" : this.state.options
       },this.buildUrl());
 
-      console.log(this.state.options);
+      console.log(this.state);
 
     }
     

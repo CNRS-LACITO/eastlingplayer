@@ -66,8 +66,6 @@ class App extends React.Component {
 	  	var optionLang = this.getUrlParameter("lang");
 		var optionMode = this.getUrlParameter("mode");
 
-	  	console.log(optionTextTranscriptions);
-	  	console.log(optionTextTranscriptions.length);
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
 	  	this.setState({
@@ -170,7 +168,7 @@ class App extends React.Component {
 			        	if(result.annotations.WORDLIST !== undefined && result.annotations.WORDLIST !== null){
 			        		var isWordList = (result.annotations.WORDLIST.W !== undefined && result.annotations.WORDLIST.W !== null) ? true : false;
 			        	}
-
+			        	//console.log(typeof [result.typeOf.sentence.transcriptions[0]]);
 			        	this.setState({
 			        		langOptions: result.langues,
 			        		options: result.typeOf,
@@ -178,12 +176,12 @@ class App extends React.Component {
 			        		displayOptions:{
 					        	textTranscriptions : (document.location.search.indexOf("optionTextTranscriptions") > 0) ? optionTextTranscriptions.split('+') : [],
 					        	textTranslations : (document.location.search.indexOf("optionTextTranslations") > 0) ? optionTextTranslations.split('+') : [],
-					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.sentence.transcriptions:[result.typeOf.sentence.transcriptions[0]]),
-					        	sentenceTranslations : (document.location.search.indexOf("optionSentenceTranslations") > 0) ? optionSentenceTranslations.split('+') : ((optionMode === "pro")?result.typeOf.sentence.translations:[result.typeOf.sentence.translations[0]]),
-					        	wordTranscriptions : (document.location.search.indexOf("optionWordTranscriptions") > 0) ? optionWordTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.word.transcriptions:(isWordList?[result.typeOf.word.transcriptions[0]]:[])),
-					        	wordTranslations : (document.location.search.indexOf("optionWordTranslations") > 0) ? optionWordTranslations.split('+') : ((optionMode === "pro")?result.typeOf.word.translations:(isWordList?[result.typeOf.word.translations[0]]:[])),
-					        	morphemeTranscriptions : (document.location.search.indexOf("optionMorphemeTranscriptions") > 0) ? optionMorphemeTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.morpheme.transcriptions:(isWordList?[result.typeOf.morpheme.transcriptions[0]]:[])),
-					        	morphemeTranslations : (document.location.search.indexOf("optionMorphemeTranslations") > 0) ? optionMorphemeTranslations.split('+') : ((optionMode === "pro")?result.typeOf.morpheme.translations:(isWordList?[result.typeOf.morpheme.translations[0]]:[])),
+					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.transcriptions):[result.typeOf.sentence.transcriptions[0]]),
+					        	sentenceTranslations : (document.location.search.indexOf("optionSentenceTranslations") > 0) ? optionSentenceTranslations.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.translations):[result.typeOf.sentence.translations[0]]),
+					        	wordTranscriptions : (document.location.search.indexOf("optionWordTranscriptions") > 0) ? optionWordTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.word.transcriptions):(isWordList?[result.typeOf.word.transcriptions[0]]:[])),
+					        	wordTranslations : (document.location.search.indexOf("optionWordTranslations") > 0) ? optionWordTranslations.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.word.translations):(isWordList?[result.typeOf.word.translations[0]]:[])),
+					        	morphemeTranscriptions : (document.location.search.indexOf("optionMorphemeTranscriptions") > 0) ? optionMorphemeTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.morpheme.transcriptions):(isWordList?[result.typeOf.morpheme.transcriptions[0]]:[])),
+					        	morphemeTranslations : (document.location.search.indexOf("optionMorphemeTranslations") > 0) ? optionMorphemeTranslations.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.morpheme.translations):(isWordList?[result.typeOf.morpheme.translations[0]]:[])),
 					        	notes : (document.location.search.indexOf("optionNotes") > 0) ? optionNotes.split('+') : [],
 					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
 					        	mode : (document.location.search.indexOf("mode") > 0) ? optionMode : 'normal',
