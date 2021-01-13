@@ -44,6 +44,9 @@ class Player extends React.Component {
         if(t.start < time && t.end> time){
 
           if(window.currentSentence !== t.sentence){ 
+            if(window.currentSentence) document.getElementById(window.currentSentence).classList.remove("currentSentence");
+            document.getElementById(t.sentence).classList.add("currentSentence");
+
             window.currentSentence = t.sentence;
             let event = new Event("sentence-changed");
             document.dispatchEvent(event);
