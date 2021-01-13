@@ -63,8 +63,8 @@ class App extends React.Component {
 	  	var optionMorphemeTranscriptions = this.getUrlParameter("optionMorphemeTranscriptions");
 	  	var optionMorphemeTranslations = this.getUrlParameter("optionMorphemeTranslations");
 	  	var optionNotes = this.getUrlParameter("optionNotes");
-	  	var optionLang = this.getUrlParameter("lang");
-		var optionMode = this.getUrlParameter("mode");
+	  	var optionLang = (this.getUrlParameter("lang").length > 0) ? this.getUrlParameter("lang") : "fr";
+		var optionMode = (this.getUrlParameter("mode").length > 0) ? this.getUrlParameter("mode") : "normal";
 
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
@@ -79,8 +79,8 @@ class App extends React.Component {
 	        	morphemeTranscriptions : (optionMorphemeTranscriptions.length > 0) ? optionMorphemeTranscriptions.split('+') : [],
 	        	morphemeTranslations : (optionMorphemeTranslations.length > 0) ? optionMorphemeTranslations.split('+') : [],
 	        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [],
-	        	lang : (optionLang.length > 0) ? optionLang : 'fr',
-	        	mode : (optionMode.length > 0) ? optionMode : 'normal',
+	        	lang : optionLang,
+	        	mode : optionMode,
 
 	        },
 	    });
@@ -151,7 +151,9 @@ class App extends React.Component {
 	            hasSecondaryId: true,
 	        });
 
-	        fetch(parserUrl+"?oai_secondary="+oai_secondary)
+	  		var oai_secondary_url = parserUrl+"?oai_secondary="+oai_secondary+"&lang="+optionLang;
+
+	        fetch(oai_secondary_url)
 		    //fetch('https://eastling.huma-num.fr/player/parserFake.php?oai_secondary=EEE')
 		      .then(res => res.json())
 		      .then(

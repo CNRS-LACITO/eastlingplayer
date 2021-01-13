@@ -1,7 +1,10 @@
 // translation.js
 //https://github.com/amsul/react-translated#static-text
 export default {
-  'Text transcription': {
+  'other': {
+    en: 'other',
+    fr: 'autre',
+  },'Text transcription': {
     en: 'Text transcription',
     fr: 'Transcription du texte',
   },
