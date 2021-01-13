@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import Metadata from './Components/Metadata';
+//import Metadata from './Components/Metadata';
 import DisplayOptions from './Components/DisplayOptions';
 import Player from './Components/Player';
 import Annotations from './Components/Annotations';
@@ -62,11 +62,7 @@ class App extends React.Component {
 	  	var optionWordTranslations = this.getUrlParameter("optionWordTranslations");
 	  	var optionMorphemeTranscriptions = this.getUrlParameter("optionMorphemeTranscriptions");
 	  	var optionMorphemeTranslations = this.getUrlParameter("optionMorphemeTranslations");
-	  	var optionWholeTranscriptions = this.getUrlParameter("optionWholeTranscriptions");
-	  	var optionWholeTranslations = this.getUrlParameter("optionWholeTranslations");
-	  	var optionWords = this.getUrlParameter("optionWords");
 	  	var optionNotes = this.getUrlParameter("optionNotes");
-	  	var optionGlosses = this.getUrlParameter("optionGlosses");
 	  	var optionLang = this.getUrlParameter("lang");
 		var optionMode = this.getUrlParameter("mode");
 
@@ -85,24 +81,25 @@ class App extends React.Component {
 	        	morphemeTranscriptions : (optionMorphemeTranscriptions.length > 0) ? optionMorphemeTranscriptions.split('+') : [],
 	        	morphemeTranslations : (optionMorphemeTranslations.length > 0) ? optionMorphemeTranslations.split('+') : [],
 	        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [],
-	        	//words : (optionWords.length > 0) ? (optionWords === 'true') : true,
 	        	lang : (optionLang.length > 0) ? optionLang : 'fr',
 	        	mode : (optionMode.length > 0) ? optionMode : 'normal',
 
 	        },
 	    });
 
+	  	var params = new URLSearchParams(window.location.search);
+	  	var newUrl = '';
 	    if(document.location.search.indexOf("lang")<0){
-	    	var params = new URLSearchParams(window.location.search);
+	    	
 		    params.set('lang',(optionLang.length > 0)?optionLang:'fr');
-		    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
+		    newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 		    window.history.pushState('test','',newUrl);
 	    }
 
 	    if(document.location.search.indexOf("mode")<0){
-	    	var params = new URLSearchParams(window.location.search);
+
 		    params.set('mode',(optionMode.length > 0)?optionMode:'normal');
-		    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
+		    newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 		    window.history.pushState('test','',newUrl);
 	    }
 
@@ -162,7 +159,7 @@ class App extends React.Component {
 		      .then(
 		        (result) => {
 		        	console.log(result);
-			        if(result==null || (result.annotations["TEXT"] == undefined && result.annotations["WORDLIST"] == undefined )){
+			        if(result===null || (result.annotations["TEXT"] === undefined && result.annotations["WORDLIST"] === undefined )){
 			        	this.setState({
 				            isAnnotationsLoaded: true,
 				            hasAnnotationsError:true,
@@ -188,7 +185,6 @@ class App extends React.Component {
 					        	morphemeTranscriptions : (document.location.search.indexOf("optionMorphemeTranscriptions") > 0) ? optionMorphemeTranscriptions.split('+') : ((optionMode === "pro")?result.typeOf.morpheme.transcriptions:(isWordList?[result.typeOf.morpheme.transcriptions[0]]:[])),
 					        	morphemeTranslations : (document.location.search.indexOf("optionMorphemeTranslations") > 0) ? optionMorphemeTranslations.split('+') : ((optionMode === "pro")?result.typeOf.morpheme.translations:(isWordList?[result.typeOf.morpheme.translations[0]]:[])),
 					        	notes : (document.location.search.indexOf("optionNotes") > 0) ? optionNotes.split('+') : [],
-					        	//words : (document.location.search.indexOf("optionWords") > 0) ? (optionWords === 'true') : true,
 					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
 					        	mode : (document.location.search.indexOf("mode") > 0) ? optionMode : 'normal',
 			        		},
@@ -218,7 +214,7 @@ class App extends React.Component {
 
 	  render(){
 	  	return (
-		    <div className="App">	
+		    <div className="App" key="App">	
 
 		    	{ 
 		    	 	this.state.hasPrimaryId
@@ -237,46 +233,51 @@ class App extends React.Component {
 		    	 	:
 		    	 	<Container>
 					    {/* <Metadata file={this.state.METADATA} /> */}
-					    <Player file={this.state.MEDIAFILE} />
+					    <Player file={this.state.MEDIAFILE} isWordList={this.state.isWordList} />
+
+						{ 
+			    	 	this.state.hasSecondaryId
+			    	 	?
+			    	 	[
+			    	 	this.state.isAnnotationsLoaded 
+			    	 	? 
+			    	 	[
+			    	 	this.state.hasAnnotationsError 
+			    	 	?
+			    	 	<Container>
+						    <p>Error getting annotations :</p>
+						    <p>Code :{this.state.annotationsError.code}</p>
+						    <p>Details :{this.state.annotationsError.text}</p>
+				    	</Container>
+			    	 	:
+			    	 	<div key={this.state.doi}>
+			    	 	<Container>
+						    <DisplayOptions displayOptions={this.state.displayOptions} options={this.state.options} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
+				    	</Container>
+				    	<Container>
+	 						<Annotations urlFile={this.state.urlFile} extensionFile={this.state.extensionFile} timeList={this.state.timeList} doi={this.state.doi} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
+	 			    	</Container>
+	 			    	</div>
+				    	]
+				    	:
+				    	<CircularProgress key="CP primary" />
+				    	]
+				    	:
+				    	<div>No Annotations</div>
+				    }
+
+
+
 			    	</Container>
 			    	]
 			    	:
-			    	<CircularProgress />
+			    	<CircularProgress key="CP secondary" />
 			    	]
 			    	:
 			    	<div>No Media</div>
 			    }
 
-			    { 
-		    	 	this.state.hasSecondaryId
-		    	 	?
-		    	 	[
-		    	 	this.state.isAnnotationsLoaded 
-		    	 	? 
-		    	 	[
-		    	 	this.state.hasAnnotationsError 
-		    	 	?
-		    	 	<Container>
-					    <p>Error getting annotations :</p>
-					    <p>Code :{this.state.annotationsError.code}</p>
-					    <p>Details :{this.state.annotationsError.text}</p>
-			    	</Container>
-		    	 	:
-		    	 	<div key={this.state.doi}>
-		    	 	<Container>
-					    <DisplayOptions displayOptions={this.state.displayOptions} options={this.state.options} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
-			    	</Container>
-			    	<Container>
- 						<Annotations urlFile={this.state.urlFile} extensionFile={this.state.extensionFile} timeList={this.state.timeList} doi={this.state.doi} options={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
- 			    	</Container>
- 			    	</div>
-			    	]
-			    	:
-			    	<CircularProgress />
-			    	]
-			    	:
-			    	<div>No Annotations</div>
-			    }
+			    
 		    </div>
 		  );
 	  }

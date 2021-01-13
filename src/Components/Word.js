@@ -1,29 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Button, Popover, Typography, Popper} from '@material-ui/core';
+import {Typography, Popper} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Note from './Note';
 import Morpheme from './Morpheme';
 import PlayButton from './PlayButton';
-
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
-
 
 class Word extends React.Component {
 	constructor(props) {
@@ -84,10 +64,6 @@ class Word extends React.Component {
   render() {
     this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
 
-    const buttonStyle = {
-      'text-transform': 'lowercase'
-    }
-
   	let word = "";
     const transcriptions = [];
   	const translations = [];
@@ -106,11 +82,12 @@ class Word extends React.Component {
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
     //<div style={{display:'table-cell'}}>
-
-    if(this.props.w.TRANSL != undefined && this.props.w.TRANSL !== null){
-	    if(this.props.w.TRANSL.length == undefined){
-        var isGlossIncluded = this.props.displayOptions.wordTranslations.includes(this.props.w.TRANSL["xml:lang"]);
-        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+    var isGlossIncluded = false;
+    var thisClassName = "";
+    if(this.props.w.TRANSL !== undefined && this.props.w.TRANSL !== null){
+	    if(this.props.w.TRANSL.length === undefined){
+        isGlossIncluded = this.props.displayOptions.wordTranslations.includes(this.props.w.TRANSL["xml:lang"]);
+        thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
 	      translations.push(
 	              <Typography variant="body2" component={this.props.isWordList === true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
@@ -119,8 +96,8 @@ class Word extends React.Component {
 	            );
 	    }else{
 	      this.props.w.TRANSL.forEach((t) => {
-            var isGlossIncluded = this.props.displayOptions.wordTranslations.includes(t["xml:lang"]);
-            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+            isGlossIncluded = this.props.displayOptions.wordTranslations.includes(t["xml:lang"]);
+            thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
 	          translations.push(
 	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} word-${t['xml:lang']}`}>
@@ -133,8 +110,8 @@ class Word extends React.Component {
 
   // Get note(s) of the sentence
   /*
-  if(this.props.w.NOTE != undefined && this.props.w.NOTE != null){
-    if(this.props.w.NOTE.length == undefined){
+  if(this.props.w.NOTE !== undefined && this.props.w.NOTE !== null){
+    if(this.props.w.NOTE.length === undefined){
       notes.push(
               <Typography variant="body2" component="p" className={`note ${this.props.w.NOTE['xml:lang']}`}>
                 {this.props.w.NOTE.message} {this.props.w.NOTE.text}
@@ -161,24 +138,24 @@ class Word extends React.Component {
     
   //
   if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
-      if(this.props.w.FORM.length == undefined){
-        var isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(this.props.w.FORM.kindOf);
-        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+      if(this.props.w.FORM.length === undefined){
+        isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(this.props.w.FORM.kindOf);
+        thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
         transcriptions.push(
                   <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${this.props.w.FORM.kindOf}`}>
-                    {this.props.w.FORM.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+                    {this.props.w.FORM.text}{notesJSON.map(n=><sup className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
         }else{
           this.props.w.FORM.forEach((f) => {
-            var isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(f.kindOf);
-            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+            isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(f.kindOf);
+            thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
               transcriptions.push(
                   <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${f.kindOf}`}>
-                    {f.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+                    {f.text}{notesJSON.map(n=><sup className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
             });
@@ -186,11 +163,9 @@ class Word extends React.Component {
         }
   }
 
-  var hasMorphemes = false;
   var morphemes = [];
 
   if(this.props.w.M !== undefined && this.props.w.M !== null){
-          hasMorphemes = true;
           
             if(this.props.w.M.length>0){
               
@@ -209,15 +184,15 @@ class Word extends React.Component {
     }
 
     return (
-      <div id={this.props.w.id} class="WORD" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+      <div id={this.props.w.id} className="WORD" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
       { 
             this.props.isWordList===true
             ?
             <div style={{display:'table'}} >
               <div style={{display:'table-cell'}}>
-                W{this.props.wID} 
+                {this.props.w.id} 
               </div>
-              <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img class="doi" src="" alt="doi" /></IconButton>
+              <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img className="doi" src="" alt="doi" /></IconButton>
                 <Popper id={"doi_W"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_W"+this.props.sID)}>
                 <div>{this.props.doi}</div>
               </Popper>
@@ -232,7 +207,7 @@ class Word extends React.Component {
                 }
               </div>
 
-              <div style={{display:'table-cell',width:'12em'}} class="word" id={this.props.w.id} >
+              <div style={{display:'table-cell',width:'12em'}} className="word" id={this.props.w.id} >
                 {transcriptions}
               </div>
               {morphemes}
@@ -244,13 +219,13 @@ class Word extends React.Component {
             </div>
             :
             <div>
-              <div class="transcBlock">
+              <div className="transcBlock">
                 {transcriptions}
               </div>
-              <div class="morphemesBlock">
+              <div className="morphemesBlock">
                 {morphemes}
               </div>
-              <div class="translBlock">
+              <div className="translBlock">
                 {translations}
               </div>
 

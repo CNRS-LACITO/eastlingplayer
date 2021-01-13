@@ -32,7 +32,6 @@ class Annotations extends React.Component {
 
     var imageSrc = "";
     var doi = this.props.doi;
-    var doiUrl = "https://pangloss.cnrs.fr/corpus/citation_doi.php?";
     var sID = 0;
 
     var player = document.querySelector('#player');
@@ -75,7 +74,7 @@ class Annotations extends React.Component {
         sID++;
         //#3
         //var doiSentenceUrl = doiUrl + doi + "&sentence=S" + sID;
-        var doiSentenceUrl = doi + "#S" + sID;
+        var doiSentenceUrl = doi + "#" + a.id;
         //TEST VTT
    
         if(trackTranscription.cues.length < sentences.length){
@@ -101,8 +100,8 @@ class Annotations extends React.Component {
             }
           }
 
-          var cueStart = (a.AUDIO != undefined)?a.AUDIO.start:0;
-          var cueEnd = (a.AUDIO != undefined)?a.AUDIO.end:0;
+          var cueStart = (a.AUDIO !== undefined)?a.AUDIO.start:0;
+          var cueEnd = (a.AUDIO !== undefined)?a.AUDIO.end:0;
 
           const cueTransc = new VTTCue(cueStart, cueEnd, transcSubtitle);
           const cueTransl = new VTTCue(cueStart, cueEnd, translSubtitle);
@@ -182,7 +181,7 @@ class Annotations extends React.Component {
       }else{
         this.props.annotations.TEXT.FORM.forEach((f) => {
             wholeTranscriptions.push(
-                <Typography hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(f.kindOf))} variant="body2" component="p" className={"text-" + f.kindOf + " transcription"}>
+                <Typography key={"textForm"+f.kindOf} hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(f.kindOf))} variant="body2" component="p" className={"text-" + f.kindOf + " transcription"}>
                   {f.text}
                 </Typography>
               );
@@ -233,7 +232,7 @@ class Annotations extends React.Component {
 
     return (
       <div ref={el => (this.instance = el)}>
-        <div class="TEXT">
+        <div className="TEXT">
           <Container fixed id="documentTranscriptionsBlock">
                  {wholeTranscriptions}
           </Container>

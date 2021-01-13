@@ -1,27 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import {Button, Popover, Typography} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import { PlayArrow, Pause } from '@material-ui/icons';
 import Note from './Note';
-
-
-const useStyles = makeStyles({
-  root: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
 
 
 class Morpheme extends React.Component {
@@ -80,10 +61,6 @@ class Morpheme extends React.Component {
 
   render() {
 
-    const buttonStyle = {
-      'text-transform': 'lowercase'
-    }
-
   	let word = "";
     const transcriptions = [];
   	const translations = [];
@@ -94,11 +71,13 @@ class Morpheme extends React.Component {
 
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
     //<div style={{display:'table-cell'}}>
+    var isGlossIncluded = false;
+    var thisClassName = '';
 
-    if(this.props.w.TRANSL != undefined && this.props.w.TRANSL !== null){
-	    if(this.props.w.TRANSL.length == undefined){
-        var isGlossIncluded = this.props.displayOptions.morphemeTranslations.includes(this.props.w.TRANSL["xml:lang"]);
-        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
+    if(this.props.w.TRANSL !== undefined && this.props.w.TRANSL !== null){
+	    if(this.props.w.TRANSL.length === undefined){
+        isGlossIncluded = this.props.displayOptions.morphemeTranslations.includes(this.props.w.TRANSL["xml:lang"]);
+        thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
 
 	      translations.push(
 	              <Typography variant="body2" component={this.props.isWordList === true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} morpheme-${this.props.w.TRANSL['xml:lang']}`}>
@@ -107,11 +86,11 @@ class Morpheme extends React.Component {
 	            );
 	    }else{
 	      this.props.w.TRANSL.forEach((t) => {
-            var isGlossIncluded = this.props.displayOptions.morphemeTranslations.includes(t["xml:lang"]);
-            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
+            isGlossIncluded = this.props.displayOptions.morphemeTranslations.includes(t["xml:lang"]);
+            thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
 
 	          translations.push(
-	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} morpheme-${t['xml:lang']}`}>
+	              <Typography variant="body2" component={this.props.isWordList === true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} morpheme-${t['xml:lang']}`}>
 	                {t.text}
 	              </Typography>
 	            );
@@ -121,7 +100,7 @@ class Morpheme extends React.Component {
 
   // Get note(s) of the sentence
   /*
-  if(this.props.w.NOTE != undefined && this.props.w.NOTE != null){
+  if(this.props.w.NOTE != undefined && this.props.w.NOTE !== null){
     if(this.props.w.NOTE.length == undefined){
       notes.push(
               <Typography variant="body2" component="p" className={`note ${this.props.w.NOTE['xml:lang']}`}>
@@ -149,9 +128,9 @@ class Morpheme extends React.Component {
     
   //
   if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
-      if(this.props.w.FORM.length == undefined){
-        var isGlossIncluded = this.props.displayOptions.morphemeTranscriptions.includes(this.props.w.FORM.kindOf);
-        var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
+      if(this.props.w.FORM.length === undefined){
+        isGlossIncluded = this.props.displayOptions.morphemeTranscriptions.includes(this.props.w.FORM.kindOf);
+        thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
 
         transcriptions.push(
                   <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} morpheme-${this.props.w.FORM.kindOf}`}>
@@ -161,8 +140,8 @@ class Morpheme extends React.Component {
                 word = this.props.w.FORM.text;
         }else{
           this.props.w.FORM.forEach((f) => {
-            var isGlossIncluded = this.props.displayOptions.morphemeTranscriptions.includes(f.kindOf);
-            var thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
+            isGlossIncluded = this.props.displayOptions.morphemeTranscriptions.includes(f.kindOf);
+            thisClassName = (this.props.isWordList === true)?'wordlistWord':'morpheme';
 
               transcriptions.push(
                   <Typography variant="body2" component="p" className={`transcription ${thisClassName} morpheme-${f.kindOf}`}>

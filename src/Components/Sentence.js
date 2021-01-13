@@ -1,9 +1,9 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import Picture from './Picture';
 import Word from './Word';
 import Morpheme from './Morpheme';
 import Note from './Note';
-import { Card, CardHeader, Avatar, CardContent, Divider, Button, Badge, Popper } from '@material-ui/core';
+import { Card, Avatar, CardContent, Popper } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import PlayButton from './PlayButton';
@@ -87,7 +87,7 @@ class Sentence extends React.Component {
 		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.sentenceTranscriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription sentence-${this.props.s.FORM.kindOf}`}>
-			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup className={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
 
@@ -95,7 +95,7 @@ class Sentence extends React.Component {
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.sentenceTranscriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription sentence-${f.kindOf}`}>
-			          <b>{f.text}</b>{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+			          <b>{f.text}</b>{notesJSON.map(n=><sup className={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
 		    });
@@ -137,7 +137,7 @@ class Sentence extends React.Component {
 
 
 			    		});
-			    		//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
+			    		//divWord = <div id={w.id} className="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
 						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
 			    		words.push(divWord);
 
@@ -147,7 +147,7 @@ class Sentence extends React.Component {
 						morphemes.push(
 				          		<Morpheme wID={w.id} w={w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} />
 				        	);
-						//divWord = <div id={w.id} class="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
+						//divWord = <div id={w.id} className="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
 						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
 			    		words.push(divWord);
 		    			
@@ -212,7 +212,7 @@ class Sentence extends React.Component {
     }
 
     return (
-      <div id={this.props.s.id} class="SENTENCE" ref={el => (this.instance = el)}>
+      <div id={"S" + this.props.sID} className="SENTENCE" ref={el => (this.instance = el)}>
 		<Card> 
 	      <CardContent>  	
 	      		{(this.props.s.AREA !== undefined) ? 
@@ -221,12 +221,12 @@ class Sentence extends React.Component {
 	      		):(<div></div>)
 	      		}
 	       	
-	        <div style={{textAlign:"initial"}} class="annotationsBlock">
+	        <div style={{textAlign:"initial"}} className="annotationsBlock">
 
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            S{this.props.sID} 
 		          </Avatar>
-				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img class="doi" src="" alt="doi" /></IconButton>
+				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img className="doi" src="" alt="doi" /></IconButton>
 	        	<Popper id={"doi_S"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_S"+this.props.sID)}>
 			      <div>{this.props.doi}</div>
 			    </Popper>
@@ -237,21 +237,21 @@ class Sentence extends React.Component {
 					:
 					<div></div>
 				}
-				<p class="transcBlock" style={{display: "inline-block"}}>
+				<div className="transcBlock" style={{display: "inline-block"}}>
 	        		{transcriptions}
-	        	</p>
+	        	</div>
 
-	        	<p class="wordsBlock">
+	        	<div className="wordsBlock">
 					{words}
-				</p>
+				</div>
 
-	        	<p class="translBlock">
+	        	<div className="translBlock">
 	        		{translations}
-	        	</p>
+	        	</div>
 
-	        	<p class="notesBlock">
+	        	<div className="notesBlock">
 	        		{notes}
-	        	</p>
+	        	</div>
 	        	
 	        </div> 
 	      </CardContent>
