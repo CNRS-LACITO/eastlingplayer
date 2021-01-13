@@ -409,6 +409,7 @@ try{
 		}elseif($oaiSecondary != NULL){
 		//Traitement de la ressource secondaire
 
+
 			$sql = "SELECT * FROM secondary_resources WHERE oai =\"$oaiSecondary\"";
 
 			//On parse la table secondary_resources pour récupérer le fichier annotation
@@ -486,6 +487,8 @@ try{
 				}
 
 				//BUG
+				$wID = 1;
+				$mID = 1;
 
 				foreach ($annotationJson->TEXT->S as $keyS => &$sentence) {
 					//https://github.com/CNRS/eastlingplayer/issues/52
@@ -528,8 +531,7 @@ try{
 						$timeList[]=array(
 							"start"=>$sentence->AUDIO->start,
 							"end"=>$sentence->AUDIO->end,
-							//"sentence"=>$sentence->id,
-							"sentence"=>"S".($keyS + 1),
+							"sentence"=>$sentence->id,
 							"word"=>null,
 							"morpheme"=>null,
 							"type"=>"S"
@@ -540,6 +542,9 @@ try{
 					if(property_exists($sentence, "W")){
 						
 						if(gettype($sentence->W)=="object"){
+
+							$sentence->W->id = "W".$wID++;
+
 							completeTranslationLang($sentence->W->NOTE,$langNotes,$defaultKindOf);
 
 							completeTranscriptionLang($sentence->W->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
@@ -550,10 +555,8 @@ try{
 								$timeList[]=array(
 									"start"=>$sentence->W->AUDIO->start,
 									"end"=>$sentence->W->AUDIO->end,
-									//"sentence"=>$sentence->id,
-									"sentence"=>"S".($keyS + 1),
-									//"word"=>$sentence->W->id,
-									"word"=>"W".($keyW + 1),
+									"sentence"=>$sentence->id,
+									"word"=>$sentence->W->id,
 									"morpheme"=>null,
 									"type"=>"W"
 								);
@@ -567,6 +570,7 @@ try{
 
 								if(gettype($sentence->W->M)=="object"){
 								//un seul morphème...
+									$sentence->W->M->id = $mID++;
 									completeTranslationLang($sentence->W->M->NOTE,$langNotes,$defaultKindOf);
 									//#32
 									completeTranscriptionLang($sentence->W->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
@@ -576,12 +580,9 @@ try{
 										$timeList[]=array(
 											"start"=>$sentence->W->M->AUDIO->start,
 											"end"=>$sentence->W->M->AUDIO->end,
-											//"sentence"=>$sentence->id,
-											//"word"=>$sentence->W->id,
-											//"morpheme"=>$sentence->W->M->id,
-											"sentence"=>"S".($keyS + 1),
-											"word"=>"W".($keyW + 1),
-											"morpheme"=>"M".($keyM + 1),
+											"sentence"=>$sentence->id,
+											"word"=>$sentence->W->id,
+											"morpheme"=>$sentence->W->M->id,
 											"type"=>"M"
 										);
 									}
@@ -590,7 +591,7 @@ try{
 								//ou plusieurs morphèmes
 									foreach ($sentence->W->M as $keyM => &$morph) {
 										//https://github.com/CNRS/eastlingplayer/issues/52
-										$morph->id = "M".($keyM + 1);
+										$morph->id = "M".$mID++;
 										completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
 										//#32
 										completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
@@ -601,12 +602,9 @@ try{
 											$timeList[]=array(
 												"start"=>$morph->AUDIO->start,
 												"end"=>$morph->AUDIO->end,
-												//"sentence"=>$sentence->id,
-												//"word"=>$sentence->W->id,
-												//"morpheme"=>$morph->id,
-												"sentence"=>"S".($keyS + 1),
-												"word"=>"W".($keyW + 1),
-												"morpheme"=>"M".($keyM + 1),
+												"sentence"=>$sentence->id,
+												"word"=>$sentence->W->id,
+												"morpheme"=>$morph->id,
 												"type"=>"M"
 											);
 										}
@@ -619,7 +617,7 @@ try{
 						}elseif(gettype($sentence->W)=="array"){
 							foreach ($sentence->W as $keyW => &$word) {
 								//https://github.com/CNRS/eastlingplayer/issues/52
-								$word->id = "W".($keyW + 1);
+								$word->id = "W".$wID++;
 								completeTranslationLang($word->NOTE,$langNotes,$defaultKindOf);
 								//32
 								completeTranscriptionLang($word->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
@@ -630,10 +628,8 @@ try{
 									$timeList[]=array(
 										"start"=>$word->AUDIO->start,
 										"end"=>$word->AUDIO->end,
-										//"sentence"=>$sentence->id,
-										//"word"=>$word->id,
-										"sentence"=>"S".($keyS + 1),
-										"word"=>"W".($keyW + 1),
+										"sentence"=>$sentence->id,
+										"word"=>$word->id,
 										"morpheme"=>null,
 										"type"=>"W"
 									);
@@ -646,6 +642,7 @@ try{
 
 									if(gettype($word->M)=="object"){
 									//un seul morphème...
+										$word->M->id = $mID++;
 										completeTranslationLang($word->M->NOTE,$langNotes,$defaultKindOf);
 										//32
 										completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
@@ -656,12 +653,9 @@ try{
 											$timeList[]=array(
 												"start"=>$word->M->AUDIO->start,
 												"end"=>$word->M->AUDIO->end,
-												//"sentence"=>$sentence->id,
-												//"word"=>$word->id,
-												//"morpheme"=>$word->M->id,
-												"sentence"=>"S".($keyS + 1),
-												"word"=>"W".($keyW + 1),
-												"morpheme"=>"M".($keyM + 1),
+												"sentence"=>$sentence->id,
+												"word"=>$word->id,
+												"morpheme"=>$word->M->id,
 												"type"=>"M"
 											);
 										}
@@ -672,7 +666,7 @@ try{
 									//ou plusieurs morphèmes
 										foreach ($word->M as $keyM => &$morph) {
 											//https://github.com/CNRS/eastlingplayer/issues/52
-											$morph->id = "M".($keyM + 1);
+											$morph->id = "M".$mID++;
 											completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
 
 											//32
@@ -685,12 +679,9 @@ try{
 												$timeList[]=array(
 													"start"=>$morph->AUDIO->start,
 													"end"=>$morph->AUDIO->end,
-													//"sentence"=>$sentence->id,
-													//"word"=>$word->id,
-													//"morpheme"=>$word->M->id,
-													"sentence"=>"S".($keyS + 1),
-													"word"=>"W".($keyW + 1),
-													"morpheme"=>"M".($keyM + 1),
+													"sentence"=>$sentence->id,
+													"word"=>$word->id,
+													"morpheme"=>$morph->id,
 													"type"=>"M"
 												);
 											}
@@ -715,7 +706,7 @@ try{
 				// github #20
 				foreach ($annotationJson->WORDLIST->W as $keyW => &$word) {
 					//https://github.com/CNRS/eastlingplayer/issues/52
-					$word->id = "W".($keyW + 1);
+					$word->id = "W".$wID++;
 
 					completeTranslationLang($word->NOTE,$langNotes,$defaultKindOf);
 					//32
@@ -736,7 +727,7 @@ try{
 						}elseif(gettype($word->M)=="array"){
 							foreach ($word->M as $keyM => &$morph) {
 								//https://github.com/CNRS/eastlingplayer/issues/52
-								$morph->id = "M".($keyM + 1);
+								$morph->id = "M".$mID++;
 								completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
 								//32
 								completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);

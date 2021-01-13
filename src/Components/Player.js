@@ -26,8 +26,9 @@ class Player extends React.Component {
     this.instance.appendChild(s);
 
     window.highlight=function highlight(id,timeVar){
-      
+
       if(timeVar.type!=="S"){
+
         document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
                   e.style.border='none'; 
                 });
@@ -38,10 +39,9 @@ class Player extends React.Component {
 
     window.updatePosition=function updatePosition(time,isWordList = false){
 
-      window.timeList.some(function(t,index,_arr){ 
-        if(t.start < time && t.end> time){
+      window.timeList.forEach(function(t,index,_arr){ 
 
-          window.highlight(t.morpheme ?? t.word ?? t.sentence,t);
+        if(t.start < time && t.end> time){
 
           if(window.currentSentence !== t.sentence){ 
             window.currentSentence = t.sentence;
@@ -53,8 +53,16 @@ class Player extends React.Component {
             window.scrollBy(0, -150);
           }
           
-        } 
-        return true;
+        }
+
+        if(t.start < time && t.end> time && t.type !== "S"){
+
+          window.highlight(t.morpheme ?? t.word ?? t.sentence,t);
+          
+        }
+        
+
+        return t;
       }
     )};
 

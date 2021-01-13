@@ -212,7 +212,7 @@ class Sentence extends React.Component {
     }
 
     return (
-      <div id={"S" + this.props.sID} className="SENTENCE" ref={el => (this.instance = el)}>
+      <div id={this.props.s.id} className="SENTENCE" ref={el => (this.instance = el)}>
 		<Card> 
 	      <CardContent>  	
 	      		{(this.props.s.AREA !== undefined) ? 
@@ -224,10 +224,10 @@ class Sentence extends React.Component {
 	        <div style={{textAlign:"initial"}} className="annotationsBlock">
 
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
-		            S{this.props.sID} 
+		            {this.props.s.id} 
 		          </Avatar>
-				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_S"+this.props.sID}><img className="doi" src="" alt="doi" /></IconButton>
-	        	<Popper id={"doi_S"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_S"+this.props.sID)}>
+				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_"+this.props.s.id}><img className="doi" src="" alt="doi" /></IconButton>
+	        	<Popper id={"doi_"+this.props.s.id} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_"+this.props.s.id)}>
 			      <div>{this.props.doi}</div>
 			    </Popper>
 			    { 
