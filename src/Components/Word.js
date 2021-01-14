@@ -144,7 +144,7 @@ class Word extends React.Component {
 
         transcriptions.push(
                   <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${this.props.w.FORM.kindOf}`}>
-                    {this.props.w.FORM.text}{notesJSON.map(n=><sup className={"circle note "+n.lang}>{n.id}</sup>)}
+                    {this.props.w.FORM.text}{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
@@ -155,7 +155,7 @@ class Word extends React.Component {
 
               transcriptions.push(
                   <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${f.kindOf}`}>
-                    {f.text}{notesJSON.map(n=><sup className={"circle note "+n.lang}>{n.id}</sup>)}
+                    {f.text}{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
             });

@@ -728,6 +728,19 @@ try{
 							completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
 							completeTranslationLang($word->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
+							//
+							if(property_exists($word->M, "AUDIO")){
+								$timeList[]=array(
+									"start"=>$word->M->AUDIO->start,
+									"end"=>$word->M->AUDIO->end,
+									"sentence"=>null,
+									"word"=>$word->id,
+									"morpheme"=>$word->M->id,
+									"type"=>"M"
+								);
+							}
+							//
+
 
 						}elseif(gettype($word->M)=="array"){
 							foreach ($word->M as $keyM => &$morph) {
@@ -738,10 +751,36 @@ try{
 								completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
 								completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
+								//
+								if(property_exists($morph, "AUDIO")){
+									$timeList[]=array(
+										"start"=>$morph->AUDIO->start,
+										"end"=>$morph->AUDIO->end,
+										"sentence"=>null,
+										"word"=>$word->id,
+										"morpheme"=>$morph->id,
+										"type"=>"M"
+									);
+								}
+								//
+
 							}
 						}
 
 					}
+
+					//
+					if(property_exists($word, "AUDIO")){
+						$timeList[]=array(
+							"start"=>$word->AUDIO->start,
+							"end"=>$word->AUDIO->end,
+							"sentence"=>null,
+							"word"=>$word->id,
+							"morpheme"=>null,
+							"type"=>"W"
+						);
+					}
+					//
 		
 				}
 
