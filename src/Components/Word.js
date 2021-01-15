@@ -192,7 +192,7 @@ class Word extends React.Component {
               <div style={{display:'table-cell'}}>
                 {this.props.w.id} 
               </div>
-              <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img className="doi" src="" alt="doi" /></IconButton>
+              <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img className="doi" src="/dist/images/DOI_logo.svg" alt="doi" /></IconButton>
                 <Popper id={"doi_W"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_W"+this.props.sID)}>
                 <div>{this.props.doi}</div>
               </Popper>

@@ -226,7 +226,7 @@ class Sentence extends React.Component {
 	        	<Avatar aria-label="sentenceId" style={avatarStyle}>
 		            {this.props.s.id} 
 		          </Avatar>
-				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_"+this.props.s.id}><img className="doi" src="" alt="doi" /></IconButton>
+				<IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_"+this.props.s.id}><img className="doi" src="/dist/images/DOI_logo.svg" alt="doi" /></IconButton>
 	        	<Popper id={"doi_"+this.props.s.id} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_"+this.props.s.id)}>
 			      <div>{this.props.doi}</div>
 			    </Popper>
