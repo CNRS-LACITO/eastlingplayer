@@ -2,82 +2,74 @@ import React from 'react';
 
 
 class Player extends React.Component {
-/*
+
   constructor(props) {
     super(props);
   }
-*/
+
     componentDidMount() {
 
-    const s = document.createElement('script');
-    
-    s.type = 'text/javascript';
+	    const s = document.createElement('script');
+	    
+	    s.type = 'text/javascript';
 
-    var scriptStr = "var wordidList=[];var startTimeList=[];var endTimeList=[];var timeList=[];"
-    //scriptStr +="function updatePosition(time){startTimeList.some(function(t,index,_arr){ if(t < time && endTimeList[index]> time){highlight(wordidList[index]);} })}";
-    //scriptStr +="function updatePosition(time){timeList.some(function(t,index,_arr){ if(t.start < time && t.end> time){console.log(t);highlight(t.mID ?? t.wID ?? t.sID);} })}";
-    scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime,"+this.props.isWordList+")};";
-    //scriptStr +="function highlight(id){document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollIntoView();window.scrollBy(0, -50);document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement.scrollLeft=document.querySelector('[wordid=\"'+id+'\"]').offsetLeft;document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';";
-    //scriptStr +="function highlight(id){console.log(id);document.querySelector('[wordid=\"'+id+'\"]').scrollIntoView();window.scrollBy(0, 300);/*document.querySelector('[wordid=\"'+id+'\"]').style.border='solid';*/";
-    //scriptStr +="document.querySelectorAll('canvas:not([wordid=\"'+id+'\"])').forEach(function(e){e.style.border='none'});}";
-    //document.querySelector('[wordid=\"'+id+'\"]').parentElement.parentElement
+	    var scriptStr = "var wordidList=[];var startTimeList=[];var endTimeList=[];var timeList=[];"
+		scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime)};";
 
-    s.innerHTML = scriptStr;
-    this.instance.appendChild(s);
+	    s.innerHTML = scriptStr;
+	    this.instance.appendChild(s);
 
-    window.highlight=function highlight(id,timeVar){
+	    //Mise en lumière du mot sur l'image
+	    window.highlight=function highlight(id,timeVar){
 
-      if(timeVar.type!=="S"){
+	      if(timeVar.type!=="S"){
 
-        document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
-                  e.style.border='none'; 
-                });
-        document.querySelector('[wordid="'+id+'"]').style.border='solid';
-      }
+	        document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
+	                  e.style.border='none'; 
+	                });
+	        document.querySelector('[wordid="'+id+'"]').style.border='solid';
+	      }
 
-    };
+	    };
 
-    window.updatePosition=function updatePosition(time,isWordList = false){
 
-      window.timeList.forEach(function(t,index,_arr){ 
+	    window.updatePosition=function updatePosition(time){
 
-        if(t.start < time && t.end> time){
+		    var t = window.timeList.find((e)=>(e.start < time && e.end > time));
 
-          if(window.currentSentence !== t.sentence){ 
-            if(window.currentSentence) document.getElementById(window.currentSentence).classList.remove("currentSentence");
-            document.getElementById(t.sentence).classList.add("currentSentence");
+		    if(t !== undefined){
+		    	var currentAnchor = (!window.isWordList)?t.sentence:t.word;
 
-            window.currentSentence = t.sentence;
-            let event = new Event("sentence-changed");
-            document.dispatchEvent(event);
+	            if(window.currentSentence !== currentAnchor){ 
+	              if(window.currentSentence !== undefined) 
+	                document.getElementById(window.currentSentence).classList.remove("currentSentence");
+	              
+	              if(currentAnchor){
+	                document.getElementById(currentAnchor).classList.add("currentSentence");
+	                window.currentSentence = currentAnchor;
+	                let event = new Event("sentence-changed");
+	                document.dispatchEvent(event);
+	                window.scrollTo(0,document.getElementById(currentAnchor).offsetTop - 150);
+	              }
+	            }
+		    }
 
-            (isWordList)?document.querySelector('.WORD#'+t.word).scrollIntoView():document.querySelector('.SENTENCE#'+t.sentence).scrollIntoView();
+		    var w = window.timeList.find((e)=>(e.start < time && e.end > time && e.type !== "S"));
+		    
+	            if((w !== undefined) && !window.isWordList){
+	                console.log("highlight");
+	              	window.highlight(w.morpheme ?? w.word,w);  
+	         }
+		    
 
-            window.scrollBy(0, -150);
-          }
-          
-        }
 
-        if(t.start < time && t.end> time && t.type !== "S"){
 
-          window.highlight(t.morpheme ?? t.word ?? t.sentence,t);
-          
-        }
-        
-
-        return t;
-      }
-    )};
-
-  }
-
-  render() {
+		};
+	}
+	
+  render(){
     const audioStyle = {
-          //'position': 'fixed',
           'width': '80%',
-          /*
-          'top' : '10px',
-          'left' : '10px'*/
         };
     var mediaElement;
 

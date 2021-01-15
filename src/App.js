@@ -171,6 +171,7 @@ class App extends React.Component {
 			        	//27/08/2020 : options de langues
 			        	if(result.annotations.WORDLIST !== undefined && result.annotations.WORDLIST !== null){
 			        		var isWordList = (result.annotations.WORDLIST.W !== undefined && result.annotations.WORDLIST.W !== null) ? true : false;
+			        		window.isWordList = isWordList;
 			        	}
 			        	//console.log(typeof [result.typeOf.sentence.transcriptions[0]]);
 			        	this.setState({
@@ -198,7 +199,9 @@ class App extends React.Component {
 				            extensionFile : result.extensionFile
 				        });
 
-				        window.location.hash = anchor;
+				        //window.location.hash = anchor;
+				        if(anchor)
+				        window.scrollTo(0,document.querySelector(anchor).offsetTop - 150);
 			        }
 			        
  
@@ -237,7 +240,7 @@ class App extends React.Component {
 		    	 	:
 		    	 	<Container>
 					    {/* <Metadata file={this.state.METADATA} /> */}
-					    <Player file={this.state.MEDIAFILE} isWordList={this.state.isWordList} />
+					    <Player file={this.state.MEDIAFILE} />
 
 						{ 
 			    	 	this.state.hasSecondaryId
