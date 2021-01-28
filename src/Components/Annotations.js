@@ -50,11 +50,11 @@ class Annotations extends React.Component {
     	trackTranslation.mode="showing";
     }
     
-    if(player.textTracks.length === 1){     
+   //if(player.textTracks.length === 1){     
       //var trackTranscription = player.addTextTrack("subtitles","transcription");
       //var trackTranslation = player.addTextTrack("subtitles","translation");
       
-    }
+   // }
 
     if(this.props.annotations.TEXT !== undefined && this.props.annotations.TEXT !== null)
       var sentences = this.props.annotations.TEXT.S;
@@ -82,50 +82,50 @@ class Annotations extends React.Component {
         //var doiSentenceUrl = doiUrl + doi + "&sentence=S" + sID;
         var doiSentenceUrl = doi + "#" + a.id;
         //TEST VTT
-   
-        if(trackTranscription.cues.length < sentences.length){
-          
-          var transcSubtitle = "";
-          var translSubtitle = "";
+	   if(player !== null){
+	        if(trackTranscription.cues.length < sentences.length){
+	          
+	          var transcSubtitle = "";
+	          var translSubtitle = "";
 
-          if(typeof(a.FORM) === "object"){
-            if(a.FORM !== null)
-            transcSubtitle = a.FORM.text;
-          }else{
-            if(a.FORM[0].text !== null)
-            transcSubtitle = a.FORM[0].text;
-          }
+	          if(typeof(a.FORM) === "object"){
+	            if(a.FORM !== null)
+	            transcSubtitle = a.FORM.text;
+	          }else{
+	            if(a.FORM[0].text !== null)
+	            transcSubtitle = a.FORM[0].text;
+	          }
 
-          if(a.TRANSL !== null){
-            if(typeof(a.TRANSL) === "object"){
-              if(a.TRANSL !== null)
-              translSubtitle = a.TRANSL.text;
-            }else{
-              if(a.TRANSL[0].text !== null)
-              translSubtitle = a.TRANSL[0].text;
-            }
-          }
+	          if(a.TRANSL !== null){
+	            if(typeof(a.TRANSL) === "object"){
+	              if(a.TRANSL !== null)
+	              translSubtitle = a.TRANSL.text;
+	            }else{
+	              if(a.TRANSL[0].text !== null)
+	              translSubtitle = a.TRANSL[0].text;
+	            }
+	          }
 
-          var cueStart = (a.AUDIO !== undefined)?a.AUDIO.start:0;
-          var cueEnd = (a.AUDIO !== undefined)?a.AUDIO.end:0;
+	          var cueStart = (a.AUDIO !== undefined)?a.AUDIO.start:0;
+	          var cueEnd = (a.AUDIO !== undefined)?a.AUDIO.end:0;
 
-          const cueTransc = new VTTCue(cueStart, cueEnd, transcSubtitle);
-          const cueTransl = new VTTCue(cueStart, cueEnd, translSubtitle);
+	          const cueTransc = new VTTCue(cueStart, cueEnd, transcSubtitle);
+	          const cueTransl = new VTTCue(cueStart, cueEnd, translSubtitle);
 
-          cueTransc.size = 99;
-          cueTransl.size = 99;
-          cueTransc.line = 12;
-          cueTransl.line = 14;
+	          cueTransc.size = 99;
+	          cueTransl.size = 99;
+	          cueTransc.line = 12;
+	          cueTransl.line = 14;
 
-          if(player !== null){
-          	trackTest.addCue(cueTransc);
-          	trackTest.addCue(cueTransl);
-          	trackTranscription.addCue(cueTransc);
-          	trackTranslation.addCue(cueTransl);
-          }
-          
-          
-        }
+	          
+	          	trackTest.addCue(cueTransc);
+	          	trackTest.addCue(cueTransl);
+	          	trackTranscription.addCue(cueTransc);
+	          	trackTranslation.addCue(cueTransl);
+	          
+	          
+	        }
+	    }
         
         annotationItems.push(
             <Sentence doi={doiSentenceUrl} sID={sID} s={a} imageSrc={imageSrc} displayOptions={this.state.displayOptions} />

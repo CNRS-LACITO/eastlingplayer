@@ -60,11 +60,10 @@ class Player extends React.Component {
 	                console.log("highlight");
 	              	window.highlight(w.morpheme ?? w.word,w);  
 	         }
-		    
-
-
 
 		};
+
+		this.props.playerIsLoaded();
 	}
 	
   render(){

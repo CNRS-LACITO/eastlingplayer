@@ -39,8 +39,15 @@ class App extends React.Component {
 			isWordList : false,
 			timeList : [],
 			urlFile : '',
-			extensionFile : ''
+			extensionFile : '',
+			playerLoaded : false
 	    };
+	  }
+
+	   playerIsLoaded() {
+	    this.setState({
+	      playerLoaded: true
+	    })
 	  }
 
 
@@ -218,7 +225,6 @@ class App extends React.Component {
 
 	  }
 
-
 	  render(){
 	  	return (
 		    <div className="App" key="App">	
@@ -240,13 +246,13 @@ class App extends React.Component {
 		    	 	:
 		    	 	<Container>
 					    {/* <Metadata file={this.state.METADATA} /> */}
-					    <Player file={this.state.MEDIAFILE} />
+					    <Player file={this.state.MEDIAFILE} playerIsLoaded = {this.playerIsLoaded.bind(this)} />
 
 						{ 
 			    	 	this.state.hasSecondaryId
 			    	 	?
 			    	 	[
-			    	 	this.state.isAnnotationsLoaded 
+			    	 	(this.state.isAnnotationsLoaded && this.state.playerLoaded)
 			    	 	? 
 			    	 	[
 			    	 	this.state.hasAnnotationsError 
