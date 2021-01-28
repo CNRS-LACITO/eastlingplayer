@@ -35,15 +35,21 @@ class Annotations extends React.Component {
     var sID = 0;
 
     var player = document.querySelector('#player');
-    var trackTest = player.textTracks.getTrackById('test');
-    var trackTranscription = player.textTracks.getTrackById('trackTranscription');
-    var trackTranslation = player.textTracks.getTrackById('trackTranslation');
-    
-    trackTest.mode="showing";
-    trackTranscription.mode="showing";
-    trackTranslation.mode="showing";
-    
 
+	var trackTest;
+    var trackTranscription;
+    var trackTranslation;
+
+    if(player !== null){
+		trackTest = player.textTracks.getTrackById('test');
+    	trackTranscription = player.textTracks.getTrackById('trackTranscription');
+    	trackTranslation = player.textTracks.getTrackById('trackTranslation');
+
+    	trackTest.mode="showing";
+    	trackTranscription.mode="showing";
+    	trackTranslation.mode="showing";
+    }
+    
     if(player.textTracks.length === 1){     
       //var trackTranscription = player.addTextTrack("subtitles","transcription");
       //var trackTranslation = player.addTextTrack("subtitles","translation");
@@ -111,10 +117,13 @@ class Annotations extends React.Component {
           cueTransc.line = 12;
           cueTransl.line = 14;
 
-          trackTest.addCue(cueTransc);
-          trackTest.addCue(cueTransl);
-          trackTranscription.addCue(cueTransc);
-          trackTranslation.addCue(cueTransl);
+          if(player !== null){
+          	trackTest.addCue(cueTransc);
+          	trackTest.addCue(cueTransl);
+          	trackTranscription.addCue(cueTransc);
+          	trackTranslation.addCue(cueTransl);
+          }
+          
           
         }
         
