@@ -159,11 +159,13 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 	$hasTranscTypeOf = array();
 	$hasTranslTypeOf = array();
 
+	//Si aucune transcription n'existe
 	if(!isset($nodeParent->FORM) || $nodeParent->FORM === null || sizeof($nodeParent->FORM)===0){
 		$hasTransc = false;
 		$nodeParent->FORM = array();
 
 	}else{
+		//Si il y a déjà des transcriptions, on récupère les typeOf pour voir lesquelles sont disponibles
 		if(gettype($nodeParent->FORM)=="array"){
 			foreach ($nodeParent->FORM as $c) {
 				$hasTranscTypeOf[] = (strlen($c->kindOf)>0)?$c->kindOf:$defaultKindOf;
@@ -174,11 +176,12 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 		
 	}
 
+	//Si aucune tradution n'existe
 	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0){
 		$hasTransl = false;
 		$nodeParent->TRANSL = array();
 	}else{
-
+		//Si il y a déjà des traductions, on récupère les langues pour voir lesquelles sont disponibles
 		if(gettype($nodeParent->TRANSL)=="array"){
 			foreach ($nodeParent->TRANSL as $c) {
 				$hasTranslTypeOf[] = $c->{"xml:lang"};
@@ -190,6 +193,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 
 	if(property_exists($nodeParent, $nodeChild)){
 		if(gettype($nodeParent->$nodeChild)==="object"){
+
 			if(isset($nodeParent->$nodeChild->FORM)){
 
 				if(gettype($nodeParent->$nodeChild->FORM)=="object"){
@@ -293,18 +297,21 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 
 	foreach($transcConcat as $kindOf => $text){
 		if(!$hasTransc || !in_array($kindOf,$hasTranscTypeOf)){
+			//#59 : "il ne faut pas proposer de niveau "transcription" : "autre" au niveau des phrases et du texte."
+			if(! (($kindOf === $defaultKindOf) && ($parent === "sentence" || $parent === "text"))  ){
+			//#59
+				$typeOf[$parent]["transcriptions"][]=$kindOf;
+				$typeOf[$parent]["transcriptions"] = array_values(array_unique($typeOf[$parent]["transcriptions"]));
 
-			$typeOf[$parent]["transcriptions"][]=$kindOf;
-			$typeOf[$parent]["transcriptions"] = array_values(array_unique($typeOf[$parent]["transcriptions"]));
-
-			if(gettype($nodeParent->FORM)=="array"){
-				$nodeParent->FORM[] = (object)array(
-					"kindOf"=>$kindOf,"text"=>trim($text,$separator),"concat"=>'TRUE'
-				);
-			}elseif(gettype($nodeParent->FORM)=="object"){
-				$nodeParent->FORM = (object)array(
-					"kindOf"=>$kindOf,"text"=>trim($text,$separator),"concat"=>'TRUE'
-				);
+				if(gettype($nodeParent->FORM)=="array"){
+					$nodeParent->FORM[] = (object)array(
+						"kindOf"=>$kindOf,"text"=>trim($text,$separator),"concat"=>'TRUE'
+					);
+				}elseif(gettype($nodeParent->FORM)=="object"){
+					$nodeParent->FORM = (object)array(
+						"kindOf"=>$kindOf,"text"=>trim($text,$separator),"concat"=>'TRUE'
+					);
+				}
 			}
 
 		}
@@ -316,15 +323,20 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 			$typeOf[$parent]["translations"][]=$xmlLang;
 			$typeOf[$parent]["translations"] = array_values(array_unique($typeOf[$parent]["translations"]));
 
-			if(gettype($nodeParent->TRANSL)=="array"){
-				$nodeParent->TRANSL[] = (object)array(
-					"xml:lang"=>$xmlLang,"text"=>trim($text,$separator),"concat"=>'TRUE'
-				);
-			}elseif(gettype($nodeParent->TRANSL)=="object"){
-				$nodeParent->TRANSL = (object)array(
-					"xml:lang"=>$xmlLang,"text"=>trim($text,$separator),"concat"=>'TRUE'
-				);
+			//#59 "on ne concatène jamais au niveau du mot pour la traduction de phrase"
+			if($parent !== "sentence"){
+			//#59
+				if(gettype($nodeParent->TRANSL)=="array"){
+					$nodeParent->TRANSL[] = (object)array(
+						"xml:lang"=>$xmlLang,"text"=>trim($text,$separator),"concat"=>'TRUE'
+					);
+				}elseif(gettype($nodeParent->TRANSL)=="object"){
+					$nodeParent->TRANSL = (object)array(
+						"xml:lang"=>$xmlLang,"text"=>trim($text,$separator),"concat"=>'TRUE'
+					);
+				}
 			}
+			
 		}
 	}
 
@@ -368,10 +380,10 @@ try{
 			    $ext = strtolower($asMedia[sizeof($asMedia)-1]);
 			    switch ($ext) {
 				    case "mp3":
-				        $audioUrl=$sMedia;
+				        $audioUrl=str_replace("http:", "https:", $sMedia);
 				        break;
 				    case "mp4":
-				        $videoUrl=$sMedia;
+				        $videoUrl=str_replace("http:", "https:", $sMedia);
 				        break;
 				}
 
@@ -385,7 +397,7 @@ try{
 			    	$sql = "SELECT * FROM secondary_resources WHERE oai =\"$oaiIds[2]\"";
 
 			    	foreach  ($db->query($sql) as $row2) {
-			    		$sUrlFile = $row2['url_pangloss_file'];
+			    		$sUrlFile = str_replace("http:","https:",$row2['url_pangloss_file']);
 			    		$asUrlFile = explode(".", $sUrlFile);
 
 			    		switch ( strtolower($asUrlFile[sizeof($asUrlFile)-1]) ) {
@@ -393,7 +405,7 @@ try{
 						        //$audioUrl=$sMedia;
 						        break;
 						    case "jpg":
-						        $imagesUrl[] = array("id"=>$row2['oai'],"url"=>$row2['url_pangloss_file']);
+						        $imagesUrl[] = array("id"=>$row2['oai'],"url"=>$sUrlFile);
 						        break;
 						}//switch
 			    	}//for
@@ -416,7 +428,7 @@ try{
 
 			//On parse la table secondary_resources pour récupérer le fichier annotation
 			foreach  ($db->query($sql) as $row) {
-				$sUrlFile = $row['url_pangloss_file'];
+				$sUrlFile = str_replace("http:","https:",$row['url_pangloss_file']);
 				$doi = $row['doi'];
 
 				$xmlData = simplexml_load_file($sUrlFile);
@@ -700,7 +712,7 @@ try{
 						}
 
 
-						concatenateAnnotation($sentence, "W",$typeOf);
+						concatenateAnnotation($sentence, "W",$typeOf," ");
 
 
 					}
