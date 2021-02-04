@@ -154,7 +154,7 @@ class Morpheme extends React.Component {
   }
 
     return (
-      <div id={this.props.w.id} class="MORPHEME" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+      <div id={this.props.w.id} className={`MORPHEME ${this.props.w.hasOwnProperty('class')?this.props.w.class:''}`} style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
       { 
             this.props.isWordList===true
             ?

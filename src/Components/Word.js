@@ -184,7 +184,7 @@ class Word extends React.Component {
     }
 
     return (
-      <div id={this.props.w.id} className="WORD" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+      <div id={this.props.w.id} className={`WORD ${this.props.w.hasOwnProperty('class')?this.props.w.class:''}`} style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
       { 
             this.props.isWordList===true
             ?
