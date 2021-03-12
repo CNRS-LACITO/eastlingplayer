@@ -11,7 +11,8 @@ class Annotations extends React.Component {
     this.state = {
       isLoaded: false,
       annotationData: [],
-      displayOptions: this.props.displayOptions
+      displayOptions: this.props.displayOptions,
+      availableOptions: this.props.availableOptions
     };
   }
 
@@ -166,7 +167,7 @@ class Annotations extends React.Component {
                   ++sID;
                   var doiWordUrl = doi + "#W" + sID;
                   annotationItems.push(
-                    <Word w={w} wID={sID} displayOptions={this.props.displayOptions} isWordList={true} doi={doiWordUrl} />
+                    <Word w={w} wID={sID} displayOptions={this.props.displayOptions} availableOptions={this.props.availableOptions} isWordList={true} doi={doiWordUrl} />
                   );
                 } 
                 
@@ -197,7 +198,7 @@ class Annotations extends React.Component {
           });
       }
     }
-//
+//// 
     // Get whole translation(s) of the doc
     if(this.props.annotations.TEXT.TRANSL !== null && this.props.annotations.TEXT.TRANSL !== undefined){
       if(this.props.annotations.TEXT.TRANSL.length === undefined){

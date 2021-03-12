@@ -19,7 +19,6 @@ class DisplayOptions extends React.Component {
         morphemeTranscriptions: (this.props.displayOptions.morphemeTranscriptions.length > 0) ? this.props.displayOptions.morphemeTranscriptions:[],
         morphemeTranslations: (this.props.displayOptions.morphemeTranslations.length > 0) ? this.props.displayOptions.morphemeTranslations:[],
         displayNotes: this.props.displayOptions.notes,
-        langOptions:this.props.langOptions,
         options:this.props.options,
         lang:this.props.displayOptions.lang,
         mode:this.props.displayOptions.mode,
@@ -27,22 +26,7 @@ class DisplayOptions extends React.Component {
     };
 
 
-    /*
-    this.state.langOptions.transcriptions.forEach((transc) => {
-      var newTrack = document.createElement("track");
-      newTrack.setAttribute("id",transc);
-      newTrack.setAttribute("kind","captions");
 
-      document.querySelector("#player").appendChild(newTrack);
-      });
-
-    this.state.langOptions.translations.forEach((transl) => {
-      var newTrack = document.createElement("track");
-      newTrack.setAttribute("id",transl);
-      newTrack.setAttribute("kind","subtitles");
-      document.querySelector("#player").appendChild(newTrack);
-      });
-      */
 
   }
 

@@ -79,9 +79,7 @@ class Word extends React.Component {
       const popperId = open ? 'simple-popper' : undefined;
     /////////
 
-
     //cas où une seule balise FORM est trouvé=>converti en objet et pas en tableau
-    //<div style={{display:'table-cell'}}>
     var isGlossIncluded = false;
     var thisClassName = "";
     if(this.props.w.TRANSL !== undefined && this.props.w.TRANSL !== null){
@@ -89,22 +87,83 @@ class Word extends React.Component {
         isGlossIncluded = this.props.displayOptions.wordTranslations.includes(this.props.w.TRANSL["xml:lang"]);
         thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
-	      translations.push(
-	              <Typography variant="body2" component={this.props.isWordList === true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
-	                {this.props.w.TRANSL.text}
-	              </Typography>
-	            );
+        //gestion de l'affichage tableau des WordList : une colonne par langue disponible
+        if(this.props.isWordList === true){
+          this.props.availableOptions.word.translations.forEach((lang) => {
+
+            if(lang === this.props.w.TRANSL['xml:lang']){
+              translations.push(
+                <Typography variant="body2" component='td' style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
+                  {this.props.w.TRANSL.text}
+                </Typography>
+              );
+            }else{
+              translations.push(
+                <Typography variant="body2" component='td' style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
+                  
+                </Typography>
+              );
+            }
+          });
+        }else{
+          translations.push(
+            <Typography variant="body2" component='p' style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
+              {this.props.w.TRANSL.text}
+            </Typography>
+          );
+        }
+
+        /*
+        translations.push(
+            <Typography variant="body2" component={this.props.isWordList === true ? 'td':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`translation ${thisClassName} word-${this.props.w.TRANSL['xml:lang']}`}>
+              {this.props.w.TRANSL.text}
+            </Typography>
+          );
+	      */
+
 	    }else{
-	      this.props.w.TRANSL.forEach((t) => {
+        //gestion de l'affichage tableau des WordList : une colonne par langue disponible
+        if(this.props.isWordList === true){
+          this.props.availableOptions.word.translations.forEach((lang) => {
+            var found = false;
+            
+              this.props.w.TRANSL.forEach((t) => {
+                
+                if(lang === t['xml:lang']){
+                  found = true;
+                  isGlossIncluded = this.props.displayOptions.wordTranslations.includes(t["xml:lang"]);
+                  thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
+
+                  translations.push(
+                      <Typography variant="body2" component='td' style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} word-${t['xml:lang']}`}>
+                        {t.text}
+                      </Typography>
+                    );
+                }
+              });
+
+            if(found===false){
+              translations.push(
+                      <Typography variant="body2" component='td' style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} word-${lang}`}>
+                        
+                      </Typography>
+                    );
+            }
+            
+          });
+        }else{
+          this.props.w.TRANSL.forEach((t) => {
             isGlossIncluded = this.props.displayOptions.wordTranslations.includes(t["xml:lang"]);
             thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
-	          translations.push(
-	              <Typography variant="body2" component={this.props.isWordList ===true ? 'div':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} word-${t['xml:lang']}`}>
-	                {t.text}
-	              </Typography>
-	            );
-	        });
+            translations.push(
+                <Typography variant="body2" component={this.props.isWordList ===true ? 'td':'p'} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}}  className={`translation ${thisClassName} word-${t['xml:lang']}`}>
+                  {t.text}
+                </Typography>
+              );
+          });
+        }
+	      
 	    }
     }
 
@@ -138,29 +197,33 @@ class Word extends React.Component {
     
   //
   if(this.props.w.FORM !== undefined && this.props.w.FORM !== null){
+      // si une seule transcription disponible
       if(this.props.w.FORM.length === undefined){
         isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(this.props.w.FORM.kindOf);
         thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
-        transcriptions.push(
-                  <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${this.props.w.FORM.kindOf}`}>
+        transcriptions.push( 
+                  <Typography variant="body2" component={(this.props.isWordList === true)?"td":"p"} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${this.props.w.FORM.kindOf}`}>
                     {this.props.w.FORM.text}{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
-        }else{
+
+      // si plusieurs transcriptions disponibles
+      }else{
+        
           this.props.w.FORM.forEach((f) => {
             isGlossIncluded = this.props.displayOptions.wordTranscriptions.includes(f.kindOf);
             thisClassName = (this.props.isWordList === true)?'wordlistWord':'word';
 
               transcriptions.push(
-                  <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${f.kindOf}`}>
+                  <Typography variant="body2" component={(this.props.isWordList === true)?"td":"p"} style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} word-${f.kindOf}`}>
                     {f.text}{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
             });
             word = this.props.w.FORM[0].text;
-        }
+      }
   }
 
   var morphemes = [];
@@ -184,20 +247,18 @@ class Word extends React.Component {
     }
 
     return (
-      <div id={this.props.w.id} className={`WORD ${this.props.w.hasOwnProperty('class')?this.props.w.class:''}`} style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
-      { 
+        
+        
             this.props.isWordList===true
             ?
-            <div style={{display:'table'}} >
-              <div style={{display:'table-cell'}}>
-                {this.props.w.id} 
-              </div>
-              <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img className="doi" src="/dist/images/DOI_logo.svg" alt="doi" /></IconButton>
+            <tr id={this.props.w.id} className="WORD" style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+      
+              <td>
+                {this.props.w.id}
+                <IconButton aria-describedby={popperId} onClick={showDoi} id={"btn_doi_W"+this.props.sID}><img className="doi" src="" alt="doi" /></IconButton>
                 <Popper id={"doi_W"+this.props.sID} open={open} anchorEl={this.state.anchorEl} test={document.getElementById("btn_doi_W"+this.props.sID)}>
-                <div>{this.props.doi}</div>
-              </Popper>
-
-              <div style={{display:'table-cell'}} id={this.props.w.id} >
+                  <div>{this.props.doi}</div>
+                </Popper> 
                 { 
                 this.props.w.hasOwnProperty('AUDIO')
                 ?
@@ -205,34 +266,34 @@ class Word extends React.Component {
                 :
                 <div></div>
                 }
-              </div>
+              </td>
 
-              <div style={{display:'table-cell',width:'12em'}} className="word" id={this.props.w.id} >
-                {transcriptions}
-              </div>
+               <React.Fragment>
+              {transcriptions}
               {morphemes}
               {translations}
+               </React.Fragment>
 
-              <div style={{display:'table-cell'}}>
+              <td className="notes">
                 {notes}
-              </div>       
-            </div>
+              </td> 
+
+            </tr>
             :
-            <div>
-              <div className="transcBlock">
-                {transcriptions}
-              </div>
-              <div className="morphemesBlock">
-                {morphemes}
-              </div>
-              <div className="translBlock">
-                {translations}
-              </div>
+            <div id={this.props.w.id} className={`WORD ${this.props.w.hasOwnProperty('class')?this.props.w.class:''}`} style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+              <div>
+                <div className="transcBlock">
+                  {transcriptions}
+                </div>
+                <div className="morphemesBlock">
+                  {morphemes}
+                </div>
+                <div className="translBlock">
+                  {translations}
+                </div>
 
-            </div>
-        }    
-
-        </div>
+              </div>
+            </div>  
 
     );
   }
