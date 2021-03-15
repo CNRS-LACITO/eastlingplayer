@@ -74,7 +74,7 @@ class App extends React.Component {
 		var optionMode = (this.getUrlParameter("mode").length > 0) ? this.getUrlParameter("mode") : "normal";
 
 		var anchor = window.location.hash;
-		console.log(anchor);
+
 	  	//28/08/2020
 	  	//TODO gérer option Lang soit fr soit en, par défaut FR dans URL pour les translations options et libellés
 	  	this.setState({
@@ -206,9 +206,8 @@ class App extends React.Component {
 				            extensionFile : result.extensionFile
 				        });
 
-				        //window.location.hash = anchor;
 				        if(anchor)
-				        window.scrollTo(0,document.querySelector(anchor).offsetTop - 150);
+				        	window.scrollTo(0,document.querySelector(anchor).offsetTop - 180);
 			        }
 			        
  
