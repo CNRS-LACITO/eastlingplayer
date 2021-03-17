@@ -84,8 +84,10 @@ class Word extends React.Component {
     var thisClassName = "";
 
     const tableBordered = {
+      /*
       border: "1px solid black",
       borderCollapse: "collapse"
+      */
     };
 
     const visible = {

@@ -12,12 +12,13 @@ class Annotations extends React.Component {
       isLoaded: false,
       annotationData: [],
       displayOptions: this.props.displayOptions,
-      availableOptions: this.props.availableOptions
+      availableOptions: this.props.availableOptions,
+      isWordList: false
     };
   }
 
   shouldComponentUpdate() {
-    console.log('Annotations - shouldComponentUpdate lifecycle');
+    //console.log('Annotations - shouldComponentUpdate lifecycle');
     return false;
   }
 
@@ -30,6 +31,7 @@ class Annotations extends React.Component {
     var wholeTranscriptions = [];
     var wholeTranslations = [];
     var notes = [];
+    var isWordList = false;
 
     var imageSrc = "";
     var doi = this.props.doi;
@@ -135,16 +137,15 @@ class Annotations extends React.Component {
       });
     }
 
-    if(wordlist !== null && wordlist !== undefined){
-      //wordlist.forEach((a) => {
-
-          // Get word(s) of the sentence
-        //if(wordlist !== undefined && wordlist !== null){
+    if(wordlist !== null && wordlist !== undefined && Array.isArray(wordlist)){
+    //Si c'est une liste de mots
+      isWordList = true;
+      this.setState({isWordList:true});
 
           //W can be an array or an object depending on the number of children in the XML
           //Object if only one Word, Array if more than 1 word
 
-          if(Array.isArray(wordlist)){
+          //if(Array.isArray(wordlist)){
             //get words of the sentence
               wordlist.forEach((w) => {
 
@@ -173,10 +174,9 @@ class Annotations extends React.Component {
                 
               });
 
-          } 
+          //} 
           
-        //}
-      //});
+
     }
     
 
@@ -254,7 +254,16 @@ class Annotations extends React.Component {
           </Container>
         </div>
         <Container fixed id="documentAnnotationsBlock">
-              {annotationItems}
+          {
+            isWordList
+              ?
+              <table>
+                {annotationItems}
+              </table>
+              :
+              annotationItems
+          }
+              
         </Container>
         {
           this.props.extensionFile==='pdf' 
