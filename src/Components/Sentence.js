@@ -233,7 +233,7 @@ class Sentence extends React.Component {
 			    { 
 		    	 	this.props.s.hasOwnProperty('AUDIO')
 		    	 	?
-					<PlayButton start={this.props.s.AUDIO?this.props.s.AUDIO.start:0} id={this.props.s.id} />
+					<PlayButton start={this.props.s.AUDIO?this.props.s.AUDIO.start:0} end={this.props.s.AUDIO?this.props.s.AUDIO.end:0} id={this.props.s.id} />
 					:
 					<div></div>
 				}

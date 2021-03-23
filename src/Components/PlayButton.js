@@ -7,8 +7,11 @@ class PlayButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      displayPlay : document.getElementById('player').paused
+      displayPlay : document.getElementById('player').paused,
+      duration : (this.props.end - this.props.start) * 1000
     }
+
+    console.log(this.state);
   }
 
   showPlayPause = event => {
@@ -23,20 +26,22 @@ class PlayButton extends React.Component {
   }
 
   playPause(){
-
+    var player = document.getElementById('player');
     //si on change de phrase
-    if(this.props.id !== window.currentSentence || this.props.isWordList === true){
-      document.getElementById('player').currentTime = this.props.start;
-    }
-    
-    if(document.getElementById('player').paused){
-      document.getElementById('player').play();
+    /*if(this.props.id !== window.currentSentence || this.props.isWordList === true){
+      player.currentTime = this.props.start;
+    }*/
+
+    if(player.paused){
+      player.currentTime = this.props.start;
+      player.play();
+      setTimeout(function() { player.pause() }, this.state.duration);
     }else{
-      document.getElementById('player').pause();
+      player.pause();
     }
 
     this.setState({
-      displayPlay : document.getElementById('player').paused
+      displayPlay : player.paused
     });
     
   }

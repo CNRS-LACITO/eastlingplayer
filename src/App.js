@@ -152,6 +152,7 @@ class App extends React.Component {
 
 		        }
 		      )
+
 	  	}
 
 	  	if(oai_secondary.length > 0){
@@ -227,7 +228,6 @@ class App extends React.Component {
 	  render(){
 	  	return (
 		    <div className="App" key="App">	
-
 		    	{ 
 		    	 	this.state.hasPrimaryId
 		    	 	?

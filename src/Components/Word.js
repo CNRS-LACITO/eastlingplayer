@@ -322,7 +322,7 @@ class Word extends React.Component {
                 { 
                 this.props.w.hasOwnProperty('AUDIO')
                 ?
-                <PlayButton start={this.props.w.AUDIO?this.props.w.AUDIO.start:0} isWordList={true} />
+                <PlayButton start={this.props.w.AUDIO?this.props.w.AUDIO.start:0} end={this.props.w.AUDIO?this.props.w.AUDIO.end:0} isWordList={true} />
                 :
                 <div></div>
                 }
