@@ -2,6 +2,14 @@ import React from 'react';
 
 class Picture extends React.Component {
 
+  componentDidMount(){
+    document.querySelectorAll('.pictureBlock canvas').forEach(c=>{
+      c.onmouseover=function(){
+        window.highlight(this.attributes.wordid.nodeValue,"W");
+      }
+    });
+  }
+
   render() {
         //var url_image = this.props.imageSrc;
         var coords = this.props.area.coords.split(',');

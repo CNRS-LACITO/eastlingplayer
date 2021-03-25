@@ -20,14 +20,20 @@ class Player extends React.Component {
 	    this.instance.appendChild(s);
 
 	    //Mise en lumière du mot sur l'image
-	    window.highlight=function highlight(id,timeVar){
+	    window.highlight=function highlight(id,type){
 
-	      if(timeVar.type!=="S"){
+	      if(type!=="S"){
 
 	        document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
 	                  e.style.border='none'; 
 	                });
 	        document.querySelector('[wordid="'+id+'"]').style.border='solid';
+
+	        document.querySelectorAll('.WORD').forEach(e => { 
+	                  e.style.border='none'; 
+	                });
+
+	        document.querySelector('#'+id).style.border='solid';
 	      }
 
 	    };
@@ -58,8 +64,8 @@ class Player extends React.Component {
 		    var w = window.timeList.find((e)=>(e.start < time && e.end > time && e.type !== "S"));
 		    
 	            if((w !== undefined) && !window.isWordList){
-	                console.log("highlight");
-	              	window.highlight(w.morpheme ?? w.word,w);  
+	                //console.log("highlight");
+	              	window.highlight(w.morpheme ?? w.word,w.type);  
 	         }
 
 		};

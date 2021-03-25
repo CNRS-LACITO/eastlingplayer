@@ -11,7 +11,6 @@ class PlayButton extends React.Component {
       duration : (this.props.end - this.props.start) * 1000
     }
 
-    console.log(this.state);
   }
 
   showPlayPause = event => {
