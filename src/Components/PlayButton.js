@@ -35,7 +35,7 @@ class PlayButton extends React.Component {
     if(player.paused){
       player.currentTime = this.props.start;
       player.play();
-      setTimeout(function() { player.pause() }, this.state.duration);
+      if(!document.getElementsByName('continuousPlay')[0].checked) setTimeout(function() { player.pause() }, this.state.duration);
     }else{
       player.pause();
     }

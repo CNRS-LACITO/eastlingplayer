@@ -49,7 +49,8 @@ class Player extends React.Component {
 	                window.currentSentence = currentAnchor;
 	                let event = new Event("sentence-changed");
 	                document.dispatchEvent(event);
-	                window.scrollTo(0,document.getElementById(currentAnchor).offsetTop - 150);
+	                //window.scrollTo(0,document.getElementById(currentAnchor).offsetTop - 150);
+	                document.getElementById(currentAnchor).scrollIntoView({block: "center"});
 	              }
 	            }
 		    }

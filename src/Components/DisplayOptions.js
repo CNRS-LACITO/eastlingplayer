@@ -22,11 +22,8 @@ class DisplayOptions extends React.Component {
         options:this.props.options,
         lang:this.props.displayOptions.lang,
         mode:this.props.displayOptions.mode,
-
+        continuousPlay:this.props.displayOptions.continuousPlay,
     };
-
-
-
 
   }
 
@@ -45,6 +42,7 @@ class DisplayOptions extends React.Component {
       //#41 params.set('optionWords',this.state.words);
       params.set('lang',this.state.lang);
       params.set('mode',this.state.mode);
+      params.set('continuousPlay',this.state.continuousPlay);
 
       var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + "?" + params.toString();
 
@@ -159,6 +157,15 @@ class DisplayOptions extends React.Component {
     
   }
 
+  handleCheck(event){
+    if(event.target.name.length >0 ){
+
+      this.setState({[event.target.name]: event.target.checked},this.buildUrl());
+
+    }
+    
+  }
+
   render() {
     this.buildUrl();
 
@@ -265,21 +272,33 @@ class DisplayOptions extends React.Component {
         </FormGroup>
         </div>                  
 
-          <div className="optionNotes" hidden={this.state.options.note.translations.length===0}>
+        <div className="optionNotes" hidden={this.state.options.note.translations.length===0}>
           <FormLabel component="legend">Notes</FormLabel>
           <FormGroup>
-          {this.state.options.note.translations.map(nl => (
-            <FormControlLabel key={"note"+nl}
-              control={<Checkbox checked={this.state.displayNotes.includes(nl)} onChange={this.handleNotesOptions.bind(this)} name={nl} />}
-              label={nl}
-            />
-          ))}
+            {this.state.options.note.translations.map(nl => (
+              <FormControlLabel key={"note"+nl}
+                control={<Checkbox checked={this.state.displayNotes.includes(nl)} onChange={this.handleNotesOptions.bind(this)} name={nl} />}
+                label={nl}
+              />
+            ))}
           </FormGroup>
-          </div>
+        </div>
+
+        <div className="optionContinuousPlay" hidden={this.state.continuousPlay.length===0}>
+          <FormLabel component="legend"><Translate text='Continuous play'/></FormLabel>
+          <FormGroup>
+
+              <FormControlLabel key={"continuousPlay"}
+                control={<Checkbox checked={this.state.continuousPlay===true} onChange={this.handleCheck.bind(this)} name="continuousPlay" />}
+                label=""
+              />
 
           </FormGroup>
+        </div>
 
-          }
+        </FormGroup>
+
+        }
 
       </div>
     );

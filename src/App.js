@@ -72,6 +72,7 @@ class App extends React.Component {
 	  	var optionNotes = this.getUrlParameter("optionNotes");
 	  	var optionLang = (this.getUrlParameter("lang").length > 0) ? this.getUrlParameter("lang") : "fr";
 		var optionMode = (this.getUrlParameter("mode").length > 0) ? this.getUrlParameter("mode") : "normal";
+		var optionContinuousPlay = (this.getUrlParameter("continuousPlay").length > 0) ? ((this.getUrlParameter("continuousPlay") === "true") ? true : false) : false;
 
 		var anchor = window.location.hash;
 
@@ -90,7 +91,7 @@ class App extends React.Component {
 	        	notes : (optionNotes.length > 0) ? optionNotes.split('+') : [],
 	        	lang : optionLang,
 	        	mode : optionMode,
-
+				continuousPlay : optionContinuousPlay,
 	        },
 	    });
 
@@ -198,6 +199,7 @@ class App extends React.Component {
 					        	notes : (document.location.search.indexOf("optionNotes") > 0) ? optionNotes.split('+') : [],
 					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
 					        	mode : (document.location.search.indexOf("mode") > 0) ? optionMode : 'normal',
+					        	continuousPlay : (document.location.search.indexOf("continuousPlay") > 0) ? optionContinuousPlay : false,
 			        		},
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
@@ -208,7 +210,8 @@ class App extends React.Component {
 				        });
 
 				        if(anchor)
-				        	window.scrollTo(0,document.querySelector(anchor).offsetTop - 180);
+				        	//window.scrollTo(0,document.querySelector(anchor).offsetTop - 180);
+				        	document.getElementById(anchor.replace('#','')).scrollIntoView({block: "center"});
 			        }
 			        
  
