@@ -172,104 +172,113 @@ class DisplayOptions extends React.Component {
     return (
       <div>
         <h2><Translate text='Display options'/></h2>
-        {
+        
+        <FormGroup row>
+          <div className="optionContinuousPlay" hidden={this.state.continuousPlay.length===0}>
+            <FormLabel component="legend"><Translate text='Continuous play'/></FormLabel>
+            <FormControlLabel key={"continuousPlay"}
+              control={<Checkbox checked={this.state.continuousPlay===true} onChange={this.handleCheck.bind(this)} name="continuousPlay" />}
+              label=""
+            />
+          </div>
+        </FormGroup>
         
         <FormGroup row>
         
         <div className="optionTransc" hidden={this.state.options.text.transcriptions.length===0}>
-        <FormLabel component="legend"><Translate text='Text transcription'/></FormLabel>
-        <FormGroup>
-        {this.state.options.text.transcriptions.map(transc => (
-          <FormControlLabel key={"textTranscription"+transc}
-            control={<Checkbox checked={this.state.textTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"text-"+transc} />}
-            label={transc}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Text transcription'/></FormLabel>
+          <FormGroup>
+          {this.state.options.text.transcriptions.map(transc => (
+            <FormControlLabel key={"textTranscription"+transc}
+              control={<Checkbox checked={this.state.textTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"text-"+transc} />}
+              label={transc}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransl" hidden={this.state.options.text.translations.length===0}>
-        <FormLabel component="legend"><Translate text='Text translation'/></FormLabel>
-        <FormGroup>
-        {this.state.options.text.translations.map(transl => (
-          <FormControlLabel key={"textTranslation"+transl}
-            control={<Checkbox checked={this.state.textTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"text-"+transl} />}
-            label={transl}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Text translation'/></FormLabel>
+          <FormGroup>
+          {this.state.options.text.translations.map(transl => (
+            <FormControlLabel key={"textTranslation"+transl}
+              control={<Checkbox checked={this.state.textTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"text-"+transl} />}
+              label={transl}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransc" hidden={this.state.options.sentence.transcriptions.length===0}>
-        <FormLabel component="legend"><Translate text='Sentence transcription'/></FormLabel>
-        <FormGroup>
-        {this.state.options.sentence.transcriptions.map(transc => (
-          <FormControlLabel key={"sentenceTranscription"+transc}
-            control={<Checkbox checked={this.state.sentenceTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"sentence-"+transc} />}
-            label={transc}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Sentence transcription'/></FormLabel>
+          <FormGroup>
+          {this.state.options.sentence.transcriptions.map(transc => (
+            <FormControlLabel key={"sentenceTranscription"+transc}
+              control={<Checkbox checked={this.state.sentenceTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"sentence-"+transc} />}
+              label={transc}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransl" hidden={this.state.options.sentence.translations.length===0}>
-        <FormLabel component="legend"><Translate text='Sentence translation'/></FormLabel>
-        <FormGroup>
-        {this.state.options.sentence.translations.map(transl => (
-          <FormControlLabel key={"textTranslation"+transl}
-            control={<Checkbox checked={this.state.sentenceTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"sentence-"+transl} />}
-            label={transl}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Sentence translation'/></FormLabel>
+          <FormGroup>
+          {this.state.options.sentence.translations.map(transl => (
+            <FormControlLabel key={"textTranslation"+transl}
+              control={<Checkbox checked={this.state.sentenceTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"sentence-"+transl} />}
+              label={transl}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransc" hidden={this.state.options.word.transcriptions.length===0} >
-        <FormLabel component="legend"><Translate text='Word transcription'/></FormLabel>
-        <FormGroup>
-        {this.state.options.word.transcriptions.map(transc => (
-          <FormControlLabel key={"wordTranscription"+transc}
-            control={<Checkbox checked={this.state.wordTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"word-"+transc} />}
-            label={transc}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Word transcription'/></FormLabel>
+          <FormGroup>
+          {this.state.options.word.transcriptions.map(transc => (
+            <FormControlLabel key={"wordTranscription"+transc}
+              control={<Checkbox checked={this.state.wordTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"word-"+transc} />}
+              label={transc}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransl" hidden={this.state.options.word.translations.length===0}>
-        <FormLabel component="legend"><Translate text='Word translation'/></FormLabel>
-        <FormGroup>
-        {this.state.options.word.translations.map(transl => (
-          <FormControlLabel key={"wordTranslation"+transl}
-            control={<Checkbox checked={this.state.wordTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"word-"+transl} />}
-            label={transl}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Word translation'/></FormLabel>
+          <FormGroup>
+          {this.state.options.word.translations.map(transl => (
+            <FormControlLabel key={"wordTranslation"+transl}
+              control={<Checkbox checked={this.state.wordTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"word-"+transl} />}
+              label={transl}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransc" hidden={this.state.options.morpheme.transcriptions.length===0}>
-        <FormLabel component="legend"><Translate text='Morpheme transcription'/></FormLabel>
-        <FormGroup>
-        {this.state.options.morpheme.transcriptions.map(transc => (
-          <FormControlLabel key={"morphemeTranscription"+transc}
-            control={<Checkbox checked={this.state.morphemeTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"morpheme-"+transc} />}
-            label={transc}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Morpheme transcription'/></FormLabel>
+          <FormGroup>
+          {this.state.options.morpheme.transcriptions.map(transc => (
+            <FormControlLabel key={"morphemeTranscription"+transc}
+              control={<Checkbox checked={this.state.morphemeTranscriptions.includes(transc)} onChange={this.handleTranscriptionOptions.bind(this)} name={"morpheme-"+transc} />}
+              label={transc}
+            />
+          ))}
+          </FormGroup>
         </div>
 
         <div className="optionTransl" hidden={this.state.options.morpheme.translations.length===0}>
-        <FormLabel component="legend"><Translate text='Morpheme translation'/></FormLabel>
-        <FormGroup>
-        {this.state.options.morpheme.translations.map(transl => (
-          <FormControlLabel key={"morphemeTranslation"+transl}
-            control={<Checkbox checked={this.state.morphemeTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"morpheme-"+transl} />}
-            label={transl}
-          />
-        ))}
-        </FormGroup>
+          <FormLabel component="legend"><Translate text='Morpheme translation'/></FormLabel>
+          <FormGroup>
+          {this.state.options.morpheme.translations.map(transl => (
+            <FormControlLabel key={"morphemeTranslation"+transl}
+              control={<Checkbox checked={this.state.morphemeTranslations.includes(transl)} onChange={this.handleTranslationOptions.bind(this)} name={"morpheme-"+transl} />}
+              label={transl}
+            />
+          ))}
+          </FormGroup>
         </div>                  
 
         <div className="optionNotes" hidden={this.state.options.note.translations.length===0}>
@@ -284,21 +293,8 @@ class DisplayOptions extends React.Component {
           </FormGroup>
         </div>
 
-        <div className="optionContinuousPlay" hidden={this.state.continuousPlay.length===0}>
-          <FormLabel component="legend"><Translate text='Continuous play'/></FormLabel>
-          <FormGroup>
-
-              <FormControlLabel key={"continuousPlay"}
-                control={<Checkbox checked={this.state.continuousPlay===true} onChange={this.handleCheck.bind(this)} name="continuousPlay" />}
-                label=""
-              />
-
-          </FormGroup>
-        </div>
-
         </FormGroup>
 
-        }
 
       </div>
     );
