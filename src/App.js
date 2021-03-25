@@ -211,7 +211,7 @@ class App extends React.Component {
 
 				        if(anchor)
 				        	//window.scrollTo(0,document.querySelector(anchor).offsetTop - 180);
-				        	document.getElementById(anchor.replace('#','')).scrollIntoView({block: "center"});
+				        	document.querySelector(anchor).scrollIntoView({block: "center"});
 			        }
 			        
  
