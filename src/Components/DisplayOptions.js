@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, FormControlLabel, FormLabel, Checkbox } from '@material-ui/core';
+import { FormGroup, FormControlLabel, FormLabel, Checkbox, Switch  } from '@material-ui/core';
 import { Translate } from 'react-translated';
 
 class DisplayOptions extends React.Component {
@@ -175,10 +175,11 @@ class DisplayOptions extends React.Component {
         
         <FormGroup row>
           <div className="optionContinuousPlay" hidden={this.state.continuousPlay.length===0}>
-            <FormLabel component="legend"><Translate text='Continuous play'/></FormLabel>
-            <FormControlLabel key={"continuousPlay"}
-              control={<Checkbox checked={this.state.continuousPlay===true} onChange={this.handleCheck.bind(this)} name="continuousPlay" />}
-              label=""
+            <FormControlLabel 
+              key={"continuousPlay"} 
+              labelPlacement="start"
+              control={<Switch checked={this.state.continuousPlay===true} onChange={this.handleCheck.bind(this)} name="continuousPlay" />}
+              label={<Translate text='Continuous play'/>}
             />
           </div>
         </FormGroup>
