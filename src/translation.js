@@ -1,7 +1,10 @@
 // translation.js
 //https://github.com/amsul/react-translated#static-text
 export default {
-  'other': {
+  'Continuous play': {
+    en: 'Continuous play',
+    fr: 'Lecture en continu',
+  },'other': {
     en: 'other',
     fr: 'autre',
   },'Text transcription': {

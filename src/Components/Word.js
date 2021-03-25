@@ -15,6 +15,10 @@ class Word extends React.Component {
       this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
 	}
 
+  highlight(){
+    window.highlight(this.props.w.id,'W');
+  }
+
   handleClick = (event) => {
     this.setState({
       anchorEl: event.currentTarget,
@@ -340,7 +344,7 @@ class Word extends React.Component {
 
             </tr>
             :
-            <div id={this.props.w.id} className={`WORD ${this.props.w.hasOwnProperty('class')?this.props.w.class:''}`} style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
+            <div id={this.props.w.id} onMouseOver={this.highlight.bind(this)} className={`WORD ${this.props.w.hasOwnProperty('class')?this.props.w.class:''}`} style={this.props.isWordList===true ? {} : {display:"inline-block"} } ref={el => (this.instance = el)} >
               <div>
                 <div className="transcBlock">
                   {transcriptions}
