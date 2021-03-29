@@ -27,7 +27,9 @@ class Player extends React.Component {
 	        document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
 	                  e.style.border='none'; 
 	                });
-	        document.querySelector('[wordid="'+id+'"]').style.border='solid';
+	        document.querySelectorAll('[wordid="'+id+'"]').forEach(e => { 
+	                  e.style.border='solid'; 
+	                });
 
 	        document.querySelectorAll('.WORD').forEach(e => { 
 	                  e.style.border='none'; 
