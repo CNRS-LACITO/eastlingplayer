@@ -269,8 +269,8 @@ class Annotations extends React.Component {
           this.props.extensionFile==='pdf' 
             ?
             <Container>
-              <object data={this.props.urlFile.replace('http','https')} type="application/pdf" width="100%" height="500px">
-                <embed src={this.props.urlFile.replace('http','https')} type='application/pdf'/>
+              <object data={this.props.urlFile.replace('http:','https:')} type="application/pdf" width="100%" height="500px">
+                <embed src={this.props.urlFile.replace('http:','https:')} type='application/pdf'/>
               </object>
 
             </Container>
