@@ -32,9 +32,9 @@ class App extends React.Component {
 			doi : '',
 			images : [],
 			displayOptions : {},
-			langOptions : {
+			/*langOptions : {
 				transcriptions:[],translations:[]
-			},
+			},*/
 			options : {},
 			isWordList : false,
 			timeList : [],
@@ -182,9 +182,12 @@ class App extends React.Component {
 			        		var isWordList = (result.annotations.WORDLIST.W !== undefined && result.annotations.WORDLIST.W !== null) ? true : false;
 			        		window.isWordList = isWordList;
 			        	}
-			        	//console.log(typeof [result.typeOf.sentence.transcriptions[0]]);
+
+			        	console.log(optionMode,[result.typeOf.sentence.transcriptions[0]]);
+			        	console.log((document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.transcriptions):[result.typeOf.sentence.transcriptions[0]]));
+
 			        	this.setState({
-			        		langOptions: result.langues,
+			        		//langOptions: result.langues,
 			        		options: result.typeOf,
 			        		timeList: result.timeList,
 			        		displayOptions:{
@@ -208,6 +211,7 @@ class App extends React.Component {
 				            urlFile : result.urlFile,
 				            extensionFile : result.extensionFile
 				        });
+
 
 				        if(anchor)
 				        	//window.scrollTo(0,document.querySelector(anchor).offsetTop - 180);
@@ -267,10 +271,25 @@ class App extends React.Component {
 			    	 	:
 			    	 	<div key={this.state.doi}>
 			    	 	<Container>
-						    <DisplayOptions displayOptions={this.state.displayOptions} options={this.state.options} langOptions={this.state.langOptions} isWordList={this.state.isWordList} />
+						    <DisplayOptions 
+							    displayOptions={this.state.displayOptions} 
+							    options={this.state.options} 
+							    //langOptions={this.state.langOptions} 
+							    isWordList={this.state.isWordList} 
+						    />
 				    	</Container>
 				    	<Container>
-	 						<Annotations urlFile={this.state.urlFile} extensionFile={this.state.extensionFile} timeList={this.state.timeList} doi={this.state.doi} availableOptions={this.state.options} displayOptions={this.state.displayOptions} annotations={this.state.annotations} images={this.state.images} video={this.state.MEDIAFILE.type==="video"} />
+	 						<Annotations 
+		 						urlFile={this.state.urlFile} 
+		 						extensionFile={this.state.extensionFile} 
+		 						timeList={this.state.timeList} 
+		 						doi={this.state.doi} 
+		 						availableOptions={this.state.options} 
+		 						displayOptions={this.state.displayOptions} 
+		 						annotations={this.state.annotations} 
+		 						images={this.state.images} 
+		 						video={this.state.MEDIAFILE.type==="video"} 
+	 						/>
 	 			    	</Container>
 	 			    	</div>
 				    	]

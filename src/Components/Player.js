@@ -10,11 +10,10 @@ class Player extends React.Component {
     componentDidMount() {
 
 	    const s = document.createElement('script');
-	    
 	    s.type = 'text/javascript';
 
 	    var scriptStr = "var wordidList=[];var startTimeList=[];var endTimeList=[];var timeList=[];"
-		scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime)};";
+			scriptStr +="document.getElementById('player').ontimeupdate=function(){updatePosition(this.currentTime)};";
 
 	    s.innerHTML = scriptStr;
 	    this.instance.appendChild(s);
@@ -23,7 +22,6 @@ class Player extends React.Component {
 	    window.highlight=function highlight(id,type){
 
 	      if(type!=="S"){
-
 	        document.querySelectorAll('canvas:not([wordid=""]').forEach(e => { 
 	                  e.style.border='none'; 
 	                });

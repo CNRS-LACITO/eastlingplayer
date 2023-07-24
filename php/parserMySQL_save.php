@@ -1,5 +1,7 @@
 <?php 
 
+header("Access-Control-Allow-Origin: *");
+header('Content-Type: application/json');
 
 $oaiID = isset($_GET['oai_primary']) ? $_GET['oai_primary'] : NULL;
 // ID du document
@@ -8,10 +10,6 @@ $oaiPrimary = isset($_GET['oai_primary']) ? $_GET['oai_primary'] : NULL;
 $oaiSecondary = isset($_GET['oai_secondary']) ? $_GET['oai_secondary'] : NULL;
 
 $lang = isset($_GET['lang']) ? $_GET['lang'] : 'fr';
-
-//23/02/2023 CORS Error
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
 
 // ID du document
 // ID du fichier annotations
@@ -72,29 +70,14 @@ function recursiveParseXML($xmlTag,$o){
 					$o->{$xmlTag->nodeName}->{$a->nodeName}=$a->nodeValue;
 				}	
 			}
-
 			if(sizeof($xmlTag->childNodes)>1 && !hasChild($xmlTag,'FOREIGN')){
 				foreach($xmlTag->childNodes as $c){
 					if($c->nodeName!='#text' && $c->nodeName!='FOREIGN')
 					recursiveParseXML($c,$o->{$xmlTag->nodeName});
 				}
 			}else{
-					if(!hasChild($xmlTag,'FOREIGN')){
-						$o->{$xmlTag->nodeName}->text=$xmlTag->textContent;
-					}else{
-						$doc = new \DOMDocument();
-						$node = $doc->importNode($xmlTag,true);
-						$tagType = $xmlTag->nodeName;
-
-						$str = trim($doc->saveXML($node));
-
-						preg_match('/<FOREIGN.*>(.*)<\/FOREIGN>/', $str, $foreign);
-						//$o->{$xmlTag->nodeName}->text=$xmlTag->textContent;
-
-						$o->{$xmlTag->nodeName}->text=str_replace($foreign,"<foreign>".$foreign[1]."</foreign>",$xmlTag->textContent);
-					}
+					$o->{$xmlTag->nodeName}->text=$xmlTag->textContent;
 			}
-
 		}
 	}
 }
@@ -229,8 +212,8 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 					}
 				}	
 			}
-			//https://github.com/CNRS-LACITO/Pangloss_website/issues/206
-			if(!$hasTransl && isset($nodeParent->$nodeChild->TRANSL)){
+			//
+			if(isset($nodeParent->$nodeChild->TRANSL)){
 
 				if(gettype($nodeParent->$nodeChild->TRANSL)=="object"){
 					$xmlLang = (strlen($nodeParent->$nodeChild->TRANSL->{"xml:lang"})>0)?$nodeParent->$nodeChild->TRANSL->{"xml:lang"}:$defaultKindOf;
@@ -271,8 +254,8 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 						}
 					}	
 				}
-				////https://github.com/CNRS-LACITO/Pangloss_website/issues/206
-				if(!$hasTransl && isset($c->TRANSL)){
+				//
+				if(isset($c->TRANSL)){
 
 					if(gettype($c->TRANSL)=="object"){
 						$xmlLang = (strlen($c->TRANSL->{"xml:lang"})>0)?$c->TRANSL->{"xml:lang"}:$defaultKindOf;
@@ -335,9 +318,6 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 	}
 
 	foreach($translConcat as $xmlLang => $text){
-
-		////https://github.com/CNRS-LACITO/Pangloss_website/issues/206
-		
 		if(!$hasTransl || !in_array($xmlLang,$hasTranslTypeOf)){
 
 			$typeOf[$parent]["translations"][]=$xmlLang;
@@ -360,19 +340,18 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 		}
 	}
 
-
 }
 
 
 $resourcesUrl = array();
 $annotationsUrl = array();
 $imagesUrl = array();
-$pdf = array(); // https://github.com/CNRS-LACITO/eastlingplayer/issues/70
-$imagesNoSyncUrl = array(); // https://github.com/CNRS-LACITO/eastlingplayer/issues/70
 $doi="";
 
-//
-require('globalParameters.php');
+$servername = "mysql80a.db.huma-num.fr";
+$dbname ="pangloss";
+$user="pangloss";
+$pass="R3i3wddi_qyBlsD9Y";
 
 try{
         $options = array(
@@ -412,54 +391,25 @@ try{
 			    $oResources =  json_decode($row['related_resources']);
 			    $aResources = $oResources->secondary;
 
-			    //TODO add subject, title, description pour export 06/12/2022
-
-
 			    //on parse la table secondary_resources pour récupérer les fichiers annotations et image
 			    foreach($aResources as $oResource){
 			    	$oaiIds = explode(":", $oResource);
 			    	$sql = "SELECT * FROM secondary_resources WHERE oai =\"$oaiIds[2]\"";
-			    	// https://github.com/CNRS-LACITO/eastlingplayer/issues/70
-			    	/*
-			    	"format" -> "type" :
-				"text" -> "image" (jpeg ou png synchronisés avec le xml d'annotations. ex les abeilles)
-				"text" -> "pdf" (pdf)
-				"image" -> "image" (jpeg ou png. ex partitions de musique ou photos)*/
+
 			    	foreach  ($db->query($sql) as $row2) {
-			    		if($row2['format'] === "text"){
-			    			if($row2['type'] === "image")
-			    			$imagesUrl[] = array("id"=>$row2['oai'],"url"=>$sUrlFile);
-
-			    			if($row2['type'] === "pdf")
-			    			$pdf[] = array("id"=>$row2['oai'],"url"=>$sUrlFile);
-			    		}
-
-			    		if($row2['format'] === "image"){
-			    			if($row2['type'] === "image")
-			    			$imagesNoSyncUrl[] = array("id"=>$row2['oai'],"url"=>$sUrlFile);
-			    		}
-
 			    		$sUrlFile = str_replace("http:","https:",$row2['url_pangloss_file']);
 			    		$asUrlFile = explode(".", $sUrlFile);
-			    		//TODO 01/12/2021
+
 			    		switch ( strtolower($asUrlFile[sizeof($asUrlFile)-1]) ) {
-					    case "xml":
-					        //$audioUrl=$sMedia;
-					        break;
-					    case "png":
-					    case "jpg":
-					        $imagesUrl[] = array("id"=>$row2['oai'],"url"=>$sUrlFile);
-					        break;
-					}//switch
+						    case "xml":
+						        //$audioUrl=$sMedia;
+						        break;
+						    case "jpg":
+						        $imagesUrl[] = array("id"=>$row2['oai'],"url"=>$sUrlFile);
+						        break;
+						}//switch
 			    	}//for
 			    }//for		 
-			    $subject = json_decode($row['subject']);
-			    $description = json_decode($row['description']);
-			    $title = json_decode($row['title']);
-			    $contributors = json_decode($row['contributors']);
-			    $recordingDate = $row['creation_date'];
-			    $recordingPlace = json_decode($row['location_description']);
-
 			}//for		
 		
 			$response = array(
@@ -467,16 +417,7 @@ try{
 				'metadata'=>$metadataJson,
 				'audio'=>$audioUrl,
 				'video'=>$videoUrl,
-				'images'=>$imagesUrl,
-				'imagesNoSync'=>$imagesNoSyncUrl,
-				'pdf'=>$pdf,
-				'subject'=>$subject,
-				'description'=>$description,
-				'title'=>$title,
-				'contributors'=>$contributors,
-				'recording_date'=>$recordingDate,
-				'recording_place'=>$recordingPlace,
-
+				'images'=>$imagesUrl
 			);
 
 		}elseif($oaiSecondary != NULL){
@@ -486,15 +427,15 @@ try{
 			$sql = "SELECT * FROM secondary_resources WHERE oai =\"$oaiSecondary\"";
 
 			$size = 0;
-
 			//On parse la table secondary_resources pour récupérer le fichier annotation
 			foreach  ($db->query($sql) as $row) {
 				$sUrlFile = str_replace("http:","https:",$row['url_pangloss_file']);
 				$doi = $row['doi'];
 
+
 				$xmlData = simplexml_load_file($sUrlFile);
 				$size += strlen($xmlData->asXml());
-
+				
 				$annotationXml = dom_import_simplexml($xmlData);
 				$annotationJson = new stdClass();
 				recursiveParseXML($annotationXml,$annotationJson);
@@ -571,9 +512,6 @@ try{
 					//https://github.com/CNRS/eastlingplayer/issues/52
 					$sentence->id = "S".($keyS + 1);
 
-					//https://github.com/CNRS-LACITO/Pangloss_website/issues/206
-					$defaultTranslLang = $defaultKindOf;
-
 					//langues disponibles
 					completeTranslationLang($sentence->NOTE,$langNotes,$defaultKindOf);
 					completeTranscriptionLang($sentence->FORM,$typeOf["sentence"]["transcriptions"],$defaultKindOf);
@@ -596,12 +534,7 @@ try{
 					//github #18 : whole translation
 					if(isset($sentence->TRANSL)){
 
-						//if only one Translation
 						if(gettype($sentence->TRANSL)=="object"){
-
-							//https://github.com/CNRS-LACITO/Pangloss_website/issues/206
-							$defaultTranslLang = $sentence->TRANSL->{"xml:lang"};
-
 							$wholeTranslation[$sentence->TRANSL->{"xml:lang"}] .= $sentence->TRANSL->text."\n";
 						}elseif(gettype($sentence->TRANSL)=="array"){
 
@@ -625,16 +558,15 @@ try{
 					//
 											
 					if(property_exists($sentence, "W")){
-					//https://github.com/CNRS-LACITO/Pangloss_website/issues/206
 						
 						if(gettype($sentence->W)=="object"){
 
 							$sentence->W->id = "W".$wID++;
 
-							completeTranslationLang($sentence->W->NOTE,$langNotes,$defaultTranslLang);
+							completeTranslationLang($sentence->W->NOTE,$langNotes,$defaultKindOf);
 
 							completeTranscriptionLang($sentence->W->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
-							completeTranslationLang($sentence->W->TRANSL,$typeOf["word"]["translations"],$defaultTranslLang);
+							completeTranslationLang($sentence->W->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
 
 							//
 							if(property_exists($sentence->W, "AUDIO")){
@@ -657,10 +589,10 @@ try{
 								if(gettype($sentence->W->M)=="object"){
 								//un seul morphème...
 									$sentence->W->M->id = $mID++;
-									completeTranslationLang($sentence->W->M->NOTE,$langNotes,$defaultTranslLang);
+									completeTranslationLang($sentence->W->M->NOTE,$langNotes,$defaultKindOf);
 									//#32
 									completeTranscriptionLang($sentence->W->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
-									completeTranslationLang($sentence->W->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultTranslLang);
+									completeTranslationLang($sentence->W->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 									//
 									if(property_exists($sentence->W->M, "AUDIO")){
 										$timeList[]=array(
@@ -678,10 +610,10 @@ try{
 									foreach ($sentence->W->M as $keyM => &$morph) {
 										//https://github.com/CNRS/eastlingplayer/issues/52
 										$morph->id = "M".$mID++;
-										completeTranslationLang($morph->NOTE,$langNotes,$defaultTranslLang);
+										completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
 										//#32
 										completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
-										completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultTranslLang);
+										completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
 										//
 										if(property_exists($morph, "AUDIO")){
@@ -705,10 +637,10 @@ try{
 							foreach ($sentence->W as $keyW => &$word) {
 								//https://github.com/CNRS/eastlingplayer/issues/52
 								$word->id = "W".$wID++;
-								completeTranslationLang($word->NOTE,$langNotes,$defaultTranslLang);
+								completeTranslationLang($word->NOTE,$langNotes,$defaultKindOf);
 								//32
 								completeTranscriptionLang($word->FORM,$typeOf["word"]["transcriptions"],$defaultKindOf);
-								completeTranslationLang($word->TRANSL,$typeOf["word"]["translations"],$defaultTranslLang);
+								completeTranslationLang($word->TRANSL,$typeOf["word"]["translations"],$defaultKindOf);
 
 								//
 								if(property_exists($word, "AUDIO")){
@@ -730,10 +662,10 @@ try{
 									if(gettype($word->M)=="object"){
 									//un seul morphème...
 										$word->M->id = $mID++;
-										completeTranslationLang($word->M->NOTE,$langNotes,$defaultTranslLang);
+										completeTranslationLang($word->M->NOTE,$langNotes,$defaultKindOf);
 										//32
 										completeTranscriptionLang($word->M->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
-										completeTranslationLang($word->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultTranslLang);
+										completeTranslationLang($word->M->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
 										//
 										if(property_exists($word->M, "AUDIO")){
@@ -754,11 +686,11 @@ try{
 										foreach ($word->M as $keyM => &$morph) {
 											//https://github.com/CNRS/eastlingplayer/issues/52
 											$morph->id = "M".$mID++;
-											completeTranslationLang($morph->NOTE,$langNotes,$defaultTranslLang);
+											completeTranslationLang($morph->NOTE,$langNotes,$defaultKindOf);
 
 											//32
 											completeTranscriptionLang($morph->FORM,$typeOf["morpheme"]["transcriptions"],$defaultKindOf);
-											completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultTranslLang);
+											completeTranslationLang($morph->TRANSL,$typeOf["morpheme"]["translations"],$defaultKindOf);
 
 
 											//
@@ -784,14 +716,12 @@ try{
 						}
 
 
-						//https://github.com/CNRS-LACITO/Pangloss_website/issues/206
 						concatenateAnnotation($sentence, "W",$typeOf," ");
 
 
 					}
 		
 				}
-
 
 				///////////////////////////////////////////////////////////////////
 				// github #20
@@ -890,8 +820,6 @@ try{
 					'extensionFile'=> pathinfo($sUrlFile, PATHINFO_EXTENSION),
 					'size'=>$size,
 					'doi'=>$doi,
-					'format'=>$row['format'],
-					'type'=>$row['type'],
 					'annotations'=>$annotationJson,
 					'langues'=>array(
 						'notes'=>$langNotes,

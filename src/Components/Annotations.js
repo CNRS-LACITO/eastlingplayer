@@ -182,17 +182,22 @@ class Annotations extends React.Component {
 
     // Get whole transcription(s) of the doc
     if(this.props.annotations.TEXT.FORM !== undefined && this.props.annotations.TEXT.FORM !== null){
+      
       if(this.props.annotations.TEXT.FORM.length === undefined){
+        var formattedText = this.props.annotations.TEXT.FORM.text.split('\n').map(str => <p style={{textAlign:"left"}}>{str}</p>);
+        
         wholeTranscriptions.push(
                 <Typography hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(this.props.annotations.TEXT.FORM.kindOf))} variant="body2" component="p" className={"text-"+this.props.annotations.TEXT.FORM.kindOf + " transcription"}>
-                  {this.props.annotations.TEXT.FORM.text}
+                  {formattedText}
                 </Typography>
               );
       }else{
         this.props.annotations.TEXT.FORM.forEach((f) => {
+            var formattedText = f.text.split('\n').map(str => <p style={{textAlign:"left"}}>{str}</p>);
+            
             wholeTranscriptions.push(
                 <Typography key={"textForm"+f.kindOf} hidden={(!this.props.displayOptions.textTranscriptions) || (!this.props.displayOptions.textTranscriptions.includes(f.kindOf))} variant="body2" component="p" className={"text-" + f.kindOf + " transcription"}>
-                  {f.text}
+                  {formattedText}
                 </Typography>
               );
           });
@@ -202,17 +207,20 @@ class Annotations extends React.Component {
     // Get whole translation(s) of the doc
     if(this.props.annotations.TEXT.TRANSL !== null && this.props.annotations.TEXT.TRANSL !== undefined){
       if(this.props.annotations.TEXT.TRANSL.length === undefined){
+        var formattedText = this.props.annotations.TEXT.TRANSL.text.split('\n').map(str => <p style={{textAlign:"left"}}>{str}</p>);
 
         wholeTranslations.push(
                 <Typography hidden={!this.props.displayOptions.textTranslations.includes(this.props.annotations.TEXT.TRANSL["xml:lang"])} variant="body2" component="p" className={`translation text-${this.props.annotations.TEXT.TRANSL['xml:lang']}`}>
-                  {this.props.annotations.TEXT.TRANSL.text}
+                  {formattedText}
                 </Typography>
               );
       }else{
         this.props.annotations.TEXT.TRANSL.forEach((t) => {
+            var formattedText = t.text.split('\n').map(str => <p style={{textAlign:"left"}}>{str}</p>);
+
             wholeTranslations.push(
                 <Typography hidden={!this.props.displayOptions.textTranslations.includes(t["xml:lang"])} variant="body2" component="p" className={`translation text-${t['xml:lang']}`}>
-                  {t.text}
+                  {formattedText}
                 </Typography>
               );
           });

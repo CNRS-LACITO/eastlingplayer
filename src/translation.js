@@ -1,7 +1,10 @@
 // translation.js
 //https://github.com/amsul/react-translated#static-text
 export default {
-  'Continuous play': {
+  'Edit document in Eastling': {
+    en: 'Edit document in Eastling',
+    fr: 'Editer le document dans Eastling',
+  },'Continuous play': {
     en: 'Continuous play',
     fr: 'Lecture en continu',
   },'other': {

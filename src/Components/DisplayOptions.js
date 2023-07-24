@@ -27,18 +27,29 @@ class DisplayOptions extends React.Component {
 
   }
 
+  getUrlParameter (sVar) {
+    return unescape(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + escape(sVar).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+  }
+
 
   buildUrl(){
       var params = new URLSearchParams(window.location.search);
-      params.set('optionTextTranscriptions',this.state.textTranscriptions.join('+'));
-      params.set('optionTextTranslations',this.state.textTranslations.join('+'));
-      params.set('optionSentenceTranscriptions',this.state.sentenceTranscriptions.join('+'));
-      params.set('optionSentenceTranslations',this.state.sentenceTranslations.join('+'));
-      params.set('optionWordTranscriptions',this.state.wordTranscriptions.join('+'));
-      params.set('optionWordTranslations',this.state.wordTranslations.join('+'));
-      params.set('optionMorphemeTranscriptions',this.state.morphemeTranscriptions.join('+'));
-      params.set('optionMorphemeTranslations',this.state.morphemeTranslations.join('+'));
-      params.set('optionNotes',this.state.displayNotes.join('+'));
+
+      var oai_secondary = this.getUrlParameter("oai_secondary");
+
+      //#211 Pangloss_website
+      if(oai_secondary.length > 0){
+        params.set('optionTextTranscriptions',this.state.textTranscriptions.join('+'));
+        params.set('optionTextTranslations',this.state.textTranslations.join('+'));
+        params.set('optionSentenceTranscriptions',this.state.sentenceTranscriptions.join('+'));
+        params.set('optionSentenceTranslations',this.state.sentenceTranslations.join('+'));
+        params.set('optionWordTranscriptions',this.state.wordTranscriptions.join('+'));
+        params.set('optionWordTranslations',this.state.wordTranslations.join('+'));
+        params.set('optionMorphemeTranscriptions',this.state.morphemeTranscriptions.join('+'));
+        params.set('optionMorphemeTranslations',this.state.morphemeTranslations.join('+'));
+        params.set('optionNotes',this.state.displayNotes.join('+'));
+      }
+      
       //#41 params.set('optionWords',this.state.words);
       params.set('lang',this.state.lang);
       params.set('mode',this.state.mode);
@@ -56,8 +67,6 @@ class DisplayOptions extends React.Component {
       var inputName = event.target.name.split('-');
       var s = [inputName[0]]+"Transcriptions";
       var checkedTranscriptions = this.state[[inputName[0]]+"Transcriptions"];
-      
-      console.log(s);
 
       //transName is used because some kindOf or Translation type can contain "-" character
       var transName = event.target.name.split(inputName[0]+'-');
@@ -67,8 +76,6 @@ class DisplayOptions extends React.Component {
       if (index > -1) {
         //if the transcription is disabled
         checkedTranscriptions.splice(index, 1);
-        console.log(checkedTranscriptions);
-        console.log(this.state);
 
         document.querySelectorAll('.transcription.'+event.target.name).forEach(
           function(e){
@@ -90,7 +97,6 @@ class DisplayOptions extends React.Component {
         "options" : this.state.options
       },this.buildUrl());
 
-      console.log(this.state);
 
     }
     
