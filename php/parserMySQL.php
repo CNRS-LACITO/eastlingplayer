@@ -193,7 +193,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 		
 	}
 
-	//Si aucune tradution n'existe
+	//Si aucune traduction n'existe
 	if(!isset($nodeParent->TRANSL) || $nodeParent->TRANSL === null || sizeof($nodeParent->TRANSL)===0){
 		$hasTransl = false;
 		$nodeParent->TRANSL = array();
@@ -315,7 +315,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 	foreach($transcConcat as $kindOf => $text){
 		if(!$hasTransc || !in_array($kindOf,$hasTranscTypeOf)){
 			//#59 : "il ne faut pas proposer de niveau "transcription" : "autre" au niveau des phrases et du texte."
-			if(! (($kindOf === $defaultKindOf) && ($parent === "sentence" || $parent === "text"))  ){
+			if(($kindOf !== $defaultKindOf) && ($parent !== "sentence")  ){
 			//#59
 				$typeOf[$parent]["transcriptions"][]=$kindOf;
 				$typeOf[$parent]["transcriptions"] = array_values(array_unique($typeOf[$parent]["transcriptions"]));
@@ -344,7 +344,7 @@ function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"
 			$typeOf[$parent]["translations"] = array_values(array_unique($typeOf[$parent]["translations"]));
 
 			//#59 "on ne concatène jamais au niveau du mot pour la traduction de phrase"
-			if($parent !== "sentence"){
+			if($parent === "text"){
 			//#59
 				if(gettype($nodeParent->TRANSL)=="array"){
 					$nodeParent->TRANSL[] = (object)array(
@@ -562,6 +562,9 @@ try{
 					//si pas de whole transcription du texte
 					$annotationJson->TEXT->TRANSL = [];
 				}
+
+				//github #77
+				completeTranslationLang($annotationJson->TEXT->NOTE,$langNotes,$defaultKindOf);
 
 				//BUG
 				$wID = 1;
