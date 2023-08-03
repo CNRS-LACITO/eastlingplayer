@@ -166,7 +166,7 @@ function completeTranslationLang(&$nodeTranslation, &$langTranslations,$default)
 }
 
 function concatenateAnnotation(&$nodeParent,$nodeChild,&$typeOf,$separator = "-"){
-//On concatène les annotations (transc, transl) du niveau inférieur si pas disponibles
+	//On concatène les annotations (transc, transl) du niveau inférieur si pas disponibles
 	$transcConcat = array();
 	$translConcat = array();
 
@@ -565,6 +565,8 @@ try{
 
 				//github #77
 				completeTranslationLang($annotationJson->TEXT->NOTE,$langNotes,$defaultKindOf);
+				//github #79
+				completeTranslationLang($annotationJson->WORDLIST->NOTE,$langNotes,$defaultKindOf);
 
 				//BUG
 				$wID = 1;

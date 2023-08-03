@@ -246,6 +246,25 @@ class Annotations extends React.Component {
       }
     }
 
+    //#79
+    if(this.props.annotations.WORDLIST.NOTE !== undefined && this.props.annotations.WORDLIST.NOTE !== null){
+      if(this.props.annotations.WORDLIST.NOTE.length === undefined){
+        notes.push(
+                <Typography hidden={!this.props.displayOptions.notes.includes(this.props.annotations.WORDLIST.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.annotations.WORDLIST.NOTE['xml:lang']}`}>
+                  {this.props.annotations.WORDLIST.NOTE.message}
+                </Typography>
+              );
+      }else{
+        this.props.annotations.WORDLIST.NOTE.forEach((t) => {
+            notes.push(
+                <Typography hidden={!this.props.displayOptions.notes.includes(t["xml:lang"])} variant="body2" component="p" className={`note ${t['xml:lang']}`}>
+                  {t.message}
+                </Typography>
+              );
+          });
+      }
+    }
+
 //
 
     return (
