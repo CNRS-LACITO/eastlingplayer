@@ -98,26 +98,6 @@ class Morpheme extends React.Component {
 	    }
     }
 
-  // Get note(s) of the sentence
-  /*
-  if(this.props.w.NOTE != undefined && this.props.w.NOTE !== null){
-    if(this.props.w.NOTE.length == undefined){
-      notes.push(
-              <Typography variant="body2" component="p" className={`note ${this.props.w.NOTE['xml:lang']}`}>
-                {this.props.w.NOTE.message} {this.props.w.NOTE.text}
-              </Typography>
-            );
-    }else{
-      this.props.w.NOTE.forEach((f) => {
-          notes.push(
-              <Typography variant="body2" component="p" className={`note ${f['xml:lang']}`}>
-                {f.message} {f.text}
-              </Typography>
-            );
-        });
-    }
-  }
-*/
 
   // Get note(s) of the morpheme
   this.getNotes(this.props.w,notesJSON);
@@ -134,7 +114,7 @@ class Morpheme extends React.Component {
 
         transcriptions.push(
                   <Typography variant="body2" component="p" style={!isGlossIncluded?{display:'none'}:{visibility:'inherit'}} className={`transcription ${thisClassName} morpheme-${this.props.w.FORM.kindOf}`}>
-                    {this.props.w.FORM.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+                    {this.props.w.FORM.text}{(this.props.notes !== undefined) && this.props.notes.filter((n)=>n.nodeId ===this.props.w.id).map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
@@ -145,7 +125,7 @@ class Morpheme extends React.Component {
 
               transcriptions.push(
                   <Typography variant="body2" component="p" className={`transcription ${thisClassName} morpheme-${f.kindOf}`}>
-                    {f.text}{notesJSON.map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
+                    {f.text}{(this.props.notes !== undefined) && this.props.notes.filter((n)=>n.nodeId ===this.props.w.id).map(n=><sup class={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
             });

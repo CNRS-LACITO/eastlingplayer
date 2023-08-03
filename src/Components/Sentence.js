@@ -27,11 +27,11 @@ class Sentence extends React.Component {
 	getNotes(node,notesJSON){
 		if(node.NOTE !== undefined && node.NOTE !== null){
 			if(node.NOTE.length === undefined){
-			    notesJSON.push({"id":this.idNote,"note": node.NOTE.message + node.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(node.NOTE['xml:lang']),lang:node.NOTE["xml:lang"]});
+			    notesJSON.push({"nodeId":node.id,"id":this.idNote,"note": node.NOTE.message + node.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(node.NOTE['xml:lang']),lang:node.NOTE["xml:lang"]});
 			    this.idNote++;
 			}else{
 				node.NOTE.forEach((f) => {
-			      notesJSON.push({"id":this.idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
+			      notesJSON.push({"nodeId":node.id,"id":this.idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
 			      this.idNote++;
 			    });
 			}
@@ -41,8 +41,8 @@ class Sentence extends React.Component {
 
   render() {
 
-  	this.idNote = 1;
-  	const transcriptions = [];
+	this.idNote = 1;
+	const transcriptions = [];
 	const translations = [];
 	const notesJSON = [];
 	const words = [];
@@ -132,20 +132,21 @@ class Sentence extends React.Component {
 							this.getNotes(m,notesJSON);
 
 			    			morphemes.push(
-				          		<Morpheme wID={w.id} w={m} displayOptions={this.props.displayOptions} idNote={this.idNote} />
+				          		<Morpheme wID={w.id} w={m} displayOptions={this.props.displayOptions} idNote={this.idNote} notes={notesJSON} />
 				        	);
 
 
 			    		});
 			    		//divWord = <div id={w.id} className="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
-						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
+						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} notes={notesJSON} />;
 			    		words.push(divWord);
 
 		    		}else{
 		    			// Get note(s) of the morpheme
 						this.getNotes(w.M,notesJSON);
+
 						morphemes.push(
-				          		<Morpheme wID={w.id} w={w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} />
+				          		<Morpheme wID={w.id} w={w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} notes={notesJSON} />
 				        	);
 						//divWord = <div id={w.id} className="WORD hasMorphemes" style={{display: "inline-block"}}>{morphemes}</div>;
 						divWord = <Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />;
@@ -159,7 +160,7 @@ class Sentence extends React.Component {
 					this.getNotes(w,notesJSON);
 
 		    		words.push(
-			          	<Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} />
+			          	<Word sID={this.props.s.id} w={w} displayOptions={this.props.displayOptions} idNote={this.idNote} notes={notesJSON} />
 			        );
 
 			        if(w.AREA !== undefined && w.AREA !== null){
@@ -201,6 +202,7 @@ class Sentence extends React.Component {
 	 
 	 var notes = [];
 	 //#17 NOTES
+
 	 notesJSON.forEach((n)=>{
 	 	notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
 	 });

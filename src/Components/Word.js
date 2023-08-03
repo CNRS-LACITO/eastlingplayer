@@ -42,29 +42,17 @@ class Word extends React.Component {
   getNotes(node,notesJSON){
     if(node.NOTE !== undefined && node.NOTE !== null){
       if(node.NOTE.length === undefined){
-          notesJSON.push({"id":this.idNote,"note": node.NOTE.message + node.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(node.NOTE['xml:lang']),lang:node.NOTE["xml:lang"]});
+          notesJSON.push({"nodeId":node.id,"id":this.idNote,"note": node.NOTE.message + node.NOTE.text,"hidden" : !this.props.displayOptions.notes.includes(node.NOTE['xml:lang']),lang:node.NOTE["xml:lang"]});
           this.idNote++;
       }else{
         node.NOTE.forEach((f) => {
-            notesJSON.push({"id":this.idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
+            notesJSON.push({"nodeId":node.id,"id":this.idNote,"note": f.message + f.text,"hidden" :!this.props.displayOptions.notes.includes(f['xml:lang']), lang:f["xml:lang"]});
             this.idNote++;
           });
       }
     }
   }
-/*
-  componentDidMount() {
-      if(this.props.w.AUDIO != undefined){
-        window.timeList.push({
-          start:parseFloat(this.props.w.AUDIO.start).toFixed(3),
-          end:parseFloat(this.props.w.AUDIO.end).toFixed(3),
-          mID:null,
-          wID:this.props.w.id,
-          sID:this.props.sID
-        });
-      }
-  }
-*/
+
   render() {
     this.idNote = (isNaN(this.props.idNote))?1:this.props.idNote - 1;
 
@@ -196,33 +184,19 @@ class Word extends React.Component {
 	    }
     }
 
-  // Get note(s) of the sentence
-  /*
-  if(this.props.w.NOTE !== undefined && this.props.w.NOTE !== null){
-    if(this.props.w.NOTE.length === undefined){
-      notes.push(
-              <Typography variant="body2" component="p" className={`note ${this.props.w.NOTE['xml:lang']}`}>
-                {this.props.w.NOTE.message} {this.props.w.NOTE.text}
-              </Typography>
-            );
-    }else{
-      this.props.w.NOTE.forEach((f) => {
-          notes.push(
-              <Typography variant="body2" component="p" className={`note ${f['xml:lang']}`}>
-                {f.message} {f.text}
-              </Typography>
-            );
-        });
-    }
-  }
-*/
-
   // Get note(s) of the word
-  this.getNotes(this.props.w,notesJSON);
+    
 
-  notesJSON.forEach((n)=>{
-    notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
-   });
+   if(this.props.notes !== undefined){
+      this.props.notes.forEach((n)=>{
+        console.log(this.props.w.id,n);
+        notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
+     });
+   }
+
+    
+
+
     
 /////////////////////////////
 //GESTION DES TRANSCRIPTIONS
@@ -252,7 +226,7 @@ class Word extends React.Component {
 
         transcriptions.push( 
                   <Typography variant="body2" component={(this.props.isWordList === true)?"td":"p"} style={styleCombined} className={`transcription ${thisClassName} word-${this.props.w.FORM.kindOf}`}>
-                    {this.props.w.FORM.text}{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
+                    {this.props.w.FORM.text}{(this.props.notes !== undefined) && this.props.notes.filter((n)=>n.nodeId ===this.props.w.id).map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
                 word = this.props.w.FORM.text;
@@ -282,7 +256,7 @@ class Word extends React.Component {
 
               transcriptions.push(
                   <Typography variant="body2" component={(this.props.isWordList === true)?"td":"p"} style={styleCombined} className={`transcription ${thisClassName} word-${f.kindOf}`}>
-                    {f.text}{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
+                    {f.text}{(this.props.notes !== undefined) && this.props.notes.filter((n)=>n.nodeId ===this.props.w.id).map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
                   </Typography>
                 );
             });
@@ -298,16 +272,25 @@ class Word extends React.Component {
               
               this.props.w.M.forEach((m) =>{
                 morphemes.push(
-                      <Morpheme w={m} displayOptions={this.props.displayOptions} idNote={this.idNote} />
+                      <Morpheme w={m} displayOptions={this.props.displayOptions} idNote={this.idNote} notes={this.props.notes} />
                   );
               });
               
 
             }else{
             morphemes.push(
-                      <Morpheme w={this.props.w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} />
+                      <Morpheme w={this.props.w.M} displayOptions={this.props.displayOptions} idNote={this.idNote} notes={this.props.notes}/>
                   );
             }
+    }
+
+    if(this.props.isWordList){
+      // Get note(s) of the word
+      this.getNotes(this.props.w,notesJSON);
+
+      notesJSON.forEach((n)=>{
+        notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
+       });
     }
 
     return (
