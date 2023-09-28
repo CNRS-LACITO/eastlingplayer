@@ -80,14 +80,19 @@ class Sentence extends React.Component {
 	//#17
 	// Get note(s) of the sentence
 	this.getNotes(this.props.s,notesJSON);
-
 //
+
+	//#199 GitHub Pangloss
+	var who = "";
+
+	if(this.props.s.who && this.props.s.who.length > 0) who = <Typography component="who">{this.props.s.who}  : </Typography>; 
+	//
 	// Get transcription(s) of the sentence
 	if(this.props.s.FORM !== undefined && this.props.s.FORM !== null){
 		if(this.props.s.FORM.length === undefined){
 			transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.sentenceTranscriptions.includes(this.props.s.FORM.kindOf)} variant="body2" component="p" className={`transcription sentence-${this.props.s.FORM.kindOf}`}>
-			          <b>{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
+			          <b>{who}{this.props.s.FORM.text}</b>{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
 
@@ -95,7 +100,7 @@ class Sentence extends React.Component {
 			this.props.s.FORM.forEach((f) => {
 		      transcriptions.push(
 		          <Typography hidden={!this.props.displayOptions.sentenceTranscriptions.includes(f.kindOf)} variant="body2" component="p" className={`transcription sentence-${f.kindOf}`}>
-			          <b>{f.text}</b>{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
+			          <b>{who}{f.text}</b>{notesJSON.map(n=><sup style={{display:(!this.props.displayOptions.notes.includes(n.lang))?"none":"inline-block"}} className={"circle note "+n.lang}>{n.id}</sup>)}
 			        </Typography>
 		        );
 		    });
