@@ -247,7 +247,7 @@ class Annotations extends React.Component {
     }
 
     //#79
-    if(this.props.annotations.WORDLIST.NOTE !== undefined && this.props.annotations.WORDLIST.NOTE !== null){
+    if(this.props.annotations.hasOwnProperty('WORDLIST') && this.props.annotations.WORDLIST.NOTE !== undefined && this.props.annotations.WORDLIST.NOTE !== null){
       if(this.props.annotations.WORDLIST.NOTE.length === undefined){
         notes.push(
                 <Typography hidden={!this.props.displayOptions.notes.includes(this.props.annotations.WORDLIST.NOTE["xml:lang"])} variant="body2" component="p" className={`note ${this.props.annotations.WORDLIST.NOTE['xml:lang']}`}>
@@ -293,7 +293,7 @@ class Annotations extends React.Component {
               
         </Container>
         {
-          this.props.extensionFile==='pdf' 
+          ['pdf','png','jpg','jpeg','txt'].includes(this.props.extensionFile)
             ?
             <Container>
               <object data={this.props.urlFile.replace('http:','https:')} type="application/pdf" width="100%" height="500px">

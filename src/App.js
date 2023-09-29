@@ -183,8 +183,8 @@ class App extends React.Component {
 			        		window.isWordList = isWordList;
 			        	}
 
-			        	console.log(optionMode,[result.typeOf.sentence.transcriptions[0]]);
-			        	console.log((document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.transcriptions):[result.typeOf.sentence.transcriptions[0]]));
+			        	//console.log(optionMode,[result.typeOf.sentence.transcriptions[0]]);
+			        	//console.log((document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.transcriptions):[result.typeOf.sentence.transcriptions[0]]));
 
 			        	this.setState({
 			        		//langOptions: result.langues,

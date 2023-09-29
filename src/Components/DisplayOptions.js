@@ -193,6 +193,10 @@ class DisplayOptions extends React.Component {
         <Divider></Divider>
         
         <FormGroup row>
+
+        {
+          (this.state.options.hasOwnProperty("text") && this.state.options.text.hasOwnProperty("transcriptions"))
+            ?
         
         <div className="optionTransc" hidden={this.state.options.text.transcriptions.length===0}>
           <FormLabel component="legend"><Translate text='Text transcription'/></FormLabel>
@@ -205,6 +209,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("text") && this.state.options.text.hasOwnProperty("translations"))
+            ?
 
         <div className="optionTransl" hidden={this.state.options.text.translations.length===0}>
           <FormLabel component="legend"><Translate text='Text translation'/></FormLabel>
@@ -217,6 +229,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("sentence") && this.state.options.sentence.hasOwnProperty("transcriptions"))
+            ?
 
         <div className="optionTransc" hidden={this.state.options.sentence.transcriptions.length===0}>
           <FormLabel component="legend"><Translate text='Sentence transcription'/></FormLabel>
@@ -229,6 +249,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("sentence") && this.state.options.sentence.hasOwnProperty("translations"))
+            ?
 
         <div className="optionTransl" hidden={this.state.options.sentence.translations.length===0}>
           <FormLabel component="legend"><Translate text='Sentence translation'/></FormLabel>
@@ -241,6 +269,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("word") && this.state.options.word.hasOwnProperty("transcriptions"))
+            ?
 
         <div className="optionTransc" hidden={this.state.options.word.transcriptions.length===0} >
           <FormLabel component="legend"><Translate text='Word transcription'/></FormLabel>
@@ -253,7 +289,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
 
+        }
+
+        {
+          (this.state.options.hasOwnProperty("word") && this.state.options.word.hasOwnProperty("translations"))
+            ?
         <div className="optionTransl" hidden={this.state.options.word.translations.length===0}>
           <FormLabel component="legend"><Translate text='Word translation'/></FormLabel>
           <FormGroup>
@@ -265,6 +308,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("morpheme") && this.state.options.morpheme.hasOwnProperty("transcriptions"))
+            ?
 
         <div className="optionTransc" hidden={this.state.options.morpheme.transcriptions.length===0}>
           <FormLabel component="legend"><Translate text='Morpheme transcription'/></FormLabel>
@@ -277,6 +328,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("morpheme") && this.state.options.morpheme.hasOwnProperty("translations"))
+            ?
 
         <div className="optionTransl" hidden={this.state.options.morpheme.translations.length===0}>
           <FormLabel component="legend"><Translate text='Morpheme translation'/></FormLabel>
@@ -289,6 +348,14 @@ class DisplayOptions extends React.Component {
           ))}
           </FormGroup>
         </div>                  
+        :
+        <div></div>
+
+        }
+
+        {
+          (this.state.options.hasOwnProperty("note") && this.state.options.note.hasOwnProperty("translations"))
+            ?
 
         <div className="optionNotes" hidden={this.state.options.note.translations.length===0}>
           <FormLabel component="legend">Notes</FormLabel>
@@ -301,6 +368,10 @@ class DisplayOptions extends React.Component {
             ))}
           </FormGroup>
         </div>
+        :
+        <div></div>
+
+        }
 
         </FormGroup>
 

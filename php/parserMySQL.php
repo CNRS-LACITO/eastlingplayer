@@ -372,7 +372,7 @@ $imagesNoSyncUrl = array(); // https://github.com/CNRS-LACITO/eastlingplayer/iss
 $doi="";
 
 //
-require('globalParameters.php');
+require('./globalParameters.php');
 
 try{
         $options = array(
