@@ -189,7 +189,7 @@ class Word extends React.Component {
 
    if(this.props.notes !== undefined){
       this.props.notes.forEach((n)=>{
-        console.log(this.props.w.id,n);
+        //console.log(this.props.w.id,n);
         notes.push(<Note id={n.id} note={n.note} hidden={n.hidden} lang={n.lang}></Note>);
      });
    }

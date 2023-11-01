@@ -142,6 +142,8 @@ class App extends React.Component {
 				            MEDIAFILE : {"type":mediaType,"url":mediaUrl},
 				            images : result.images
 				          });
+
+			        	window.subject = result.subject;
 			        
  
 		        },

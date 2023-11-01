@@ -1,6 +1,7 @@
 import React from 'react';
-import { FormGroup, FormControlLabel, FormLabel, Checkbox, Switch, Divider  } from '@material-ui/core';
+import { FormGroup, FormControlLabel, FormLabel, Checkbox, Switch, Divider, Button, Icon  } from '@material-ui/core';
 import { Translate } from 'react-translated';
+import DownloadIcon from '@material-ui/icons/CloudDownload';
 
 class DisplayOptions extends React.Component {
 
@@ -170,6 +171,65 @@ class DisplayOptions extends React.Component {
 
     }
     
+  }
+
+  handleExportLatex(){
+    var oai_primary = this.getUrlParameter("oai_primary");
+    var oai_secondary = this.getUrlParameter("oai_secondary");
+    var JSONParameters = {};
+
+    JSONParameters.jeton = "clé secrète !";
+    JSONParameters.identifiant = oai_secondary;
+
+    JSONParameters.configuration = {};
+    JSONParameters.configuration.langue = window.subject[0].name;
+
+    JSONParameters.livret = {};
+    JSONParameters.livret['paramètres'] = {};
+
+    JSONParameters.livret['paramètres']['transcription du texte'] = this.state.textTranscriptions;
+    JSONParameters.livret['paramètres']['traduction du texte'] = this.state.textTranslations;
+    JSONParameters.livret['paramètres']['transcription des phrases'] = this.state.sentenceTranscriptions;
+    JSONParameters.livret['paramètres']['traduction des phrases'] = this.state.sentenceTranslations;
+    JSONParameters.livret['paramètres']['transcription des mots'] = this.state.wordTranscriptions;
+    JSONParameters.livret['paramètres']['traduction des mots'] = this.state.wordTranslations;
+    JSONParameters.livret['paramètres']['transcription des morphèmes'] = this.state.morphemeTranscriptions;
+    JSONParameters.livret['paramètres']['traduction des morphèmes'] = this.state.morphemeTranslations;
+
+    JSONParameters.livret.textes = {};
+    JSONParameters.livret.textes.introduction = {};
+
+    JSONParameters.livret.ressources = [];
+    var ressource = {};
+    ressource.identifiant = "WR_Transcr1_"+oai_primary;
+    //V1 with all segments, do not need to precise this property //ressource.segments = [];
+
+    JSONParameters.livret.ressources.push(ressource);
+
+    console.log(JSONParameters);
+
+    fetch("http://pangloss-labs.huma-num.fr/api/livret",{
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        //mode: "cors", // no-cors, *cors, same-origin
+        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: "same-origin", // include, *same-origin, omit
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        redirect: "follow", // manual, *follow, error
+        referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        body: JSON.stringify(JSONParameters), // body data type must match "Content-Type" header
+      })
+          .then(res => res.json())
+          .then(
+            (result) => {
+              console.log(result);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
   }
 
   render() {
@@ -375,8 +435,22 @@ class DisplayOptions extends React.Component {
 
         </FormGroup>
 
+        <div className="exportLatex">
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<DownloadIcon />}
+            onClick={this.handleExportLatex.bind(this)}
+          >
+            LaTex
+          </Button>
+        </div>
+
+
 
       </div>
+
+      
     );
   }
 }

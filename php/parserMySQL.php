@@ -902,7 +902,8 @@ try{
 						'notes'=>$langNotes,
 					),
 					'typeOf'=>$typeOf,
-					'timeList'=>$timeList
+					'timeList'=>$timeList,
+					'subject'=>$row['subject']
 				);
 			}
 
