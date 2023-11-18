@@ -188,11 +188,35 @@ class App extends React.Component {
 			        	//console.log(optionMode,[result.typeOf.sentence.transcriptions[0]]);
 			        	//console.log((document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.transcriptions):[result.typeOf.sentence.transcriptions[0]]));
 
-			        	this.setState({
-			        		//langOptions: result.langues,
-			        		options: result.typeOf,
-			        		timeList: result.timeList,
-			        		displayOptions:{
+			        	//18/11/2023 : BF #221 Pangloss_Website
+			        	var oDisplayOptions = {};
+			        	var oOptions = [];
+
+			        	if(result.type==="image"){
+
+			        		oDisplayOptions = {
+					        	textTranscriptions : [],
+					        	textTranslations : [],
+					        	sentenceTranscriptions : [],
+					        	sentenceTranslations : [],
+					        	wordTranscriptions : [],
+					        	wordTranslations : [],
+					        	morphemeTranscriptions : [],
+					        	morphemeTranslations : [],
+					        	notes : [],
+					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
+					        	mode : (document.location.search.indexOf("mode") > 0) ? optionMode : 'normal',
+					        	continuousPlay : (document.location.search.indexOf("continuousPlay") > 0) ? optionContinuousPlay : false,
+			        		};
+
+			        		oOptions = {
+					        	text : {transcriptions:[],translations:[]},
+					        	sentence : {transcriptions:[],translations:[]}
+			        		};
+
+			        	}else{
+
+			        		oDisplayOptions = {
 					        	textTranscriptions : (document.location.search.indexOf("optionTextTranscriptions") > 0) ? optionTextTranscriptions.split('+') : [],
 					        	textTranslations : (document.location.search.indexOf("optionTextTranslations") > 0) ? optionTextTranslations.split('+') : [],
 					        	sentenceTranscriptions : (document.location.search.indexOf("optionSentenceTranscriptions") > 0) ? optionSentenceTranscriptions.split('+') : ((optionMode === "pro")?Array.from(result.typeOf.sentence.transcriptions):[result.typeOf.sentence.transcriptions[0]]),
@@ -205,7 +229,17 @@ class App extends React.Component {
 					        	lang : (document.location.search.indexOf("lang") > 0) ? optionLang : 'fr',
 					        	mode : (document.location.search.indexOf("mode") > 0) ? optionMode : 'normal',
 					        	continuousPlay : (document.location.search.indexOf("continuousPlay") > 0) ? optionContinuousPlay : false,
-			        		},
+			        		};
+
+			        		oOptions = result.typeOf;
+			        	}
+
+
+			        	this.setState({
+			        		//langOptions: result.langues,
+			        		options: oOptions,
+			        		timeList: result.timeList,
+			        		displayOptions:oDisplayOptions,
 				            isAnnotationsLoaded: true,
 				            annotations : result.annotations,
 				            doi : result.doi,

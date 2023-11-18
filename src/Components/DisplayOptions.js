@@ -184,27 +184,29 @@ class DisplayOptions extends React.Component {
     JSONParameters.configuration = {};
     JSONParameters.configuration.langue = window.subject[0].name;
 
-    JSONParameters.livret = {};
-    JSONParameters.livret['paramètres'] = {};
+    JSONParameters.configuration.livret = {};
+    JSONParameters.configuration.livret['paramètres'] = {};
 
-    JSONParameters.livret['paramètres']['transcription du texte'] = this.state.textTranscriptions;
-    JSONParameters.livret['paramètres']['traduction du texte'] = this.state.textTranslations;
-    JSONParameters.livret['paramètres']['transcription des phrases'] = this.state.sentenceTranscriptions;
-    JSONParameters.livret['paramètres']['traduction des phrases'] = this.state.sentenceTranslations;
-    JSONParameters.livret['paramètres']['transcription des mots'] = this.state.wordTranscriptions;
-    JSONParameters.livret['paramètres']['traduction des mots'] = this.state.wordTranslations;
-    JSONParameters.livret['paramètres']['transcription des morphèmes'] = this.state.morphemeTranscriptions;
-    JSONParameters.livret['paramètres']['traduction des morphèmes'] = this.state.morphemeTranslations;
+    JSONParameters.configuration.livret['paramètres']['transcription du texte'] = this.state.textTranscriptions;
+    JSONParameters.configuration.livret['paramètres']['traduction du texte'] = this.state.textTranslations;
+    JSONParameters.configuration.livret['paramètres']['transcription des phrases'] = this.state.sentenceTranscriptions;
+    JSONParameters.configuration.livret['paramètres']['traduction des phrases'] = this.state.sentenceTranslations;
+    JSONParameters.configuration.livret['paramètres']['transcription des mots'] = this.state.wordTranscriptions;
+    JSONParameters.configuration.livret['paramètres']['traduction des mots'] = this.state.wordTranslations;
+    JSONParameters.configuration.livret['paramètres']['transcription des morphèmes'] = this.state.morphemeTranscriptions;
+    JSONParameters.configuration.livret['paramètres']['traduction des morphèmes'] = this.state.morphemeTranslations;
 
-    JSONParameters.livret.textes = {};
-    JSONParameters.livret.textes.introduction = {};
+    JSONParameters.configuration.livret.textes = {};
+    JSONParameters.configuration.livret.textes.introduction = {};
+    //JSONParameters.configuration.livret.textes.introduction.en = "Test de texte introduction"; //TODO enlever après test
 
-    JSONParameters.livret.ressources = [];
+
+    JSONParameters.configuration.livret.ressources = [];
     var ressource = {};
     ressource.identifiant = "WR_Transcr1_"+oai_primary;
     //V1 with all segments, do not need to precise this property //ressource.segments = [];
 
-    JSONParameters.livret.ressources.push(ressource);
+    JSONParameters.configuration.livret.ressources.push(ressource);
 
     console.log(JSONParameters);
 
