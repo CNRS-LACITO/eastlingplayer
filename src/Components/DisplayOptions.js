@@ -436,7 +436,10 @@ class DisplayOptions extends React.Component {
         }
 
         </FormGroup>
-
+        
+        {
+          (window.location.host !=="pangloss.cnrs.fr")
+            ?
         <div className="exportLatex">
           <Button
             variant="contained"
@@ -447,6 +450,10 @@ class DisplayOptions extends React.Component {
             LaTex
           </Button>
         </div>
+        :
+        <div></div>
+
+        }
 
 
 
