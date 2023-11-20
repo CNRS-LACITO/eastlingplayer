@@ -192,7 +192,7 @@ class App extends React.Component {
 			        	var oDisplayOptions = {};
 			        	var oOptions = [];
 
-			        	if(result.type==="image"){
+			        	if(result.type==="image" || result.type==="pdf"){
 
 			        		oDisplayOptions = {
 					        	textTranscriptions : [],
